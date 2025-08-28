@@ -1,0 +1,23 @@
+# Documentation files (not for public deployment)
+*.md
+README.md
+OAUTH_SETUP.md
+CLAUDE.md
+
+# Git files
+.git/
+.gitignore
+
+# Development files
+.DS_Store
+*.log
+npm-debug.log*
+
+# Node modules (Vercel installs these)
+node_modules/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
