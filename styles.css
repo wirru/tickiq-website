@@ -270,6 +270,22 @@ footer a:hover {
     border-bottom-color: #000000;
 }
 
+.legal-links {
+    font-size: 0.875rem;
+    color: #666666;
+    margin-top: 1rem;
+}
+
+.legal-links a {
+    color: #666666;
+    margin: 0 0.5rem;
+}
+
+.legal-links a:hover {
+    color: #000000;
+    border-bottom-color: #666666;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
