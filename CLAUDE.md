@@ -1,7 +1,7 @@
 # tickIQ Website
 
 ## Project Overview
-Official website for tickIQ - an intelligent ticketing solution by B23, LLC. This is a minimalist landing page announcing the upcoming product launch.
+Official website for tickIQ - a professional iOS app for mechanical watch timing analysis. Features AI-powered watch identification, chronometer-precision measurements, and cloud-synchronized collection management.
 
 ## Live Site
 - **Production URL**: https://tickiq.b23.ai (to be configured)
@@ -62,9 +62,20 @@ vercel login
 
 ## Content Details
 - **Product Name**: tickIQ
-- **Tagline**: "Intelligent ticketing, simplified."
-- **Status**: Coming Soon
-- **Description**: Focuses on smart support ticket management with AI-powered efficiency
+- **Tagline**: "Professional watch timing. AI-powered insights."
+- **Status**: Now Available on iOS
+- **Description**: Professional mechanical watch timing app with chronometer precision
+- **Key Features**:
+  - Professional timegrapher with ±0.5ms beat error precision
+  - AI-powered watch identification using GPT-4 Vision
+  - Real-time measurement visualization
+  - Cloud-synchronized watch collection
+  - Machine learning signal detection
+- **Technical Specs**:
+  - BPH Range: 12,000 - 72,000
+  - Rate Accuracy: ±6 s/d
+  - Beat Error: ±0.5 ms
+  - Amplitude: 200-360°
 
 ## Security Headers
 Configured in vercel.json:
