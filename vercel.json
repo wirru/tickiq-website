@@ -1,5 +1,6 @@
 {
   "name": "tickiq-website",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
