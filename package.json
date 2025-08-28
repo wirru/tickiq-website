@@ -1,0 +1,12 @@
+{
+  "name": "tickiq-website",
+  "version": "1.0.0",
+  "description": "tickIQ - Intelligent ticketing solution by B23, LLC",
+  "scripts": {
+    "deploy": "vercel",
+    "deploy:prod": "vercel --prod"
+  },
+  "dependencies": {
+    "vercel": "^45.0.9"
+  }
+}
