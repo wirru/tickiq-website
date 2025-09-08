@@ -129,76 +129,187 @@ main {
 
 .hero {
     text-align: center;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto 5rem;
-    padding: 2rem 0;
+    padding: 4rem 0 2rem;
 }
 
-.app-icon-container {
-    margin-bottom: 2rem;
-}
-
-.app-icon {
-    width: 120px;
-    height: 120px;
-    border-radius: 24px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    animation: scaleIn 0.8s ease-out;
-}
-
-.app-name {
+.main-headline {
     font-size: 3.5rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
     color: #000000;
-}
-
-.headline {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #000000;
-    margin-bottom: 1rem;
+    line-height: 1.1;
 }
 
 .subheadline {
     font-size: 1.125rem;
     font-weight: 400;
-    color: #555555;
-    line-height: 1.7;
-    max-width: 700px;
-    margin: 0 auto 2.5rem;
+    color: #666666;
+    line-height: 1.6;
+    max-width: 750px;
+    margin: 0 auto 3rem;
 }
 
-.download-section {
-    margin: 2rem 0;
+.awards-section {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
 }
 
-.app-store-button {
-    display: inline-block;
-    transition: transform 0.2s, opacity 0.2s;
+.award {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background: #f8f8f8;
+    border-radius: 12px;
 }
 
-.app-store-button:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
+.award-icon {
+    font-size: 1.5rem;
 }
 
-.app-store-button img {
-    height: 60px;
-    width: auto;
+.award-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-.coming-soon-badge {
-    display: inline-block;
-    padding: 1rem 2.5rem;
+.award-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #000000;
+}
+
+.award-subtitle {
+    font-size: 0.75rem;
+    color: #666666;
+}
+
+.app-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 4rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iphone-mockup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 30px;
+    min-height: 400px;
+}
+
+.app-preview {
+    width: 200px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.app-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: left;
+}
+
+.feature-card:hover,
+.feature-card.active {
+    border-color: #000000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.feature-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 0.25rem;
+}
+
+.feature-content p {
+    font-size: 0.875rem;
+    color: #666666;
+    margin: 0;
+}
+
+.cta-section {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.primary-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
     background: #000000;
     color: #ffffff;
-    font-size: 1.125rem;
+    text-decoration: none;
+    border-radius: 12px;
     font-weight: 600;
-    border-radius: 50px;
-    letter-spacing: 0.02em;
-    animation: pulse 2s infinite;
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.primary-cta:hover {
+    transform: translateY(-2px);
+}
+
+.secondary-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-cta:hover {
+    border-color: #000000;
+}
+
+.apple-logo,
+.play-icon {
+    width: 20px;
+    height: 20px;
 }
 
 @keyframes pulse {
@@ -343,39 +454,57 @@ main {
 }
 
 footer {
-    text-align: center;
-    padding: 2rem 0;
+    width: 100%;
+    background: #f8f8f8;
     margin-top: 4rem;
-    border-top: 1px solid #e0e0e0;
     animation: fadeIn 1.5s ease-in;
 }
 
-.company {
-    font-size: 0.875rem;
-    color: #666666;
-    margin-bottom: 0.5rem;
+.footer-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
 }
 
-.contact {
-    font-size: 0.875rem;
-    color: #666666;
+.footer-sections {
+    display: flex;
+    justify-content: center;
+    gap: 6rem;
+    margin-bottom: 3rem;
 }
 
-footer a {
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-section h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
     color: #000000;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s ease;
+    margin: 0 0 0.5rem 0;
 }
 
-footer a:hover {
-    border-bottom-color: #000000;
-}
-
-.legal-links {
+.footer-section a {
     font-size: 0.875rem;
     color: #666666;
-    margin-top: 1rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-section a:hover {
+    color: #000000;
+}
+
+.footer-tagline {
+    text-align: center;
+}
+
+.footer-tagline p {
+    font-size: 0.8125rem;
+    color: #999999;
+    margin: 0;
 }
 
 .legal-links a {
@@ -434,21 +563,50 @@ footer a:hover {
         font-size: 0.8125rem;
     }
     
-    .app-icon {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .app-name {
+    .main-headline {
         font-size: 2.5rem;
-    }
-    
-    .headline {
-        font-size: 1.5rem;
     }
     
     .subheadline {
         font-size: 1rem;
+    }
+    
+    .awards-section {
+        gap: 1rem;
+    }
+    
+    .award {
+        padding: 0.5rem 1rem;
+    }
+    
+    .app-showcase {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .iphone-mockup {
+        padding: 2rem;
+        min-height: 300px;
+    }
+    
+    .app-preview {
+        width: 150px;
+    }
+    
+    .cta-section {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .primary-cta,
+    .secondary-cta {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    
+    .footer-sections {
+        gap: 3rem;
     }
     
     .feature h2 {
@@ -477,16 +635,24 @@ footer a:hover {
 }
 
 @media (max-width: 480px) {
-    .app-name {
+    .main-headline {
         font-size: 2rem;
     }
     
-    .headline {
-        font-size: 1.25rem;
+    .subheadline {
+        font-size: 0.9375rem;
     }
     
-    .feature-emoji {
-        font-size: 2.5rem;
+    .footer-main {
+        gap: 2rem;
+    }
+    
+    .footer-section h3 {
+        font-size: 0.9375rem;
+    }
+    
+    .footer-bottom p {
+        font-size: 0.75rem;
     }
 }
 
