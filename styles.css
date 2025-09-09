@@ -961,45 +961,31 @@ footer {
 
 /* Mobile State - Narrow viewport */
 @media (max-width: 520px) {
-    /* Always show collapsed pill style in mobile */
-    .header-pill::after {
-        width: 430px !important;
-        opacity: 1 !important;
+    /* Remove top margin on mobile */
+    header {
+        top: 0 !important;
     }
     
-    .header-pill {
-        position: relative !important;
+    .header-content {
+        padding: 1.25rem 1.25rem !important;
     }
     
-    .pill-content {
-        max-width: 430px !important;
-        padding: 0 1rem !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-start !important;
-        position: relative !important;
+    /* Adjust main padding for no header margin */
+    main {
+        padding-top: 72px !important;
     }
     
-    /* Hide regular nav links */
+    /* Hide nav links and spacer */
     .nav-links,
-    .pill-separator {
-        display: none !important;
-    }
-    
-    /* Remove spacer */
     .spacer {
         display: none !important;
     }
     
-    /* Show hamburger menu */
+    /* Always show hamburger menu */
     .hamburger-menu {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        position: absolute !important;
-        right: 1rem !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
         height: auto !important;
         width: auto !important;
         padding: 4px !important;
@@ -1008,22 +994,99 @@ footer {
         border: none !important;
     }
     
-    /* Adjust logo visibility */
-    .header-logo {
-        display: none !important;
+    /* Mobile expanded state (default) */
+    /* No pill background */
+    .header-pill::after {
+        opacity: 0 !important;
+        transition: opacity 0.25s ease-out !important;
     }
     
-    /* Ensure proper spacing */
+    .pill-content {
+        max-width: 100% !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        position: relative !important;
+        transition: max-width 0.25s ease-out !important;
+    }
+    
+    /* Show logo in expanded state */
+    .header-logo {
+        display: block !important;
+        opacity: 1 !important;
+        width: 78px !important;
+        transition: all 0.25s ease-out !important;
+    }
+    
+    /* Hide separator in expanded state */
+    .pill-separator {
+        opacity: 0 !important;
+        width: 0 !important;
+        transition: all 0.25s ease-out !important;
+    }
+    
+    /* Position elements in expanded state */
     .nav-brand {
-        flex: 0 0 auto;
+        position: absolute !important;
+        left: 0 !important;
+        gap: 0.375rem !important;
+        transition: left 0.25s ease-out !important;
     }
     
     .get-app-button {
-        flex: 0 0 auto;
-        margin-left: auto;
-        margin-right: 3rem; /* Make room for hamburger */
-        position: static;
-        right: auto;
+        position: absolute !important;
+        right: 2.5rem !important;  /* 40px spacing for hamburger */
+        padding: 0.25rem 0.625rem !important;
+        transition: right 0.25s ease-out !important;
+    }
+    
+    .hamburger-menu {
+        position: absolute !important;
+        right: 0 !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        transition: right 0.25s ease-out !important;
+    }
+    
+    /* Mobile collapsed state */
+    header.collapsed .header-pill::after {
+        width: 430px !important;
+        opacity: 1 !important;
+    }
+    
+    header.collapsed .pill-content {
+        max-width: 430px !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Hide logo in collapsed state */
+    header.collapsed .header-logo {
+        opacity: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Show separator in collapsed state */
+    header.collapsed .pill-separator {
+        position: absolute !important;
+        opacity: 1 !important;
+        width: 1px !important;
+        height: 20px !important;
+        left: calc(50% - 215px + 60px) !important;
+    }
+    
+    /* Position elements in collapsed state */
+    header.collapsed .nav-brand {
+        left: calc(50% - 215px + 16.5px) !important;
+    }
+    
+    header.collapsed .get-app-button {
+        right: calc(50% - 215px + 52px) !important;  /* Adjusted for 40px spacing */
+    }
+    
+    header.collapsed .hamburger-menu {
+        right: calc(50% - 215px + 12px) !important;
     }
 }
 
