@@ -89,10 +89,9 @@ header.collapsed .get-app-button {
 }
 
 header.collapsed .header-pill {
-    background: rgba(248, 248, 248, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #ffffff;
     border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
     width: fit-content;
     height: 48px;
     margin: 0 auto;

@@ -120,13 +120,24 @@
             const firstLinks = navLinks.getBoundingClientRect();
             const firstButton = getAppButton.getBoundingClientRect();
             
-            // Store the current width of nav-links to prevent layout jump
+            // Store the current width of nav-links
             const linksWidth = firstLinks.width;
             
             // Last - apply the state change
             if (targetCollapsed) {
                 header.classList.add('collapsed');
+                // When collapsing, constrain width after state change
+                // to get accurate position measurements
+                const tempLinks = navLinks.getBoundingClientRect();
+                navLinks.style.width = `${linksWidth}px`;
+                navLinks.style.flex = 'none';
+                // Re-measure after constraining
+                void header.offsetHeight;
             } else {
+                // When expanding, constrain width before state change
+                // to prevent flex: 1 from causing immediate expansion
+                navLinks.style.width = `${linksWidth}px`;
+                navLinks.style.flex = 'none';
                 header.classList.remove('collapsed');
             }
             
@@ -140,10 +151,6 @@
             const linksDeltaX = firstLinks.left - lastLinks.left;
             const buttonDeltaX = firstButton.left - lastButton.left;
             
-            // For nav-links, we need to handle the width change as well
-            // Temporarily set a fixed width to prevent the flex layout jump
-            navLinks.style.width = `${linksWidth}px`;
-            navLinks.style.flex = 'none';
             
             // Only apply horizontal transforms (no vertical movement)
             navBrand.style.transform = `translateX(${brandDeltaX}px)`;
@@ -181,13 +188,13 @@
             
             // Play - animate to final positions
             requestAnimationFrame(() => {
-                // Re-enable transitions
-                const timing = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                // Re-enable transitions with slower duration
+                const timing = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
                 navBrand.style.transition = timing;
-                navLinks.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                navLinks.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), width 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
                 getAppButton.style.transition = timing;
-                logo.style.transition = 'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                separator.style.transition = 'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, width 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s';
+                logo.style.transition = 'opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), width 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+                separator.style.transition = 'opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, width 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, height 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s';
                 
                 // Remove transforms and animate width to final state
                 navBrand.style.transform = 'translateX(0)';
@@ -234,7 +241,7 @@
                 separator.style.width = '';
                 separator.style.height = '';
                 isAnimating = false;
-            }, 450);
+            }, 750);
             
             isCollapsed = targetCollapsed;
         }
