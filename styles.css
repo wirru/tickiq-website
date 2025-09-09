@@ -933,8 +933,8 @@ footer {
     background: rgba(0, 0, 0, 0.04);
 }
 
-/* Mobile State - Narrow viewport */
-@media (max-width: 520px) {
+/* Mobile State - Switch earlier to prevent overlap */
+@media (max-width: 580px) {
     /* Remove top margin on mobile */
     header {
         top: 0 !important;
@@ -1028,12 +1028,13 @@ footer {
     
     /* Mobile collapsed state */
     header.collapsed .header-pill::after {
-        width: 430px !important;
+        width: calc(100vw - 2rem) !important;
         max-width: 430px !important;
         opacity: 1 !important;
     }
     
     header.collapsed .pill-content {
+        width: calc(100vw - 2rem) !important;
         max-width: 430px !important;
         margin: 0 auto !important;
     }
@@ -1051,20 +1052,20 @@ footer {
         opacity: 1 !important;
         width: 1px !important;
         height: 20px !important;
-        left: calc(50% - 215px + 60px) !important;
+        left: 60px !important;
     }
     
     /* Position elements in collapsed state */
     header.collapsed .nav-brand {
-        left: calc(50% - 215px + 16.5px) !important;
+        left: 16.5px !important;
     }
     
     header.collapsed .get-app-button {
-        right: calc(50% - 215px + 52px) !important;  /* Adjusted for 40px spacing */
+        right: 52px !important;  /* 40px spacing for hamburger + 12px margin */
     }
     
     header.collapsed .hamburger-menu {
-        right: calc(50% - 215px + 12px) !important;
+        right: 12px !important;
     }
 }
 
