@@ -39,6 +39,17 @@
                                 <p>Scan to download tickIQ</p>
                             </div>
                         </a>
+                        <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
+                            <div class="hamburger-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
+                        <div class="mobile-menu" id="mobile-menu">
+                            <a href="/about">About</a>
+                            <a href="/help">Help Center</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -113,6 +124,27 @@
         
         // Initial check
         updateHeader();
+        
+        // Hamburger menu functionality
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (hamburgerMenu && mobileMenu) {
+            hamburgerMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+            
+            // Prevent menu from closing when clicking inside it
+            mobileMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
     </script>
 </body>
 </html>

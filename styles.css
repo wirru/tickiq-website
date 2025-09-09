@@ -76,20 +76,21 @@ header.collapsed .header-logo {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 380px;
+    width: 100%;
+    max-width: 1200px;
     height: 48px;
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
     border-radius: 50px;
-    transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%);
     opacity: 0;
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: max-width 0.7s ease-out, opacity 0.7s ease-out;
     z-index: -1;
 }
 
 header.collapsed .header-pill::after {
-    transform: translate(-50%, -50%) scale(1);
+    max-width: 380px;
     opacity: 1;
 }
 
@@ -102,6 +103,7 @@ header.collapsed .header-pill::after {
     max-width: 1200px;
     height: 100%;
     padding: 0 2rem;
+    transition: max-width 0.7s ease-out, padding 0.7s ease-out;
 }
 
 .pill-separator {
@@ -110,35 +112,32 @@ header.collapsed .header-pill::after {
     background: rgba(0, 0, 0, 0.12);
     opacity: 0;
     flex-shrink: 0;
-    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+    transition: all 0.7s ease-out;
 }
 
 header.collapsed .pill-separator {
     opacity: 1;
     width: 1px;
     height: 20px;
-    margin: 0 1rem;
+    left: calc(50% - 190px + 55px);
 }
 
 .nav-brand {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    flex-shrink: 0;
-    transform: translateX(0);
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    left: 0;
+    transition: left 0.7s ease-out, gap 0.7s ease-out, opacity 0.7s ease-out;
 }
 
 /* Spacer to help with layout */
 .spacer {
-    flex: 1;
-    transition: flex 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    /* No longer needed with absolute positioning */
+    display: none;
 }
 
-header.collapsed .spacer {
-    flex: 0;
-    width: 0;
-}
+/* Spacer removed - using absolute positioning instead */
 
 .nav-links {
     display: flex;
@@ -147,21 +146,26 @@ header.collapsed .spacer {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), gap 0.7s cubic-bezier(0.4, 0, 0.2, 1), left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.7s ease-out;
 }
 
 /* In collapsed state, move elements into pill formation */
+header.collapsed .pill-content {
+    /* In collapsed state, constrain content to fixed width */
+    max-width: 380px;
+    padding: 0 0.75rem;
+}
+
 header.collapsed .nav-brand {
-    /* Move toward center to be inside the pill */
-    transform: translateX(calc(50vw - 190px));
+    /* Move to left edge of 380px pill */
+    left: calc(50% - 190px + 10px);
 }
 
 header.collapsed .nav-links {
-    /* In collapsed, nav-links should be positioned after icon+separator */
-    /* Since icon moves to center-190px, nav-links should be about 70px to the right of that */
-    left: 50%;
-    transform: translateX(calc(-50% - 50px));
-    gap: 1.5rem;
+    /* Move to position after app icon and separator */
+    left: calc(50% - 190px + 80px);
+    transform: translateX(0);
+    gap: 1rem;
 }
 
 .nav-link {
@@ -190,7 +194,7 @@ header.collapsed .nav-links {
     object-fit: cover;
     object-position: center;
     margin: 0 -7px;
-    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.7s ease-out;
 }
 
 .get-app-button {
@@ -205,14 +209,14 @@ header.collapsed .nav-links {
     font-weight: 500;
     font-size: 0.875rem;
     cursor: pointer;
-    flex-shrink: 0;
-    transform: translateX(0);
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    right: 0;
+    transition: right 0.7s ease-out, padding 0.7s ease-out, font-size 0.7s ease-out;
 }
 
 header.collapsed .get-app-button {
-    /* Move toward center to be inside the pill */
-    transform: translateX(calc(-50vw + 190px));
+    /* Move to right edge of 380px pill */
+    right: calc(50% - 190px + 10px);
 }
 
 .qr-popover {
@@ -686,33 +690,20 @@ footer {
     }
 }
 
+
 @media (max-width: 768px) {
     .container {
         padding: 1.5rem;
     }
     
-    .header-content {
-        padding: 1.25rem 1.5rem;
-    }
-    
-    header.collapsed .header-content {
-        padding: 1rem 1.5rem;
-    }
-    
-    .header-app-icon {
-        width: 30px;
-        height: 30px;
-    }
+    /* Removed header styles that were affecting collapsed state */
     
     .header-logo {
         height: 26px;
         width: 65px;
     }
     
-    .get-app-button {
-        padding: 0.4rem 0.75rem;
-        font-size: 0.8125rem;
-    }
+    /* Get-app-button sizing removed to keep collapsed state consistent */
     
     .nav-links {
         gap: 1rem;
@@ -723,18 +714,7 @@ footer {
         font-size: 0.8125rem;
     }
     
-    header.collapsed .nav-links {
-        gap: 0.75rem;
-    }
-    
-    header.collapsed .nav-link {
-        font-size: 0.75rem;
-    }
-    
-    header.collapsed .get-app-button {
-        padding: 0.35rem 0.65rem;
-        font-size: 0.75rem;
-    }
+    /* Removed collapsed state responsive styles to keep it constant */
     
     main {
         padding-top: 70px;
@@ -908,6 +888,116 @@ footer {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     color: #ffffff;
+}
+
+/* Hamburger Menu Button */
+.hamburger-menu {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    transition: opacity 0.3s ease;
+}
+
+.hamburger-menu:hover {
+    opacity: 0.7;
+}
+
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+    height: 20px;
+}
+
+.hamburger-icon span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #000000;
+    border-radius: 1px;
+    transition: transform 0.3s ease;
+}
+
+/* Mobile Menu Dropdown */
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 1rem;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 180px;
+    z-index: 1000;
+}
+
+.mobile-menu.active {
+    display: block;
+}
+
+.mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #000000;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.mobile-menu a:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+/* Mobile State - Narrow viewport */
+@media (max-width: 520px) {
+    /* Always show collapsed pill style in mobile */
+    .header-pill::after {
+        width: 380px !important;
+        opacity: 1 !important;
+    }
+    
+    .pill-content {
+        max-width: 380px !important;
+        padding: 0 1rem !important;
+    }
+    
+    /* Hide regular nav links */
+    .nav-links,
+    .pill-separator {
+        display: none !important;
+    }
+    
+    /* Remove spacer */
+    .spacer {
+        display: none !important;
+    }
+    
+    /* Show hamburger menu */
+    .hamburger-menu {
+        display: block;
+    }
+    
+    /* Adjust logo visibility */
+    .header-logo {
+        display: none !important;
+    }
+    
+    /* Ensure proper spacing */
+    .nav-brand {
+        flex: 0 0 auto;
+    }
+    
+    .get-app-button {
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
 }
 
 @media (max-width: 768px) {
