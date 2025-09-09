@@ -25,6 +25,7 @@
                             <a href="/about" class="nav-link">About</a>
                             <a href="/help" class="nav-link">Help Center</a>
                         </nav>
+                        <div class="spacer"></div>
                         <a href="https://apps.apple.com/us/app/tickiq-measure-watch-accuracy/id6749871310" target="_blank" class="get-app-button">
                             <span>Get the app</span>
                             <svg class="phone-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,156 +78,23 @@
     </footer>
     
     <script>
-        // Smooth header animation on scroll
+        // Simple, robust header animation
         const header = document.getElementById('header');
         const scrollThreshold = 100;
         let isCollapsed = false;
-        let isAnimating = false;
-        
-        function animateTransition(targetCollapsed) {
-            if (targetCollapsed === isCollapsed || isAnimating) return;
-            isAnimating = true;
-            
-            const navBrand = document.querySelector('.nav-brand');
-            const navLinks = document.querySelector('.nav-links');
-            const getAppButton = document.querySelector('.get-app-button');
-            const logo = document.querySelector('.header-logo');
-            const separator = document.querySelector('.pill-separator');
-            
-            // FLIP Animation: First - capture current positions
-            const firstBrand = navBrand.getBoundingClientRect();
-            const firstLinks = navLinks.getBoundingClientRect();
-            const firstButton = getAppButton.getBoundingClientRect();
-            
-            // Store the current width of nav-links
-            const linksWidth = firstLinks.width;
-            
-            // Last - apply the state change
-            if (targetCollapsed) {
-                header.classList.add('collapsed');
-                // When collapsing, constrain width after state change
-                // to get accurate position measurements
-                const tempLinks = navLinks.getBoundingClientRect();
-                navLinks.style.width = `${linksWidth}px`;
-                navLinks.style.flex = 'none';
-                // Re-measure after constraining
-                void header.offsetHeight;
-            } else {
-                // When expanding, constrain width before state change
-                // to prevent flex: 1 from causing immediate expansion
-                navLinks.style.width = `${linksWidth}px`;
-                navLinks.style.flex = 'none';
-                header.classList.remove('collapsed');
-            }
-            
-            // Get new positions after state change
-            const lastBrand = navBrand.getBoundingClientRect();
-            const lastLinks = navLinks.getBoundingClientRect();
-            const lastButton = getAppButton.getBoundingClientRect();
-            
-            // Invert - calculate the delta and apply inverse transform
-            const brandDeltaX = firstBrand.left - lastBrand.left;
-            const linksDeltaX = firstLinks.left - lastLinks.left;
-            const buttonDeltaX = firstButton.left - lastButton.left;
-            
-            // Only apply horizontal transforms (no vertical movement)
-            navBrand.style.transform = `translateX(${brandDeltaX}px)`;
-            navLinks.style.transform = `translateX(${linksDeltaX}px)`;
-            getAppButton.style.transform = `translateX(${buttonDeltaX}px)`;
-            
-            // Remove transitions temporarily
-            navBrand.style.transition = 'none';
-            navLinks.style.transition = 'none';
-            getAppButton.style.transition = 'none';
-            logo.style.transition = 'none';
-            separator.style.transition = 'none';
-            
-            // Handle logo and separator visibility
-            if (targetCollapsed) {
-                // Going to collapsed - start with logo visible
-                logo.style.opacity = '1';
-                logo.style.width = '78px';
-                logo.style.transform = 'scale(1)';
-                separator.style.opacity = '0';
-                separator.style.width = '0';
-                separator.style.height = '0';
-            } else {
-                // Going to expanded - start with separator visible
-                logo.style.opacity = '0';
-                logo.style.width = '0';
-                logo.style.transform = 'scale(0)';
-                separator.style.opacity = '1';
-                separator.style.width = '1px';
-                separator.style.height = '20px';
-            }
-            
-            // Force browser to calculate the layout
-            void header.offsetHeight;
-            
-            // Play - animate to final positions
-            requestAnimationFrame(() => {
-                // Re-enable transitions with slower duration
-                const timing = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
-                navBrand.style.transition = timing;
-                navLinks.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), width 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
-                getAppButton.style.transition = timing;
-                logo.style.transition = 'opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), width 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
-                separator.style.transition = 'opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, width 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, height 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s';
-                
-                // Remove transforms and animate width to final state
-                navBrand.style.transform = 'translateX(0)';
-                navLinks.style.transform = 'translateX(0)';
-                navLinks.style.width = ''; // Let CSS determine final width
-                getAppButton.style.transform = 'translateX(0)';
-                
-                // Animate logo and separator
-                if (targetCollapsed) {
-                    // Fade out logo, fade in separator
-                    logo.style.opacity = '0';
-                    logo.style.width = '0';
-                    logo.style.transform = 'scale(0)';
-                    separator.style.opacity = '1';
-                    separator.style.width = '1px';
-                    separator.style.height = '20px';
-                } else {
-                    // Fade in logo, fade out separator
-                    logo.style.opacity = '1';
-                    logo.style.width = '78px';
-                    logo.style.transform = 'scale(1)';
-                    separator.style.opacity = '0';
-                    separator.style.width = '0';
-                    separator.style.height = '0';
-                }
-            });
-            
-            // Cleanup after animation
-            setTimeout(() => {
-                navBrand.style.transition = '';
-                navBrand.style.transform = '';
-                navLinks.style.transition = '';
-                navLinks.style.transform = '';
-                navLinks.style.width = '';
-                navLinks.style.flex = '';
-                getAppButton.style.transition = '';
-                getAppButton.style.transform = '';
-                logo.style.transition = '';
-                logo.style.transform = '';
-                logo.style.opacity = '';
-                logo.style.width = '';
-                separator.style.transition = '';
-                separator.style.opacity = '';
-                separator.style.width = '';
-                separator.style.height = '';
-                isAnimating = false;
-            }, 750);
-            
-            isCollapsed = targetCollapsed;
-        }
         
         function updateHeader() {
             const scrollY = window.scrollY;
             const shouldCollapse = scrollY > scrollThreshold;
-            animateTransition(shouldCollapse);
+            
+            if (shouldCollapse !== isCollapsed) {
+                if (shouldCollapse) {
+                    header.classList.add('collapsed');
+                } else {
+                    header.classList.remove('collapsed');
+                }
+                isCollapsed = shouldCollapse;
+            }
         }
         
         // Throttle scroll events for better performance
