@@ -721,13 +721,7 @@ footer {
         padding-top: 86px; /* Account for fixed header with top margin on mobile */
     }
     
-    .main-headline {
-        font-size: 2.5rem;
-    }
-    
-    .subheadline {
-        font-size: 1rem;
-    }
+    /* Keep font sizes consistent across viewports */
     
     .awards-section {
         gap: 1rem;
@@ -767,13 +761,7 @@ footer {
         gap: 3rem;
     }
     
-    .feature h2 {
-        font-size: 1.5rem;
-    }
-    
-    .feature li {
-        font-size: 1rem;
-    }
+    /* Keep feature font sizes consistent */
     
     .audience-grid {
         grid-template-columns: 1fr;
@@ -783,9 +771,7 @@ footer {
         padding: 2rem 1.5rem;
     }
     
-    .cta-text {
-        font-size: 1.125rem;
-    }
+    /* Keep CTA font size consistent */
     
     .app-store-button img {
         height: 50px;
@@ -793,25 +779,13 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .main-headline {
-        font-size: 2rem;
-    }
-    
-    .subheadline {
-        font-size: 0.9375rem;
-    }
+    /* Keep headline font sizes consistent */
     
     .footer-main {
         gap: 2rem;
     }
     
-    .footer-section h3 {
-        font-size: 0.9375rem;
-    }
-    
-    .footer-bottom p {
-        font-size: 0.75rem;
-    }
+    /* Keep footer font sizes consistent */
 }
 
 /* Contact Page Styles */
@@ -975,9 +949,10 @@ footer {
         padding-top: 72px !important;
     }
     
-    /* Hide nav links and spacer */
+    /* Hide nav links, spacer, and QR popover */
     .nav-links,
-    .spacer {
+    .spacer,
+    .qr-popover {
         display: none !important;
     }
     
@@ -1091,9 +1066,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .contact-header h1 {
-        font-size: 2rem;
-    }
+    /* Keep contact header font size consistent */
     
     .contact-option-card {
         padding: 1.5rem;
