@@ -128,7 +128,7 @@ header.collapsed .pill-separator {
     align-items: center;
     gap: 0.5rem;
     position: absolute;
-    left: 7rem; /* Positioned closer to center */
+    left: 2rem; /* Default position for narrow screens */
     transition: left 0.25s ease-out, gap 0.25s ease-out, opacity 0.25s ease-out;
 }
 
@@ -209,7 +209,7 @@ header.collapsed .nav-links {
     font-size: 0.875rem;
     cursor: pointer;
     position: absolute;
-    right: 7rem; /* Positioned closer to center */
+    right: 2rem; /* Default position for narrow screens */
     transition: right 0.25s ease-out, padding 0.25s ease-out, font-size 0.25s ease-out;
 }
 
@@ -689,29 +689,31 @@ footer {
     }
 }
 
+/* Apply inset margins only on wider screens */
+@media (min-width: 1024px) {
+    .nav-brand {
+        left: 7rem; /* Inset from edges on wide screens */
+    }
+    
+    .get-app-button {
+        right: 7rem; /* Inset from edges on wide screens */
+    }
+}
 
 @media (max-width: 768px) {
     .container {
         padding: 1.5rem;
     }
     
-    /* Removed header styles that were affecting collapsed state */
-    
-    .header-logo {
-        height: 26px;
-        width: 65px;
-    }
+    /* Keep header elements consistent across viewports */
     
     /* Get-app-button sizing removed to keep collapsed state consistent */
     
     .nav-links {
         gap: 1rem;
-        font-size: 0.8125rem;
     }
     
-    .nav-link {
-        font-size: 0.8125rem;
-    }
+    /* Keep nav-link font size consistent across all viewports */
     
     /* Removed collapsed state responsive styles to keep it constant */
     
@@ -896,7 +898,9 @@ footer {
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    margin-left: 0.5rem;
+    margin-left: 0.75rem;
+    position: absolute;
+    right: 1rem;
     transition: opacity 0.3s ease;
 }
 
@@ -907,15 +911,16 @@ footer {
 .hamburger-icon {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 24px;
-    height: 20px;
+    justify-content: center;
+    gap: 3px;
+    width: 16px;
+    height: auto;
 }
 
 .hamburger-icon span {
     display: block;
     width: 100%;
-    height: 2px;
+    height: 1.5px;
     background: #000000;
     border-radius: 1px;
     transition: transform 0.3s ease;
@@ -962,9 +967,17 @@ footer {
         opacity: 1 !important;
     }
     
+    .header-pill {
+        position: relative !important;
+    }
+    
     .pill-content {
         max-width: 430px !important;
         padding: 0 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        position: relative !important;
     }
     
     /* Hide regular nav links */
@@ -980,7 +993,19 @@ footer {
     
     /* Show hamburger menu */
     .hamburger-menu {
-        display: block;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: absolute !important;
+        right: 1rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        height: auto !important;
+        width: auto !important;
+        padding: 4px !important;
+        margin: 0 !important;
+        background: none !important;
+        border: none !important;
     }
     
     /* Adjust logo visibility */
@@ -996,6 +1021,9 @@ footer {
     .get-app-button {
         flex: 0 0 auto;
         margin-left: auto;
+        margin-right: 3rem; /* Make room for hamburger */
+        position: static;
+        right: auto;
     }
 }
 
