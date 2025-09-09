@@ -26,7 +26,7 @@ body {
 
 header {
     position: fixed;
-    top: 0;
+    top: 1rem;
     left: 0;
     right: 0;
     z-index: 1000;
@@ -85,13 +85,13 @@ header.collapsed .header-logo {
     border-radius: 50px;
     transform: translate(-50%, -50%);
     opacity: 0;
-    transition: max-width 0.35s ease-out, opacity 0.35s ease-out;
+    transition: max-width 0.25s ease-out, opacity 0.25s ease-out;
     z-index: -1;
     pointer-events: none;
 }
 
 header.collapsed .header-pill::after {
-    max-width: 380px;
+    max-width: 430px;
     opacity: 1;
 }
 
@@ -108,19 +108,19 @@ header.collapsed .header-pill::after {
 }
 
 .pill-separator {
+    position: absolute;
     width: 0;
     height: 0;
     background: rgba(0, 0, 0, 0.12);
     opacity: 0;
-    flex-shrink: 0;
-    transition: all 0.35s ease-out;
+    transition: all 0.25s ease-out;
 }
 
 header.collapsed .pill-separator {
     opacity: 1;
     width: 1px;
     height: 20px;
-    left: calc(50% - 190px + 55px);
+    left: calc(50% - 215px + 60px);
 }
 
 .nav-brand {
@@ -129,7 +129,7 @@ header.collapsed .pill-separator {
     gap: 0.5rem;
     position: absolute;
     left: 7rem; /* Positioned closer to center */
-    transition: left 0.35s ease-out, gap 0.35s ease-out, opacity 0.35s ease-out;
+    transition: left 0.25s ease-out, gap 0.25s ease-out, opacity 0.25s ease-out;
 }
 
 /* Spacer to help with layout */
@@ -147,22 +147,22 @@ header.collapsed .pill-separator {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    transition: all 0.35s ease-out;
+    transition: all 0.25s ease-out;
 }
 
 /* In collapsed state, move elements into pill formation */
 /* Content container doesn't change - only visual pill shrinks */
 
 header.collapsed .nav-brand {
-    /* Move to left edge of 380px pill */
-    left: calc(50% - 190px + 10px);
+    /* Center icon between left edge and separator */
+    left: calc(50% - 215px + 16.5px);
 }
 
 header.collapsed .nav-links {
-    /* Move to position after app icon and separator */
-    left: calc(50% - 190px + 80px);
-    transform: translateX(0);
-    gap: 1rem;
+    /* Position for equal spacing between all elements */
+    left: calc(50% - 215px + 165px);
+    transform: translateX(-50%);
+    gap: 1.75rem;
 }
 
 .nav-link {
@@ -178,9 +178,9 @@ header.collapsed .nav-links {
 }
 
 .header-app-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 9px;
+    width: 31px;
+    height: 31px;
+    border-radius: 8px;
     flex-shrink: 0;
 }
 
@@ -191,14 +191,16 @@ header.collapsed .nav-links {
     object-fit: cover;
     object-position: center;
     margin: 0 -7px;
-    transition: all 0.35s ease-out;
+    transition: all 0.25s ease-out;
 }
 
 .get-app-button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.3125rem 1rem;
+    height: 31px;
+    box-sizing: border-box;
     background: #000000;
     color: #ffffff;
     text-decoration: none;
@@ -208,12 +210,12 @@ header.collapsed .nav-links {
     cursor: pointer;
     position: absolute;
     right: 7rem; /* Positioned closer to center */
-    transition: right 0.35s ease-out, padding 0.35s ease-out, font-size 0.35s ease-out;
+    transition: right 0.25s ease-out, padding 0.25s ease-out, font-size 0.25s ease-out;
 }
 
 header.collapsed .get-app-button {
-    /* Move to right edge of 380px pill */
-    right: calc(50% - 190px + 10px);
+    /* Move to right edge of 430px pill */
+    right: calc(50% - 215px + 12px);
 }
 
 .qr-popover {
@@ -272,7 +274,7 @@ header.collapsed .get-app-button {
 main {
     flex: 1;
     animation: fadeIn 1s ease-in;
-    padding-top: 100px; /* Account for fixed header */
+    padding-top: 116px; /* Account for fixed header with top margin */
 }
 
 .hero {
@@ -714,7 +716,7 @@ footer {
     /* Removed collapsed state responsive styles to keep it constant */
     
     main {
-        padding-top: 70px;
+        padding-top: 86px; /* Account for fixed header with top margin on mobile */
     }
     
     .main-headline {
@@ -956,12 +958,12 @@ footer {
 @media (max-width: 520px) {
     /* Always show collapsed pill style in mobile */
     .header-pill::after {
-        width: 380px !important;
+        width: 430px !important;
         opacity: 1 !important;
     }
     
     .pill-content {
-        max-width: 380px !important;
+        max-width: 430px !important;
         padding: 0 1rem !important;
     }
     
