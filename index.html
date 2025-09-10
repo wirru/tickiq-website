@@ -40,17 +40,21 @@
         <div class="feature-pills-container" id="feature-pills">
             <div class="feature-pills">
                 <div class="pill-indicator"></div>
-                <button class="feature-pill active" data-feature="accuracy">
-                    Instant Accuracy
+                <button class="feature-pill active" data-feature="accuracy" data-number="1">
+                    <span class="pill-text">Instant Accuracy</span>
+                    <span class="pill-number">1</span>
                 </button>
-                <button class="feature-pill" data-feature="ai-insights">
-                    AI Insights
+                <button class="feature-pill" data-feature="ai-insights" data-number="2">
+                    <span class="pill-text">AI Insights</span>
+                    <span class="pill-number">2</span>
                 </button>
-                <button class="feature-pill" data-feature="collection">
-                    Collection Tracking
+                <button class="feature-pill" data-feature="collection" data-number="3">
+                    <span class="pill-text">Collection Tracking</span>
+                    <span class="pill-number">3</span>
                 </button>
-                <button class="feature-pill" data-feature="social">
-                    Community
+                <button class="feature-pill" data-feature="social" data-number="4">
+                    <span class="pill-text">Community</span>
+                    <span class="pill-number">4</span>
                 </button>
             </div>
         </div>
@@ -144,7 +148,7 @@
                     // Add active class to clicked pill
                     this.classList.add('active');
                     
-                    // Update indicator position
+                    // Update indicator position (won't do anything on mobile due to CSS)
                     updateIndicator(this);
                     
                     // Additional functionality
@@ -168,13 +172,35 @@
             function updatePillsPosition() {
                 const heroRect = heroWrapper.getBoundingClientRect();
                 const viewportHeight = window.innerHeight;
-                const pillsHeight = 60; // Approximate height of pills container
-                const fixedBottom = 40; // Distance from bottom when fixed
-                const anchoredBottom = 20; // Distance from hero bottom when anchored
+                const viewportWidth = window.innerWidth;
+                
+                // Get actual measured height of pills container
+                const pillsRect = pillsContainer.getBoundingClientRect();
+                const pillsHeight = pillsRect.height;
+                
+                // Different bottom values for mobile vs desktop (from CSS)
+                let fixedBottom, anchoredBottom;
+                
+                if (viewportWidth <= 480) {
+                    fixedBottom = 15; // Fixed to viewport
+                    anchoredBottom = 0; // Anchored at hero bottom edge
+                } else if (viewportWidth <= 640) {
+                    fixedBottom = 20; // Fixed to viewport
+                    anchoredBottom = 5; // Anchored slightly below hero bottom
+                } else {
+                    // Desktop values (no intermediate tablet state)
+                    fixedBottom = 40;
+                    anchoredBottom = 20;
+                }
                 
                 // Calculate where pills would be in each state
-                const anchoredPillTop = heroRect.bottom - anchoredBottom - pillsHeight;
-                const fixedPillTop = viewportHeight - fixedBottom - pillsHeight;
+                // For anchored: measure from hero bottom up
+                const anchoredPillBottom = heroRect.bottom - anchoredBottom;
+                const anchoredPillTop = anchoredPillBottom - pillsHeight;
+                
+                // For fixed: measure from viewport bottom up  
+                const fixedPillBottom = viewportHeight - fixedBottom;
+                const fixedPillTop = fixedPillBottom - pillsHeight;
                 
                 // Switch when the two positions match exactly
                 const shouldAnchor = anchoredPillTop <= fixedPillTop;
@@ -182,50 +208,60 @@
                 if (shouldAnchor) {
                     // Hero has scrolled up enough - anchor pills to hero
                     if (!pillsContainer.classList.contains('anchored')) {
-                        // Calculate offset to prevent jump
-                        const currentTop = pillsContainer.getBoundingClientRect().top;
-                        pillsContainer.classList.add('anchored');
-                        const newTop = pillsContainer.getBoundingClientRect().top;
-                        const jumpDistance = newTop - currentTop;
-                        
-                        // Apply inverse transform to cancel the jump
-                        pillsContainer.style.transform = `translateY(${-jumpDistance}px)`;
-                        
-                        // Remove transform after a frame to allow CSS transition
-                        requestAnimationFrame(() => {
-                            pillsContainer.style.transition = 'transform 0.15s ease-out';
-                            pillsContainer.style.transform = '';
-                            setTimeout(() => {
-                                pillsContainer.style.transition = '';
-                                // Recalculate indicator position after transition
-                                const activePill = document.querySelector('.feature-pill.active');
-                                if (activePill) updateIndicator(activePill);
-                            }, 150);
-                        });
+                        // For mobile, use a simpler transition without animation
+                        if (viewportWidth <= 640) {
+                            pillsContainer.classList.add('anchored');
+                            // Update indicator if exists (hidden on mobile but just in case)
+                            const activePill = document.querySelector('.feature-pill.active');
+                            if (activePill) updateIndicator(activePill);
+                        } else {
+                            // Desktop: smooth animated transition
+                            const currentTop = pillsContainer.getBoundingClientRect().top;
+                            pillsContainer.classList.add('anchored');
+                            const newTop = pillsContainer.getBoundingClientRect().top;
+                            const jumpDistance = newTop - currentTop;
+                            
+                            pillsContainer.style.transform = `translateY(${-jumpDistance}px)`;
+                            
+                            requestAnimationFrame(() => {
+                                pillsContainer.style.transition = 'transform 0.15s ease-out';
+                                pillsContainer.style.transform = '';
+                                setTimeout(() => {
+                                    pillsContainer.style.transition = '';
+                                    const activePill = document.querySelector('.feature-pill.active');
+                                    if (activePill) updateIndicator(activePill);
+                                }, 150);
+                            });
+                        }
                     }
                 } else {
                     // Hero still visible enough - keep pills fixed to viewport
                     if (pillsContainer.classList.contains('anchored')) {
-                        // Calculate offset to prevent jump
-                        const currentTop = pillsContainer.getBoundingClientRect().top;
-                        pillsContainer.classList.remove('anchored');
-                        const newTop = pillsContainer.getBoundingClientRect().top;
-                        const jumpDistance = newTop - currentTop;
-                        
-                        // Apply inverse transform to cancel the jump
-                        pillsContainer.style.transform = `translateY(${-jumpDistance}px)`;
-                        
-                        // Remove transform after a frame to allow CSS transition
-                        requestAnimationFrame(() => {
-                            pillsContainer.style.transition = 'transform 0.15s ease-out';
-                            pillsContainer.style.transform = '';
-                            setTimeout(() => {
-                                pillsContainer.style.transition = '';
-                                // Recalculate indicator position after transition
-                                const activePill = document.querySelector('.feature-pill.active');
-                                if (activePill) updateIndicator(activePill);
-                            }, 150);
-                        });
+                        // For mobile, use a simpler transition without animation
+                        if (viewportWidth <= 640) {
+                            pillsContainer.classList.remove('anchored');
+                            // Update indicator if exists
+                            const activePill = document.querySelector('.feature-pill.active');
+                            if (activePill) updateIndicator(activePill);
+                        } else {
+                            // Desktop: smooth animated transition
+                            const currentTop = pillsContainer.getBoundingClientRect().top;
+                            pillsContainer.classList.remove('anchored');
+                            const newTop = pillsContainer.getBoundingClientRect().top;
+                            const jumpDistance = newTop - currentTop;
+                            
+                            pillsContainer.style.transform = `translateY(${-jumpDistance}px)`;
+                            
+                            requestAnimationFrame(() => {
+                                pillsContainer.style.transition = 'transform 0.15s ease-out';
+                                pillsContainer.style.transform = '';
+                                setTimeout(() => {
+                                    pillsContainer.style.transition = '';
+                                    const activePill = document.querySelector('.feature-pill.active');
+                                    if (activePill) updateIndicator(activePill);
+                                }, 150);
+                            });
+                        }
                     }
                 }
             }
