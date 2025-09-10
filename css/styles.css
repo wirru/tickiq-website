@@ -19,7 +19,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
-    flex: 1;
+    /* Remove flex: 1 to prevent expansion */
     display: flex;
     flex-direction: column;
 }
@@ -279,7 +279,7 @@ header.collapsed .get-app-button {
 }
 
 main {
-    flex: 1;
+    /* Remove flex: 1 to keep content compact */
     padding-top: 116px; /* Account for fixed header with top margin */
 }
 
@@ -609,21 +609,28 @@ main {
     font-weight: 500;
 }
 
+/* Hero media wrapper to control overflow */
+.hero-media-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Clip the edges */
+    margin: 0.25rem 0 0;
+}
+
 /* Hero media section with video background and image overlay */
 .hero-media-container {
     position: relative;
-    width: 100%;
-    max-width: 900px; /* Narrower on desktop */
-    margin: 0.25rem auto 0;
+    width: 750px; /* Reduced from 900px */
+    margin: 0 auto;
 }
 
-/* Mobile: wider hero that can overflow */
-@media (max-width: 768px) {
+/* When viewport is narrower than 750px, center and allow clipping */
+@media (max-width: 750px) {
     .hero-media-container {
-        width: 150%; /* 50% wider than viewport */
-        max-width: none;
-        margin-left: -25%; /* Center the overflow */
-        margin-right: -25%;
+        /* Center the 750px container */
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
@@ -638,16 +645,9 @@ main {
     top: 1.47%;
     z-index: 1;
     object-fit: cover;
-    /* Adjusted for 900px max container: 54px × (900/1150) ≈ 42px */
-    border-radius: min(42px, 4.7vw);
+    /* Fixed border radius for constant 750px container (42px × 750/900 ≈ 35px) */
+    border-radius: 35px;
     overflow: hidden;
-}
-
-@media (max-width: 768px) {
-    .hero-video {
-        /* On mobile, scale up the border radius since container is larger */
-        border-radius: min(65px, 5.5vw);
-    }
 }
 
 .hero-image-overlay {
@@ -661,7 +661,7 @@ main {
 footer {
     width: 100%;
     background: #f8f8f8;
-    margin-top: 0;
+    margin-top: auto; /* Push footer to bottom */
 }
 
 .footer-content {
