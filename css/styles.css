@@ -137,6 +137,8 @@ header.collapsed .pill-separator {
     display: flex;
     align-items: center;
     gap: 0.7rem;
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Spacer to help with layout */
@@ -1042,6 +1044,11 @@ footer {
         left: 0 !important;
         gap: 0.375rem !important;
         transition: left 0.25s ease-out !important;
+    }
+    
+    /* Ensure anchor inside nav-brand inherits the gap */
+    .nav-brand > a {
+        gap: 0.375rem !important;
     }
     
     .get-app-button {
