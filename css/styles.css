@@ -613,8 +613,18 @@ main {
 .hero-media-container {
     position: relative;
     width: 100%;
-    max-width: 1150px;
+    max-width: 900px; /* Narrower on desktop */
     margin: 0.25rem auto 0;
+}
+
+/* Mobile: wider hero that can overflow */
+@media (max-width: 768px) {
+    .hero-media-container {
+        width: 150%; /* 50% wider than viewport */
+        max-width: none;
+        margin-left: -25%; /* Center the overflow */
+        margin-right: -25%;
+    }
 }
 
 .hero-video {
@@ -622,15 +632,22 @@ main {
     /* Video at (504,23) with dimensions 430x934 in 1440x1565 coordinate space */
     /* Width: 430/1440 = 29.86% of container */
     /* Position: 504/1440 = 35% from left, 23/1565 = 1.47% from top */
-    /* Corner radius: 68px in the coordinate system = 4.72% of container width */
     width: 29.86%;
     height: auto;
     left: 35%;
     top: 1.47%;
     z-index: 1;
     object-fit: cover;
-    border-radius: min(54px, 4.7vw);
+    /* Adjusted for 900px max container: 54px × (900/1150) ≈ 42px */
+    border-radius: min(42px, 4.7vw);
     overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-video {
+        /* On mobile, scale up the border radius since container is larger */
+        border-radius: min(65px, 5.5vw);
+    }
 }
 
 .hero-image-overlay {
