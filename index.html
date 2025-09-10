@@ -30,7 +30,7 @@
     <!-- Wrapper to contain overflow -->
     <div class="hero-media-wrapper">
         <div class="hero-media-container">
-            <video class="hero-video" autoplay muted loop playsinline>
+            <video class="hero-video" id="hero-video" muted loop playsinline>
                 <source src="assets/videos/tickiq-hero-background-trimmed.mp4" type="video/mp4">
             </video>
             <img src="assets/images/hands-hero-foreground.png" alt="Watch collection" class="hero-image-overlay">
@@ -42,5 +42,34 @@
     
     <!-- Load the shared components -->
     <script src="js/components.js"></script>
+    
+    <!-- Video scroll trigger -->
+    <script>
+        (function() {
+            const video = document.getElementById('hero-video');
+            if (!video) return;
+            
+            // Create intersection observer to watch when video is 4/5 visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.8) {
+                        // Start playing when at least 4/5 visible
+                        video.play().catch(e => console.log('Video play failed:', e));
+                    } else {
+                        // Pause when less than 4/5 visible
+                        video.pause();
+                    }
+                });
+            }, {
+                threshold: [0, 0.8] // Trigger at 0% and 80% visibility
+            });
+            
+            // Start observing the video element
+            observer.observe(video);
+            
+            // Ensure video is paused initially
+            video.pause();
+        })();
+    </script>
 </body>
 </html>
