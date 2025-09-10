@@ -685,6 +685,36 @@ main {
     z-index: 2;
 }
 
+/* Main content section */
+.content-section {
+    width: 100%;
+    min-height: 100px; /* Much shorter height */
+    padding: 2rem 2rem;
+    background: #ffffff;
+}
+
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    /* Temporary - remove when content is added */
+    min-height: 75px;
+}
+
+/* Responsive content spacing */
+@media (max-width: 768px) {
+    .content-section {
+        padding: 1.5rem 1.5rem;
+        min-height: 90px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-section {
+        padding: 1rem 1rem;
+        min-height: 80px;
+    }
+}
+
 footer {
     width: 100%;
     background: #f8f8f8;
