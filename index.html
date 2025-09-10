@@ -49,19 +49,22 @@
             const video = document.getElementById('hero-video');
             if (!video) return;
             
-            // Create intersection observer to watch when video is 4/5 visible
+            // Track if video has started playing
+            let hasStartedPlaying = false;
+            
+            // Create intersection observer to watch when video is fully visible
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting && entry.intersectionRatio >= 0.8) {
-                        // Start playing when at least 4/5 visible
-                        video.play().catch(e => console.log('Video play failed:', e));
-                    } else {
-                        // Pause when less than 4/5 visible
-                        video.pause();
+                    if (entry.isIntersecting && entry.intersectionRatio >= 1.0 && !hasStartedPlaying) {
+                        // Start playing when 100% visible for the first time
+                        video.play().then(() => {
+                            hasStartedPlaying = true;
+                        }).catch(e => console.log('Video play failed:', e));
                     }
+                    // Once started, never pause
                 });
             }, {
-                threshold: [0, 0.8] // Trigger at 0% and 80% visibility
+                threshold: [0, 1.0] // Trigger at 0% and 100% visibility
             });
             
             // Start observing the video element
