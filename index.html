@@ -81,7 +81,7 @@
     <!-- Load the shared components -->
     <script src="js/components.js"></script>
     
-    <!-- Video scroll trigger for both videos -->
+    <!-- Video preloading and scroll trigger -->
     <script>
         (function() {
             // Handle both hero and insights videos
@@ -94,14 +94,37 @@
                 const video = document.getElementById(videoConfig.id);
                 if (!video) return;
                 
+                // Force video to load but ensure it's paused
+                video.load();
+                video.pause();
+                video.currentTime = 0;
+                
+                // Function to start video playback
+                const startPlayback = () => {
+                    if (!videoConfig.hasStarted) {
+                        videoConfig.hasStarted = true; // Set this first to prevent double-starts
+                        video.play().then(() => {
+                            // Video started successfully
+                        }).catch(e => {
+                            videoConfig.hasStarted = false; // Reset on failure
+                            // Try again with a small delay
+                            video.currentTime = 0;
+                            video.load();
+                            setTimeout(() => {
+                                videoConfig.hasStarted = true;
+                                video.play().catch(() => {
+                                    videoConfig.hasStarted = false;
+                                });
+                            }, 100);
+                        });
+                    }
+                };
+                
                 // Create intersection observer to watch when video is fully visible
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting && entry.intersectionRatio >= 1.0 && !videoConfig.hasStarted) {
-                            // Start playing when 100% visible for the first time
-                            video.play().then(() => {
-                                videoConfig.hasStarted = true;
-                            }).catch(e => console.log(`Video play failed for ${videoConfig.id}:`, e));
+                            startPlayback();
                         }
                         // Once started, never pause
                     });
@@ -112,8 +135,23 @@
                 // Start observing the video element
                 observer.observe(video);
                 
-                // Ensure video is paused initially
-                video.pause();
+                // Check if video is already visible on page load
+                // Use requestAnimationFrame to ensure DOM is ready
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const rect = video.getBoundingClientRect();
+                        const viewportHeight = window.innerHeight;
+                        const videoHeight = rect.height;
+                        
+                        // Check if video is fully visible (same criteria as intersection observer)
+                        const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+                        const visibilityRatio = visibleHeight / videoHeight;
+                        
+                        if (visibilityRatio >= 1.0) {
+                            startPlayback();
+                        }
+                    });
+                });
             });
         })();
     </script>
