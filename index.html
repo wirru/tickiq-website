@@ -27,38 +27,27 @@
         </main>
     </div>
     
-    <!-- Wrapper to contain overflow -->
-    <div class="hero-media-wrapper">
-        <div class="hero-media-container">
-            <video class="hero-video" id="hero-video" muted loop playsinline>
-                <source src="assets/videos/tickiq-hero-background-trimmed.mp4" type="video/mp4">
-            </video>
-            <img src="assets/images/hands-hero-foreground.png" alt="Watch collection" class="hero-image-overlay">
-        </div>
-        
-        <!-- Feature selection pills -->
-        <div class="feature-pills-container" id="feature-pills">
-            <div class="feature-pills">
-                <div class="pill-indicator"></div>
-                <button class="feature-pill active" data-feature="accuracy" data-number="1">
-                    <span class="pill-text">Instant Accuracy</span>
-                    <span class="pill-number">1</span>
-                </button>
-                <button class="feature-pill" data-feature="ai-insights" data-number="2">
-                    <span class="pill-text">AI Insights</span>
-                    <span class="pill-number">2</span>
-                </button>
-                <button class="feature-pill" data-feature="collection" data-number="3">
-                    <span class="pill-text">Collection Tracking</span>
-                    <span class="pill-number">3</span>
-                </button>
-                <button class="feature-pill" data-feature="social" data-number="4">
-                    <span class="pill-text">Community</span>
-                    <span class="pill-number">4</span>
-                </button>
+    <!-- Hero Section with Image -->
+    <section class="hero-showcase">
+        <div class="showcase-container">
+            <p class="showcase-eyebrow">How it Works</p>
+            <h2 class="showcase-headline">Measure your watch's accuracy using only your phone's microphone</h2>
+            
+            <!-- Wrapper to contain overflow -->
+            <div class="hero-media-wrapper">
+                <div class="hero-media-container">
+                    <video class="hero-video" id="hero-video" muted loop playsinline>
+                        <source src="assets/videos/tickiq-hero-background-trimmed.mp4" type="video/mp4">
+                    </video>
+                    <img src="assets/images/hands-hero-foreground-hard-edge.png" alt="Watch collection" class="hero-image-overlay">
+                </div>
+            </div>
+            
+            <div class="showcase-description">
+                <p>Using advanced digital signal processing, tickIQ recreates the timegrapher tools used by professional watchmakers worldwide. With striking precision, <span class="highlight">we use your phone's microphone to detect the faint mechanical heartbeat of your watch</span>—effortlessly revealing its true accuracy and mechanical health <span class="highlight">in a matter of seconds</span>.</p>
             </div>
         </div>
-    </div>
+    </section>
     
     <!-- Main content section -->
     <section class="content-section">
@@ -105,188 +94,33 @@
         })();
     </script>
     
-    <!-- Feature pills interaction and sticky behavior -->
+    <!-- Scroll-triggered animations for showcase text -->
     <script>
         (function() {
-            // Pill selection functionality with sliding indicator
-            const pills = document.querySelectorAll('.feature-pill');
-            const indicator = document.querySelector('.pill-indicator');
+            // Elements to animate
+            const animateElements = document.querySelectorAll('.showcase-eyebrow, .showcase-headline, .showcase-description');
             
-            // Function to update indicator position and size
-            function updateIndicator(activePill) {
-                if (!activePill || !indicator) return;
-                
-                const pillRect = activePill.getBoundingClientRect();
-                const containerRect = activePill.parentElement.getBoundingClientRect();
-                
-                // Calculate position relative to container
-                const left = pillRect.left - containerRect.left;
-                const width = pillRect.width;
-                const height = pillRect.height;
-                
-                // Apply styles to indicator
-                indicator.style.left = `${left}px`;
-                indicator.style.width = `${width}px`;
-                indicator.style.height = `${height}px`;
-                indicator.style.top = '50%';
-                indicator.style.transform = 'translateY(-50%)';
-            }
+            if (animateElements.length === 0) return;
             
-            // Initialize indicator position
-            const initialActive = document.querySelector('.feature-pill.active');
-            if (initialActive) {
-                // Wait for styles to be computed
-                requestAnimationFrame(() => {
-                    // Set initial position without animation
-                    indicator.style.transition = 'none';
-                    updateIndicator(initialActive);
-                    // Re-enable animation after another frame
-                    requestAnimationFrame(() => {
-                        indicator.style.transition = '';
-                    });
+            // Create intersection observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Add animation class when element comes into view
+                        entry.target.classList.add('animate-in');
+                        // Stop observing once animated
+                        observer.unobserve(entry.target);
+                    }
                 });
-            }
-            
-            // Handle pill clicks
-            pills.forEach(pill => {
-                pill.addEventListener('click', function() {
-                    // Remove active class from all pills
-                    pills.forEach(p => p.classList.remove('active'));
-                    // Add active class to clicked pill
-                    this.classList.add('active');
-                    
-                    // Update indicator position (won't do anything on mobile due to CSS)
-                    updateIndicator(this);
-                    
-                    // Additional functionality
-                    const feature = this.getAttribute('data-feature');
-                    console.log('Selected feature:', feature);
-                });
+            }, {
+                threshold: 0.2, // Trigger when 20% of element is visible
+                rootMargin: '0px 0px -50px 0px' // Slightly offset trigger point
             });
             
-            // Update indicator on window resize
-            window.addEventListener('resize', () => {
-                const activePill = document.querySelector('.feature-pill.active');
-                if (activePill) {
-                    updateIndicator(activePill);
-                }
+            // Start observing all elements
+            animateElements.forEach(element => {
+                observer.observe(element);
             });
-            
-            // Sticky threshold behavior
-            const pillsContainer = document.getElementById('feature-pills');
-            const heroWrapper = document.querySelector('.hero-media-wrapper');
-            
-            function updatePillsPosition() {
-                const heroRect = heroWrapper.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
-                const viewportWidth = window.innerWidth;
-                
-                // Get actual measured height of pills container
-                const pillsRect = pillsContainer.getBoundingClientRect();
-                const pillsHeight = pillsRect.height;
-                
-                // Different bottom values for mobile vs desktop (from CSS)
-                let fixedBottom, anchoredBottom;
-                
-                if (viewportWidth <= 480) {
-                    fixedBottom = 15; // Fixed to viewport
-                    anchoredBottom = 0; // Anchored at hero bottom edge
-                } else if (viewportWidth <= 640) {
-                    fixedBottom = 20; // Fixed to viewport
-                    anchoredBottom = 5; // Anchored slightly below hero bottom
-                } else {
-                    // Desktop values (no intermediate tablet state)
-                    fixedBottom = 40;
-                    anchoredBottom = 20;
-                }
-                
-                // Calculate where pills would be in each state
-                // For anchored: measure from hero bottom up
-                const anchoredPillBottom = heroRect.bottom - anchoredBottom;
-                const anchoredPillTop = anchoredPillBottom - pillsHeight;
-                
-                // For fixed: measure from viewport bottom up  
-                const fixedPillBottom = viewportHeight - fixedBottom;
-                const fixedPillTop = fixedPillBottom - pillsHeight;
-                
-                // Switch when the two positions match exactly
-                const shouldAnchor = anchoredPillTop <= fixedPillTop;
-                
-                if (shouldAnchor) {
-                    // Hero has scrolled up enough - anchor pills to hero
-                    if (!pillsContainer.classList.contains('anchored')) {
-                        // For mobile, use a simpler transition without animation
-                        if (viewportWidth <= 640) {
-                            pillsContainer.classList.add('anchored');
-                            // Update indicator if exists (hidden on mobile but just in case)
-                            const activePill = document.querySelector('.feature-pill.active');
-                            if (activePill) updateIndicator(activePill);
-                        } else {
-                            // Desktop: smooth animated transition
-                            const currentTop = pillsContainer.getBoundingClientRect().top;
-                            pillsContainer.classList.add('anchored');
-                            const newTop = pillsContainer.getBoundingClientRect().top;
-                            const jumpDistance = newTop - currentTop;
-                            
-                            pillsContainer.style.transform = `translateY(${-jumpDistance}px)`;
-                            
-                            requestAnimationFrame(() => {
-                                pillsContainer.style.transition = 'transform 0.15s ease-out';
-                                pillsContainer.style.transform = '';
-                                setTimeout(() => {
-                                    pillsContainer.style.transition = '';
-                                    const activePill = document.querySelector('.feature-pill.active');
-                                    if (activePill) updateIndicator(activePill);
-                                }, 150);
-                            });
-                        }
-                    }
-                } else {
-                    // Hero still visible enough - keep pills fixed to viewport
-                    if (pillsContainer.classList.contains('anchored')) {
-                        // For mobile, use a simpler transition without animation
-                        if (viewportWidth <= 640) {
-                            pillsContainer.classList.remove('anchored');
-                            // Update indicator if exists
-                            const activePill = document.querySelector('.feature-pill.active');
-                            if (activePill) updateIndicator(activePill);
-                        } else {
-                            // Desktop: smooth animated transition
-                            const currentTop = pillsContainer.getBoundingClientRect().top;
-                            pillsContainer.classList.remove('anchored');
-                            const newTop = pillsContainer.getBoundingClientRect().top;
-                            const jumpDistance = newTop - currentTop;
-                            
-                            pillsContainer.style.transform = `translateY(${-jumpDistance}px)`;
-                            
-                            requestAnimationFrame(() => {
-                                pillsContainer.style.transition = 'transform 0.15s ease-out';
-                                pillsContainer.style.transform = '';
-                                setTimeout(() => {
-                                    pillsContainer.style.transition = '';
-                                    const activePill = document.querySelector('.feature-pill.active');
-                                    if (activePill) updateIndicator(activePill);
-                                }, 150);
-                            });
-                        }
-                    }
-                }
-            }
-            
-            // Use requestAnimationFrame for smoother updates
-            let ticking = false;
-            function requestTick() {
-                if (!ticking) {
-                    window.requestAnimationFrame(updatePillsPosition);
-                    ticking = true;
-                    setTimeout(() => { ticking = false; }, 16); // Reset after frame
-                }
-            }
-            
-            // Listen for scroll events
-            window.addEventListener('scroll', requestTick);
-            // Initial check
-            updatePillsPosition();
         })();
     </script>
 </body>

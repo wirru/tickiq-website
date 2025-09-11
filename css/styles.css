@@ -19,8 +19,8 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
-    /* Remove flex: 1 to prevent expansion */
+    padding: 0 2rem; /* Only horizontal padding */
+    min-height: 100vh; /* Full viewport height */
     display: flex;
     flex-direction: column;
 }
@@ -286,24 +286,29 @@ header.collapsed .get-app-button {
 }
 
 main {
-    /* Remove flex: 1 to keep content compact */
+    flex: 1; /* Take up remaining space */
     padding-top: 116px; /* Account for fixed header with top margin */
+    min-height: calc(100vh - 116px); /* Full viewport height minus header */
+    display: flex;
+    align-items: center; /* Center hero content vertically */
+    justify-content: center;
 }
 
 .hero {
     text-align: center;
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 0 0;
+    width: 100%;
+    padding: 2rem;
+    padding-bottom: calc(2rem + 8.33vh); /* Add extra bottom padding to compensate for container overlap */
 }
 
 .main-headline {
-    font-size: 3.75rem;
+    font-size: 4.25rem; /* Larger for clear primary focus */
     font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: 1rem;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.25rem;
     color: #000000;
-    line-height: 1.1;
+    line-height: 1.05;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
@@ -318,15 +323,57 @@ main {
 }
 
 /* Responsive headline sizing */
-@media (max-width: 768px) {
+/* Mobile state - when viewport is 750px or less */
+@media (max-width: 750px) {
     .main-headline {
         font-size: 3rem;
     }
+    
+    /* Hero showcase - full width on mobile */
+    .hero-showcase {
+        padding: 0 !important; /* No padding - full width */
+    }
+    
+    .showcase-container {
+        padding: 2.5rem 0 !important;
+        border-radius: 0 !important; /* No rounded corners on mobile */
+        max-width: 100vw !important; /* Full viewport width */
+        margin: 0 !important;
+    }
+    
+    .showcase-eyebrow {
+        font-size: 0.875rem !important; /* Smaller on mobile */
+        padding: 0 1.5rem; /* Internal padding for text */
+    }
+    
+    .showcase-headline {
+        font-size: 1.75rem !important; /* Smaller on mobile */
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        padding: 0 1.5rem; /* Internal padding for text */
+    }
+    
+    .showcase-description {
+        padding: 0 1.5rem; /* Internal padding for text */
+    }
+    
+    .showcase-description p {
+        font-size: 1.0625rem;
+    }
 }
 
+/* Smaller mobile adjustments if needed */
 @media (max-width: 480px) {
     .main-headline {
         font-size: 2.5rem;
+    }
+    
+    .showcase-eyebrow {
+        font-size: 0.8125rem !important; /* Even smaller on very small screens */
+    }
+    
+    .showcase-headline {
+        font-size: 1.5rem !important; /* Even smaller on very small screens */
     }
     
     .subheadline {
@@ -635,13 +682,100 @@ main {
     font-weight: 500;
 }
 
+/* Hero Showcase Section - Apple-inspired design */
+.hero-showcase {
+    padding: 2rem;
+    background: transparent;
+    position: relative;
+    margin-top: -16.67vh; /* Pull up by 1/6th of viewport height */
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden; /* Hide horizontal overflow */
+}
+
+.showcase-container {
+    width: 750px; /* Fixed width */
+    flex-shrink: 0; /* Don't shrink in flex container */
+    padding: 4rem 0; /* Remove horizontal padding for full-bleed image */
+    text-align: center;
+    background: #000000; /* Black background */
+    border-radius: 48px; /* Very rounded corners */
+    overflow: hidden; /* Ensure content respects rounded corners */
+}
+
+.showcase-eyebrow {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #a1a1a6; /* Light gray for dark background */
+    margin: 0 0 0.75rem 0;
+    padding: 0 3rem; /* Add padding to text elements */
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.showcase-eyebrow.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.showcase-headline {
+    font-size: 2.75rem; /* Smaller than main headline for hierarchy */
+    font-weight: 600;
+    line-height: 1.15;
+    color: #ffffff; /* White for dark background */
+    margin: 0 auto 3rem;
+    padding: 0 3rem; /* Add padding to text elements */
+    max-width: 100%; /* Full width within padding */
+    letter-spacing: -0.015em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-delay: 0.1s; /* Stagger after eyebrow */
+}
+
+.showcase-headline.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.showcase-description {
+    max-width: 100%;
+    margin: 2rem auto 0;
+    padding: 0 3rem; /* Add padding to text elements */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-delay: 0.2s; /* Stagger after headline */
+}
+
+.showcase-description.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.showcase-description p {
+    font-size: 1.1875rem;
+    line-height: 1.6;
+    color: #8e8e93; /* Darker gray for more contrast with highlights */
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-align: left; /* Left-align the paragraph text */
+}
+
+.showcase-description .highlight {
+    color: #ffffff; /* Pure white for emphasis */
+    font-weight: 500; /* Slightly bolder for subtle emphasis */
+}
+
 /* Hero media wrapper to control overflow */
 .hero-media-wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden; /* Clip horizontal overflow */
-    overflow-y: visible; /* Allow pills to extend below */
-    margin: 0.25rem 0 0;
+    overflow: visible; /* Allow full-bleed within container */
+    margin: 2rem 0; /* Add spacing around the media */
 }
 
 /* Hero media section with video background and image overlay */
@@ -663,13 +797,13 @@ main {
 
 .hero-video {
     position: absolute;
-    /* Video at (504,23) with dimensions 430x934 in 1440x1565 coordinate space */
-    /* Width: 430/1440 = 29.86% of container */
-    /* Position: 504/1440 = 35% from left, 23/1565 = 1.47% from top */
-    width: 29.86%;
+    /* Video at (511,95) with dimensions 420x912 in 1440x1565 coordinate space */
+    /* Width: 420/1440 = 29.17% of container */
+    /* Position: 511/1440 = 35.49% from left, 95/1565 = 6.07% from top */
+    width: 29.17%;
     height: auto;
-    left: 35%;
-    top: 1.47%;
+    left: 35.49%;
+    top: 6.07%;
     z-index: 1;
     object-fit: cover;
     /* Fixed border radius for constant 750px container */
@@ -691,6 +825,8 @@ main {
     min-height: 100px; /* Much shorter height */
     padding: 2rem 2rem;
     background: #ffffff;
+    position: relative;
+    z-index: 1; /* Ensure it's above the showcase section */
 }
 
 .content-container {
@@ -792,7 +928,7 @@ footer {
 
 @media (max-width: 768px) {
     .container {
-        padding: 1.5rem;
+        padding: 0 1.5rem; /* Only horizontal padding */
     }
     
     /* Keep header elements consistent across viewports */
@@ -809,6 +945,7 @@ footer {
     
     main {
         padding-top: 86px; /* Account for fixed header with top margin on mobile */
+        min-height: calc(100vh - 86px); /* Adjust for mobile header height */
     }
     
     /* Keep font sizes consistent across viewports */
@@ -1177,10 +1314,10 @@ footer {
     }
 }
 
-/* Feature Pills Section */
+/* Feature Pills Section - REMOVED FOR NOW
 .feature-pills-container {
-    position: fixed;
-    bottom: 40px;
+    position: absolute;
+    bottom: 90px; /* Positioned 70px higher than original */
     left: 0;
     right: 0;
     width: 100%;
@@ -1188,13 +1325,6 @@ footer {
     justify-content: center;
     z-index: 100;
     pointer-events: none; /* Allow clicks through container */
-}
-
-.feature-pills-container.anchored {
-    position: absolute;
-    bottom: 20px; /* Moved up by 50px for better overlap */
-    left: 0;
-    right: 0;
 }
 
 .feature-pills {
@@ -1269,12 +1399,8 @@ footer {
 /* Mobile design with accordion-style pills */
 @media (max-width: 640px) {
     .feature-pills-container {
-        bottom: 20px; /* Fixed to viewport bottom */
+        bottom: 20px; /* Adjusted for mobile */
         padding: 0 1rem;
-    }
-    
-    .feature-pills-container.anchored {
-        bottom: 5px; /* Anchored slightly below hero bottom */
     }
     
     .feature-pills {
@@ -1397,12 +1523,8 @@ footer {
 /* Extra small mobile */
 @media (max-width: 480px) {
     .feature-pills-container {
-        bottom: 15px; /* Fixed to viewport bottom */
+        bottom: 10px; /* Adjusted for small mobile */
         padding: 0 0.75rem;
-    }
-    
-    .feature-pills-container.anchored {
-        bottom: 0; /* Anchored at hero bottom edge */
     }
     
     .feature-pills {
@@ -1455,7 +1577,11 @@ footer {
         padding: 0 0.875rem; /* Slightly less on tiny screens */
         font-size: 0.65rem;
     }
-    
+}
+END OF FEATURE PILLS CSS */
+
+/* Ultra narrow screens */
+@media (max-width: 350px) {
     /* Fix headline overflow on ultra-narrow screens */
     .main-headline {
         font-size: 2rem;
