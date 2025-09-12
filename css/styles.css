@@ -80,7 +80,9 @@ header.collapsed .header-logo {
     width: 100%;
     max-width: 900px; /* Start width for smooth shrinking animation */
     height: 48px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
     border-radius: 50px;
@@ -1500,6 +1502,32 @@ main {
     .community-description p {
         font-size: 1.0625rem;
     }
+}
+
+/* Disable save-to-camera-roll on all phone images */
+.hero-image-overlay,
+.insights-phone,
+.recognition-phone,
+.collection-phone,
+.community-phone {
+    -webkit-touch-callout: none; /* Disable iOS save image callout */
+    -webkit-user-select: none; /* Disable selection */
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Also disable on container elements to be thorough */
+.hero-media-container,
+.insights-media-container,
+.recognition-media-container,
+.collection-media-container,
+.community-media-container {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 /* Main content section */
