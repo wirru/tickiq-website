@@ -44,7 +44,7 @@
             </div>
             
             <div class="showcase-description">
-                <p>Using advanced digital signal processing, tickIQ recreates the timegrapher tools used by professional watchmakers worldwide. With striking precision, <span class="highlight">we use your phone's microphone to detect the faint mechanical heartbeat of your watch</span>—effortlessly revealing its true accuracy and mechanical health <span class="highlight">in a matter of seconds</span>.</p>
+                <p>Using advanced digital signal processing, tickIQ recreates the timegrapher tools used by professional watchmakers worldwide. With striking precision, <span class="highlight">we use your phone's microphone to detect the faint mechanical heartbeat of your watch</span>, effortlessly revealing its true accuracy and mechanical health <span class="highlight">in a matter of seconds</span>.</p>
             </div>
         </div>
     </section>
@@ -53,7 +53,7 @@
     <section class="insights-section">
         <div class="insights-container">
             <p class="insights-eyebrow">AI Powered</p>
-            <h2 class="insights-headline">Unlock insights about your watch in seconds</h2>
+            <h2 class="insights-headline">Unlock insights about your timepiece in seconds</h2>
             <div class="insights-hero-image">
                 <div class="insights-media-container">
                     <video class="insights-video" id="insights-video" muted loop playsinline preload="auto">
@@ -64,6 +64,79 @@
             </div>
             <div class="insights-description">
                 <p>Our AI-powered analysis transforms raw measurements into <span class="highlight">professional-grade insights you can actually understand</span>. Get instant summaries of your watch's health, personalized maintenance recommendations, and beautiful visualizations that track your timepiece's performance over days, weeks, and months—helping you <span class="highlight">catch issues before they become problems</span>.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AI Watch Recognition Section -->
+    <section class="recognition-section">
+        <div class="recognition-container">
+            <p class="recognition-eyebrow">Auto-Identification</p>
+            <h2 class="recognition-headline">Add your watches in a snap</h2>
+            <div class="recognition-hero-image">
+                <div class="recognition-accordion">
+                    <div class="recognition-media-container">
+                        <video class="recognition-video" id="recognition-video-1" muted loop playsinline preload="auto">
+                            <source src="assets/videos/tickiq-ai-insights-web.mp4" type="video/mp4">
+                        </video>
+                        <img src="assets/images/iphone16_frame.png" alt="tickIQ AI watch recognition on iPhone" class="recognition-phone">
+                    </div>
+                    <div class="recognition-media-container">
+                        <video class="recognition-video" id="recognition-video-2" muted loop playsinline preload="auto">
+                            <source src="assets/videos/tickiq-ai-insights-web.mp4" type="video/mp4">
+                        </video>
+                        <img src="assets/images/iphone16_frame.png" alt="tickIQ AI watch recognition on iPhone" class="recognition-phone">
+                    </div>
+                    <div class="recognition-media-container">
+                        <video class="recognition-video" id="recognition-video-3" muted loop playsinline preload="auto">
+                            <source src="assets/videos/tickiq-ai-insights-web.mp4" type="video/mp4">
+                        </video>
+                        <img src="assets/images/iphone16_frame.png" alt="tickIQ AI watch recognition on iPhone" class="recognition-phone">
+                    </div>
+                </div>
+            </div>
+            <div class="recognition-description">
+                <p>Simply snap a photo and watch as cutting-edge AI <span class="highlight">automatically identifies the brand and model of your timepiece</span>. No manual entry, no searching through databases. tickIQ instantly recognizes your watch's make and model with remarkable accuracy. <span class="highlight">It's like magic</span>, turning what used to be a tedious process into an effortless, delightful experience.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Collection Management Section -->
+    <section class="collection-section">
+        <div class="collection-container">
+            <div class="collection-text-wrapper">
+                <p class="collection-eyebrow">Collection Management</p>
+                <h2 class="collection-headline">Keep all your timepieces in one beautiful place</h2>
+                <div class="collection-description">
+                    <p>Our beautiful interface with <span class="highlight">gorgeous watch portrait photos</span> creates the perfect digital home for your collection. Track each timepiece's accuracy history and mechanical health trends over time, all in one elegantly designed space. tickIQ makes it effortless to <span class="highlight">share your passion with friends</span> through beautifully formatted accuracy reports and watch performance data that showcase both your collection and how well each piece is running.</p>
+                </div>
+            </div>
+            <div class="collection-hero-image">
+                <div class="collection-media-container">
+                    <video class="collection-video" id="collection-video" muted loop playsinline preload="auto">
+                        <source src="assets/videos/tickiq-ai-insights-web.mp4" type="video/mp4">
+                    </video>
+                    <img src="assets/images/iphone16_frame.png" alt="tickIQ collection management on iPhone" class="collection-phone">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Community Section -->
+    <section class="community-section">
+        <div class="community-container">
+            <p class="community-eyebrow">Community</p>
+            <h2 class="community-headline">Explore extraordinary collections from the inner circle of members</h2>
+            <div class="community-hero-image">
+                <div class="community-media-container">
+                    <video class="community-video" id="community-video" muted loop playsinline preload="auto">
+                        <source src="assets/videos/tickiq-ai-insights-web.mp4" type="video/mp4">
+                    </video>
+                    <img src="assets/images/iphone16_frame.png" alt="tickIQ community collections on iPhone" class="community-phone">
+                </div>
+            </div>
+            <div class="community-description">
+                <p>Explore <span class="highlight">grail pieces, vintage treasures, and modern marvels</span> from tickIQ members around the world. For the first time ever, see <span class="highlight">real accuracy data from actual owners</span>, making tickIQ the only platform where you can benchmark your watch's performance against the exact same references in collections worldwide.</p>
             </div>
         </div>
     </section>
@@ -84,10 +157,15 @@
     <!-- Video preloading and scroll trigger -->
     <script>
         (function() {
-            // Handle both hero and insights videos
+            // Handle all videos
             const videos = [
                 { id: 'hero-video', hasStarted: false },
-                { id: 'insights-video', hasStarted: false }
+                { id: 'insights-video', hasStarted: false },
+                { id: 'recognition-video-1', hasStarted: false },
+                { id: 'recognition-video-2', hasStarted: false },
+                { id: 'recognition-video-3', hasStarted: false },
+                { id: 'collection-video', hasStarted: false },
+                { id: 'community-video', hasStarted: false }
             ];
             
             videos.forEach(videoConfig => {
@@ -159,8 +237,8 @@
     <!-- Scroll-triggered animations for showcase and insights text -->
     <script>
         (function() {
-            // Elements to animate - both showcase and insights sections
-            const animateElements = document.querySelectorAll('.showcase-eyebrow, .showcase-headline, .showcase-description, .insights-eyebrow, .insights-headline, .insights-hero-image, .insights-description');
+            // Elements to animate - all sections
+            const animateElements = document.querySelectorAll('.showcase-eyebrow, .showcase-headline, .showcase-description, .insights-eyebrow, .insights-headline, .insights-hero-image, .insights-description, .recognition-eyebrow, .recognition-headline, .recognition-hero-image, .recognition-description, .collection-eyebrow, .collection-headline, .collection-hero-image, .collection-description, .community-eyebrow, .community-headline, .community-hero-image, .community-description');
             
             if (animateElements.length === 0) return;
             

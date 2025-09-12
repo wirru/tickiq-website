@@ -331,7 +331,8 @@ main {
     
     /* Hero showcase - full width on mobile */
     .hero-showcase {
-        padding: 0 !important; /* No padding - full width */
+        padding: 4rem 0 !important; /* Vertical padding for black space, no horizontal */
+        background: #000000; /* Maintain black background */
     }
     
     .showcase-container {
@@ -339,6 +340,7 @@ main {
         border-radius: 0 !important; /* No rounded corners on mobile */
         max-width: 100vw !important; /* Full viewport width */
         margin: 0 !important;
+        background: #1a1a1a; /* Maintain dark gray background */
     }
     
     .showcase-eyebrow {
@@ -347,7 +349,7 @@ main {
     }
     
     .showcase-headline {
-        font-size: 1.75rem !important; /* Smaller on mobile */
+        font-size: 2.25rem !important; /* Larger for better readability on mobile */
         line-height: 1.2;
         margin-bottom: 1.5rem;
         padding: 0 1.5rem; /* Internal padding for text */
@@ -373,7 +375,7 @@ main {
     }
     
     .showcase-headline {
-        font-size: 1.5rem !important; /* Even smaller on very small screens */
+        font-size: 2rem !important; /* Slightly smaller on very small screens */
     }
     
     .subheadline {
@@ -682,12 +684,13 @@ main {
     font-weight: 500;
 }
 
-/* Hero Showcase Section - Apple-inspired design */
+/* Hero Showcase Section - Full width black background */
 .hero-showcase {
-    padding: 2rem;
-    background: transparent;
+    width: 100%;
+    padding: 6rem 2rem; /* More vertical padding for black space */
+    background: #000000; /* Black background for full section */
     position: relative;
-    margin-top: -16.67vh; /* Pull up by 1/6th of viewport height */
+    margin-top: 0; /* No overlap with section above */
     display: flex;
     justify-content: center;
     overflow-x: hidden; /* Hide horizontal overflow */
@@ -698,7 +701,7 @@ main {
     flex-shrink: 0; /* Don't shrink in flex container */
     padding: 4rem 0; /* Remove horizontal padding for full-bleed image */
     text-align: center;
-    background: #000000; /* Black background */
+    background: #1a1a1a; /* Dark gray background for container */
     border-radius: 48px; /* Very rounded corners */
     overflow: hidden; /* Ensure content respects rounded corners */
 }
@@ -823,7 +826,7 @@ main {
 .insights-section {
     width: 100%;
     padding: 6rem 2rem;
-    margin-top: calc(2rem + 8.33vh);
+    margin-top: 0; /* Remove extra whitespace */
     background: #f5f5f7;
     position: relative;
     z-index: 1;
@@ -954,7 +957,7 @@ main {
     }
     
     .insights-headline {
-        font-size: 1.75rem !important; /* Match showcase mobile size */
+        font-size: 2.25rem !important; /* Match showcase mobile size */
         line-height: 1.2;
         margin-bottom: 1.5rem;
     }
@@ -974,10 +977,511 @@ main {
     }
     
     .insights-headline {
-        font-size: 1.5rem !important; /* Match showcase small mobile */
+        font-size: 2rem !important; /* Match showcase small mobile */
     }
     
     .insights-description p {
+        font-size: 1.0625rem;
+    }
+}
+
+/* AI Watch Recognition Section - White background */
+.recognition-section {
+    width: 100%;
+    padding: 6rem 2rem 3rem; /* More padding at top, less at bottom */
+    margin-top: 0; /* Remove extra whitespace */
+    background: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+
+.recognition-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.recognition-eyebrow,
+.recognition-headline,
+.recognition-hero-image,
+.recognition-description {
+    /* Same animations as insights section */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.recognition-eyebrow {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #86868b;
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+}
+
+.recognition-headline {
+    font-size: 2.75rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #000000;
+    margin: 0 auto 4rem; /* More space before hero images */
+    max-width: 100%;
+    letter-spacing: -0.015em;
+    transition-delay: 0.1s;
+}
+
+.recognition-hero-image {
+    margin: 4rem auto 4rem; /* More vertical space around hero images */
+    text-align: center;
+    transition-delay: 0.15s;
+    overflow: visible; /* Allow overflow for accordion effect */
+}
+
+.recognition-accordion {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Align items to bottom */
+    gap: 0;
+    position: relative;
+    height: 420px;
+    max-width: 700px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.recognition-media-container {
+    position: relative;
+    max-width: 200px;
+    width: 200px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    transform-origin: bottom center;
+}
+
+/* Fan out phones like \|/ with heavy overlap */
+.recognition-media-container:nth-child(1) {
+    transform: rotate(-18deg) translateX(40px) scale(0.95); /* Increased rotation and scale adjustment */
+    z-index: 1 !important;
+    transform-origin: bottom center; /* Rotate from bottom */
+    filter: brightness(0.7); /* Even darker for maximum depth */
+}
+
+.recognition-media-container:nth-child(2) {
+    transform: rotate(0deg) translateZ(20px); /* Bring forward in 3D space */
+    z-index: 10 !important; /* Higher z-index to be in front */
+    margin: 0 -90px; /* Much more negative margin for heavy overlap */
+    position: relative; /* Ensure z-index works */
+    filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3)); /* Add depth shadow */
+}
+
+.recognition-media-container:nth-child(3) {
+    transform: rotate(18deg) translateX(-40px) scale(0.95); /* Increased rotation and scale adjustment */
+    z-index: 2 !important;
+    transform-origin: bottom center; /* Rotate from bottom */
+    filter: brightness(0.7); /* Even darker for maximum depth */
+}
+
+.recognition-video {
+    position: absolute;
+    width: 92.84%;
+    height: auto;
+    left: 3.58%;
+    top: 1.45%;
+    z-index: 1;
+    object-fit: cover;
+    border-radius: 26px; /* Scale down for smaller container */
+}
+
+.recognition-phone {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+
+.recognition-description {
+    max-width: 750px;
+    margin: 0 auto;
+    transition-delay: 0.2s;
+}
+
+.recognition-description p {
+    font-size: 1.1875rem;
+    line-height: 1.6;
+    color: #666666;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-align: left;
+}
+
+.recognition-description .highlight {
+    color: #000000;
+    font-weight: 500;
+}
+
+/* Collection Management Section - Gray background */
+.collection-section {
+    width: 100%;
+    padding: 6rem 2rem;
+    margin-top: calc(2rem + 8.33vh);
+    background: #f5f5f7;
+    position: relative;
+    z-index: 1;
+}
+
+.collection-container {
+    max-width: 1100px; /* Wider for side-by-side */
+    margin: 0 auto;
+    text-align: center; /* Default center for all sizes */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Side-by-side layout on larger screens */
+@media (min-width: 900px) {
+    .collection-container {
+        display: flex;
+        flex-direction: row !important; /* Force horizontal layout */
+        gap: 4rem;
+        align-items: center; /* Vertically center all content */
+        justify-content: space-between;
+        text-align: left; /* Left align text on desktop */
+    }
+    
+    /* Create a wrapper for text content */
+    .collection-text-wrapper {
+        flex: 1;
+        max-width: 600px;
+        text-align: left; /* Ensure text wrapper is also left aligned */
+    }
+    
+    .collection-eyebrow {
+        margin-bottom: 0.75rem !important; /* Force tighter spacing */
+    }
+    
+    .collection-headline {
+        margin-top: 0 !important; /* Remove any top margin */
+        margin-bottom: 2rem;
+    }
+    
+    .collection-hero-image {
+        flex-shrink: 0;
+        width: 300px;
+        margin: 0;
+    }
+}
+
+.collection-eyebrow,
+.collection-headline,
+.collection-hero-image,
+.collection-description {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.collection-eyebrow {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #86868b;
+    margin: 0 0 0.75rem 0; /* Very tight spacing to headline */
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+}
+
+.collection-headline {
+    font-size: 2.75rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #000000;
+    margin: 0 0 2rem 0; /* No top margin, bottom margin for content */
+    max-width: 100%;
+    letter-spacing: -0.015em;
+    transition-delay: 0.1s;
+}
+
+.collection-hero-image {
+    margin: 3rem auto;
+    text-align: center;
+    transition-delay: 0.15s;
+}
+
+.collection-media-container {
+    position: relative;
+    display: inline-block;
+    max-width: 256px;
+    width: 100%;
+}
+
+.collection-video {
+    position: absolute;
+    width: 92.84%;
+    height: auto;
+    left: 3.58%;
+    top: 1.45%;
+    z-index: 1;
+    object-fit: cover;
+    border-radius: 34px;
+}
+
+.collection-phone {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+
+.collection-description {
+    max-width: 750px;
+    margin: 0 auto;
+    transition-delay: 0.2s;
+}
+
+.collection-description p {
+    font-size: 1.1875rem;
+    line-height: 1.6;
+    color: #666666;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-align: left;
+}
+
+.collection-description .highlight {
+    color: #000000;
+    font-weight: 500;
+}
+
+/* Community Section */
+.community-section {
+    width: 100%;
+    padding: 6rem 2rem;
+    margin-top: calc(2rem + 8.33vh);
+    background: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+
+.community-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.community-eyebrow,
+.community-headline,
+.community-hero-image,
+.community-description {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.community-eyebrow {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #86868b;
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+}
+
+.community-headline {
+    font-size: 2.75rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #000000;
+    margin: 0 auto 3rem;
+    max-width: 100%;
+    letter-spacing: -0.015em;
+    transition-delay: 0.1s;
+}
+
+.community-hero-image {
+    margin: 3rem auto;
+    text-align: center;
+    transition-delay: 0.15s;
+}
+
+.community-media-container {
+    position: relative;
+    display: inline-block;
+    max-width: 320px; /* Larger for emphasis */
+    width: 100%;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15)); /* Add subtle shadow */
+}
+
+.community-video {
+    position: absolute;
+    width: 92.84%;
+    height: auto;
+    left: 3.58%;
+    top: 1.45%;
+    z-index: 1;
+    object-fit: cover;
+    border-radius: 42px; /* Scale up for larger container */
+}
+
+.community-phone {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+
+.community-description {
+    max-width: 750px;
+    margin: 0 auto;
+    transition-delay: 0.2s;
+}
+
+.community-description p {
+    font-size: 1.1875rem;
+    line-height: 1.6;
+    color: #666666;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-align: left;
+}
+
+.community-description .highlight {
+    color: #000000;
+    font-weight: 500;
+}
+
+/* Add animate-in classes for animations */
+.recognition-eyebrow.animate-in,
+.recognition-headline.animate-in,
+.recognition-hero-image.animate-in,
+.recognition-description.animate-in,
+.collection-eyebrow.animate-in,
+.collection-headline.animate-in,
+.collection-hero-image.animate-in,
+.collection-description.animate-in,
+.community-eyebrow.animate-in,
+.community-headline.animate-in,
+.community-hero-image.animate-in,
+.community-description.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive adjustments for new sections */
+@media (max-width: 750px) {
+    .recognition-section {
+        padding: 4rem 1.5rem 2rem; /* Match top padding, less at bottom on mobile */
+        margin-top: 0;
+    }
+    
+    .collection-section,
+    .community-section {
+        padding: 4rem 1.5rem;
+        margin-top: 0;
+    }
+    
+    /* Reset collection layout on mobile to match other sections */
+    .collection-container {
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        max-width: 800px;
+    }
+    
+    .collection-text-wrapper {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .collection-eyebrow {
+        margin-bottom: 0.5rem !important; /* Standard mobile spacing */
+    }
+    
+    .collection-headline {
+        margin: 0 auto 3rem !important; /* Center on mobile */
+    }
+    
+    .collection-hero-image {
+        width: 100%;
+        margin: 3rem auto !important;
+    }
+    
+    .recognition-eyebrow,
+    .collection-eyebrow,
+    .community-eyebrow {
+        font-size: 0.875rem !important;
+    }
+    
+    .recognition-headline,
+    .collection-headline,
+    .community-headline {
+        font-size: 2.25rem !important;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+    }
+    
+    .recognition-description p,
+    .collection-description p,
+    .community-description p {
+        font-size: 1.0625rem;
+    }
+    
+    /* Adjust fan accordion for mobile */
+    .recognition-accordion {
+        height: 320px;
+        max-width: 100%;
+    }
+    
+    .recognition-media-container {
+        max-width: 140px;
+        width: 140px;
+    }
+    
+    /* Overlapping fan on mobile */
+    .recognition-media-container:nth-child(1) {
+        transform: rotate(-15deg) translateX(25px) scale(0.96);
+        z-index: 1 !important;
+    }
+    
+    .recognition-media-container:nth-child(2) {
+        transform: rotate(0deg);
+        margin: 0 -65px; /* Heavy overlap on mobile too */
+        z-index: 10 !important;
+    }
+    
+    .recognition-media-container:nth-child(3) {
+        transform: rotate(15deg) translateX(-25px) scale(0.96);
+        z-index: 2 !important;
+    }
+    
+    .recognition-video {
+        border-radius: 18px; /* Smaller radius for smaller phones */
+    }
+}
+
+@media (max-width: 480px) {
+    .recognition-section,
+    .collection-section,
+    .community-section {
+        padding: 3rem 1.25rem;
+    }
+    
+    .recognition-eyebrow,
+    .collection-eyebrow,
+    .community-eyebrow {
+        font-size: 0.8125rem !important;
+    }
+    
+    .recognition-headline,
+    .collection-headline,
+    .community-headline {
+        font-size: 2rem !important;
+    }
+    
+    .recognition-description p,
+    .collection-description p,
+    .community-description p {
         font-size: 1.0625rem;
     }
 }
