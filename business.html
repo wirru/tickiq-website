@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Inquiries — tickIQ</title>
+    <meta name="description" content="Contact tickIQ for business inquiries, partnerships, and general questions.">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="assets/icons/app-icon.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .business-hero {
+            padding: 8rem 2rem 8rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .business-headline {
+            font-size: 3.5rem;
+            font-weight: 600;
+            line-height: 1.1;
+            color: #000000;
+            margin: 0 0 1.5rem 0;
+            letter-spacing: -0.03em;
+        }
+        
+        .business-subheadline {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0 0 3rem 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 3rem;
+        }
+        
+        .email-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .email-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .email-address {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #86868b;
+        }
+        
+        @media (max-width: 768px) {
+            .business-headline {
+                font-size: 2.5rem;
+            }
+            
+            .business-subheadline {
+                font-size: 1.125rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .business-hero {
+                padding: 6rem 1.5rem 6rem;
+            }
+            
+            .business-headline {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be injected here -->
+    <header></header>
+    
+    <main>
+        <div class="business-hero">
+            <h1 class="business-headline">Business Inquiries</h1>
+            <p class="business-subheadline">
+                Have a partnership opportunity, press inquiry, or business proposal? We'd love to hear from you.
+            </p>
+            <a href="mailto:business@b23.ai" class="email-button">
+                Contact Us
+            </a>
+            <span class="email-address">business@b23.ai</span>
+        </div>
+    </main>
+    
+    <!-- Footer will be injected here -->
+    <footer></footer>
+    
+    <!-- Load the shared components -->
+    <script src="js/components.js"></script>
+</body>
+</html>

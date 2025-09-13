@@ -131,6 +131,7 @@
                         <div class="footer-section">
                             <h4>Support</h4>
                             <a href="/help">Help Center</a>
+                            <a href="/business">Business</a>
                             <a href="https://forms.gle/c8UFuimtHGte3h4x5" target="_blank">Leave Feedback</a>
                         </div>
                     </div>
