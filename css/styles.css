@@ -1092,9 +1092,9 @@ main {
 
 .recognition-video {
     position: absolute;
-    width: 92.84%;
+    width: 93.84%; /* Increased by ~1% for better fit */
     height: auto;
-    left: 3.58%;
+    left: 3.08%; /* Adjusted to center the larger video */
     top: 1.45%;
     z-index: 1;
     object-fit: cover;
@@ -1475,6 +1475,8 @@ main {
     
     .recognition-video {
         border-radius: 18px; /* Smaller radius for smaller phones */
+        width: 94.84%; /* Slightly larger for mobile too */
+        left: 2.58%; /* Adjusted centering */
     }
 }
 
