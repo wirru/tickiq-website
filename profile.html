@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tickIQ - User Profile</title>
+    <meta name="description" content="View watch collection and timing data on tickIQ">
+
+    <!-- Open Graph / Twitter Cards -->
+    <meta property="og:title" content="tickIQ Profile">
+    <meta property="og:description" content="View watch collection and timing measurements">
+    <meta property="og:image" content="/assets/og-image.png">
+    <meta property="og:url" content="/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- App Links for iOS -->
+    <!-- <meta property="al:ios:app_store_id" content="APP_STORE_ID"> -->
+    <meta property="al:ios:app_name" content="tickIQ">
+    <meta property="al:ios:url" content="tickiq://profile/">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1c1610 0%, #141010 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .username {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .message {
+            font-size: 18px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+        }
+
+        .app-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .app-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 280px;
+            justify-content: center;
+        }
+
+        .app-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .app-button.primary {
+            background: linear-gradient(135deg, #FFB800 0%, #FF8A00 100%);
+            border: none;
+        }
+
+        .app-button.primary:hover {
+            background: linear-gradient(135deg, #FFC933 0%, #FF9933 100%);
+        }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #FFB800;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">⏱️</div>
+
+        <h1>tickIQ</h1>
+
+        <div id="username" class="username"></div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading profile...</p>
+        </div>
+
+        <div id="content">
+            <p class="message">
+                View this watch collection in the tickIQ app for detailed timing measurements and analytics.
+            </p>
+
+            <div class="app-buttons">
+                <a href="#" id="open-app" class="app-button primary">
+                    📱 Open in tickIQ App
+                </a>
+                <a href="https://apps.apple.com/app/tickiq" class="app-button">
+                    📥 Download tickIQ
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>The precision watch timing app</p>
+        </div>
+    </div>
+
+    <script>
+        // Parse username from URL
+        const pathParts = window.location.pathname.split('/');
+        const username = pathParts[2] || pathParts[1]?.replace('.html', '') || 'user';
+
+        // Update page with username
+        document.getElementById('username').textContent = '@' + username;
+        document.title = `@${username} - tickIQ`;
+
+        // Update Open in App link
+        const openAppLink = document.getElementById('open-app');
+        openAppLink.href = `tickiq://profile/${username}`;
+
+        // Try to open the app automatically on mobile
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Small delay to allow page to render
+            setTimeout(() => {
+                // Try to open the app
+                window.location.href = `tickiq://profile/${username}`;
+
+                // If the app doesn't open, show download option
+                setTimeout(() => {
+                    // Page is still visible, app probably not installed
+                }, 1000);
+            }, 500);
+        }
+    </script>
+</body>
+</html>

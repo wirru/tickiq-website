@@ -4,7 +4,9 @@
 Official website for tickIQ - a professional iOS app for mechanical watch timing analysis. Features AI-powered watch identification, chronometer-precision measurements, and cloud-synchronized collection management.
 
 ## Live Site
-- **Production URL**: https://tickiq.b23.ai (to be configured)
+- **Production URLs**:
+  - https://tickiq.app (primary)
+  - https://tickiq.b23.ai (secondary)
 - **Parent Company**: B23, LLC (https://www.b23.ai)
 
 ## Tech Stack
@@ -51,10 +53,11 @@ vercel --prod
 vercel login
 ```
 
-## DNS Configuration (To Do)
-1. Add subdomain in Vercel dashboard
-2. Configure DNS for tickiq.b23.ai to point to Vercel
-3. SSL certificate will be automatically provisioned
+## Domain Configuration
+Both domains are managed through Vercel:
+1. Add domains in Vercel dashboard (Project Settings > Domains)
+2. Configure DNS records at your domain registrar to point to Vercel
+3. SSL certificates automatically provisioned by Vercel for all domains
 
 ## Contact Information
 - **Product Email**: tickiq@b23.ai
