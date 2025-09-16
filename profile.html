@@ -179,20 +179,41 @@
         const pathParts = window.location.pathname.split('/');
         const username = pathParts[2] || pathParts[1]?.replace('.html', '') || 'user';
 
+        // Check for dev parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDev = urlParams.get('dev') === 'true';
+
+        // Determine which URL scheme to use
+        const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
+
         // Update page with username
         document.getElementById('username').textContent = '@' + username;
         document.title = `@${username} - tickIQ`;
 
+        // If dev mode, show indicator
+        if (isDev) {
+            // Add a small dev indicator to the page
+            const devBadge = document.createElement('div');
+            devBadge.style.cssText = 'position: fixed; top: 10px; right: 10px; background: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; z-index: 1000;';
+            devBadge.textContent = 'DEV MODE';
+            document.body.appendChild(devBadge);
+        }
+
         // Update Open in App link
         const openAppLink = document.getElementById('open-app');
-        openAppLink.href = `tickiq://profile/${username}`;
+        openAppLink.href = `${urlScheme}://profile/${username}`;
+
+        // Update button text if in dev mode
+        if (isDev) {
+            openAppLink.innerHTML = '📱 Open in tickIQ Dev App';
+        }
 
         // Try to open the app automatically on mobile
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             // Small delay to allow page to render
             setTimeout(() => {
                 // Try to open the app
-                window.location.href = `tickiq://profile/${username}`;
+                window.location.href = `${urlScheme}://profile/${username}`;
 
                 // If the app doesn't open, show download option
                 setTimeout(() => {
