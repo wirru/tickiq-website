@@ -198,6 +198,101 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
+
+        /* QR Code Modal for Desktop */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .qr-modal.active {
+            display: flex;
+        }
+
+        .qr-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 400px;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .qr-modal-close:hover {
+            opacity: 1;
+        }
+
+        .qr-code-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .qr-code-container img {
+            width: 200px;
+            height: 200px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .qr-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-modal-subtitle {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Desktop-specific button styling */
+        @media (min-width: 769px) {
+            .profile-cta-button.primary.desktop {
+                cursor: pointer;
+            }
+
+            .profile-cta-button.primary.desktop:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+        }
     </style>
 </head>
 <body>
@@ -231,6 +326,23 @@
 
     <!-- Footer will be injected here -->
     <footer></footer>
+
+    <!-- QR Code Modal -->
+    <div class="qr-modal" id="qr-modal">
+        <div class="qr-modal-content">
+            <button class="qr-modal-close" id="qr-modal-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="qr-modal-title" id="qr-modal-title">Scan to View Collection</div>
+            <div class="qr-modal-subtitle">Open your iPhone camera and point it at this code to view this watch collection in tickIQ</div>
+            <div class="qr-code-container">
+                <img id="qr-code-img" src="" alt="QR Code">
+            </div>
+            <div class="qr-modal-subtitle" id="profile-url-display"></div>
+        </div>
+    </div>
 
     <!-- Load the shared components -->
     <script src="/js/components.js"></script>
@@ -301,9 +413,60 @@
             document.body.appendChild(devBadge);
         }
 
+        // Detect if desktop or mobile
+        const isDesktop = !(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+        const profileUrl = `https://tickiq.app/u/${username}`;
+
         // Update Open in App link
         const openAppLink = document.getElementById('open-app');
-        openAppLink.href = `${urlScheme}://profile/${username}`;
+        const downloadButton = document.querySelector('.profile-cta-button.secondary');
+
+        if (isDesktop) {
+            // Desktop: Show QR code on click
+            openAppLink.textContent = 'Open on iPhone';
+            openAppLink.href = '#';
+            openAppLink.classList.add('desktop');
+
+            // Change download button text for desktop
+            if (downloadButton) {
+                downloadButton.textContent = 'View on App Store';
+            }
+
+            // Generate QR code
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(profileUrl)}`;
+            document.getElementById('qr-code-img').src = qrCodeUrl;
+            document.getElementById('profile-url-display').textContent = profileUrl.replace('https://', '');
+
+            // Update modal title with username
+            document.getElementById('qr-modal-title').textContent = `View @${username}'s Collection`;
+
+            // Handle click to show modal
+            openAppLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('qr-modal').classList.add('active');
+            });
+
+            // Close modal handlers
+            document.getElementById('qr-modal-close').addEventListener('click', () => {
+                document.getElementById('qr-modal').classList.remove('active');
+            });
+
+            document.getElementById('qr-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'qr-modal') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+        } else {
+            // Mobile: Deep link to app
+            openAppLink.href = `${urlScheme}://profile/${username}`;
+        }
 
         // Smooth auto-redirect on iOS with better UX
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
