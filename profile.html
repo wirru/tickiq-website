@@ -414,7 +414,11 @@
         }
 
         // Detect if desktop or mobile/tablet
-        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        // Modern iPad detection: iPadOS 13+ reports as MacIntel but has touch support
+        const isIPad = /iPad/.test(navigator.userAgent) ||
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+        const isIOS = isIPad || isIPhone || /iPhone|iPod/.test(navigator.platform);
         const isAndroid = /Android/i.test(navigator.userAgent);
         const isMobile = isIOS || isAndroid;
         const isDesktop = !isMobile;
