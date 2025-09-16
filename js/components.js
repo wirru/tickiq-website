@@ -6,8 +6,8 @@
         
         // Determine if logo should be wrapped in a link
         const logoContent = `
-            <img src="assets/icons/app-icon.png" alt="tickIQ" class="header-app-icon">
-            <img src="assets/images/logo.svg" alt="tickIQ" class="header-logo">
+            <img src="/assets/icons/app-icon.png" alt="tickIQ" class="header-app-icon">
+            <img src="/assets/images/logo.svg" alt="tickIQ" class="header-logo">
         `;
         
         const logoHTML = isHomePage ? logoContent : `

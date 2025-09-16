@@ -3,176 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tickIQ - User Profile</title>
-    <meta name="description" content="View watch collection and timing data on tickIQ">
+    <title>tickIQ Profile</title>
+    <meta name="description" content="View watch collection and timing measurements on tickIQ">
 
     <!-- Open Graph / Twitter Cards -->
     <meta property="og:title" content="tickIQ Profile">
-    <meta property="og:description" content="View watch collection and timing measurements">
-    <meta property="og:image" content="/assets/og-image.png">
+    <meta property="og:description" content="View my watch collection and timing measurements on tickIQ">
+    <meta property="og:image" content="/assets/images/og-image-landscape.png">
     <meta property="og:url" content="/">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- App Links for iOS -->
-    <!-- <meta property="al:ios:app_store_id" content="APP_STORE_ID"> -->
     <meta property="al:ios:app_name" content="tickIQ">
     <meta property="al:ios:url" content="tickiq://profile/">
 
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/assets/icons/app-icon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #1c1610 0%, #141010 100%);
-            color: #ffffff;
-            min-height: 100vh;
+        /* Profile-specific styles that extend the main styles.css */
+        .profile-hero {
+            min-height: calc(100vh - 100px);
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            margin-top: 100px;
         }
 
-        .container {
-            max-width: 600px;
-            padding: 40px 20px;
+        .profile-content {
             text-align: center;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
         }
 
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
+        .profile-app-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 27px;
+            margin: 0 auto 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+                        0 0 0 1px rgba(0, 0, 0, 0.05);
+            animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        h1 {
-            font-size: 32px;
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .profile-username {
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
         }
 
-        .username {
-            font-size: 24px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 32px;
-        }
-
-        .message {
-            font-size: 18px;
+        .profile-message {
+            font-size: 1.25rem;
             line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 40px;
+            color: #666;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
         }
 
-        .app-buttons {
+        .profile-cta-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
             align-items: center;
+            gap: 1rem;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
         }
 
-        .app-button {
+        .profile-cta-button {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px 32px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            text-decoration: none;
+            border-radius: 980px;
+            transition: all 0.2s ease;
             min-width: 280px;
             justify-content: center;
         }
 
-        .app-button:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .profile-cta-button.primary {
+            background: #000;
+            color: #fff;
+        }
+
+        .profile-cta-button.primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .app-button.primary {
-            background: linear-gradient(135deg, #FFB800 0%, #FF8A00 100%);
-            border: none;
+        .profile-cta-button.secondary {
+            background: transparent;
+            color: #000;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .app-button.primary:hover {
-            background: linear-gradient(135deg, #FFC933 0%, #FF9933 100%);
+        .profile-cta-button.secondary:hover {
+            background: rgba(0, 0, 0, 0.05);
         }
 
-        .footer {
-            margin-top: 60px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .loading {
+        /* Loading state */
+        .profile-loading {
             display: none;
+            text-align: center;
+            padding: 2rem;
         }
 
-        .loading.active {
+        .profile-loading.active {
             display: block;
         }
 
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            border-top: 3px solid #FFB800;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .profile-hero {
+                min-height: calc(100vh - 80px);
+                margin-top: 80px;
+            }
+
+            .profile-username {
+                font-size: 2rem;
+            }
+
+            .profile-message {
+                font-size: 1.125rem;
+            }
+
+            .profile-app-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+        }
+
+        /* Dev mode indicator */
+        .dev-indicator {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: #ff3838;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 100;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">⏱️</div>
+        <!-- Header will be injected here -->
+        <header></header>
 
-        <h1>tickIQ</h1>
+        <!-- Profile Hero Section -->
+        <div class="profile-hero">
+            <div class="profile-content">
+                <img src="/assets/icons/app-icon.png" alt="tickIQ" class="profile-app-icon">
 
-        <div id="username" class="username"></div>
+                <h1 class="profile-username" id="profile-username">Loading...</h1>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Loading profile...</p>
-        </div>
+                <p class="profile-message">
+                    Explore this member's curated collection with real accuracy data from actual wear.
+                    See which pieces they treasure most, how each watch performs, and discover grail pieces you never knew existed.
+                </p>
 
-        <div id="content">
-            <p class="message">
-                View this watch collection in the tickIQ app for detailed timing measurements and analytics.
-            </p>
-
-            <div class="app-buttons">
-                <a href="#" id="open-app" class="app-button primary">
-                    📱 Open in tickIQ App
-                </a>
-                <a href="https://apps.apple.com/app/tickiq" class="app-button">
-                    📥 Download tickIQ
-                </a>
+                <div class="profile-cta-container">
+                    <a href="#" id="open-app" class="profile-cta-button primary">
+                        View Collection in App
+                    </a>
+                    <a href="https://apps.apple.com/us/app/tickiq-measure-watch-accuracy/id6749871310" class="profile-cta-button secondary">
+                        Download tickIQ
+                    </a>
+                </div>
             </div>
         </div>
-
-        <div class="footer">
-            <p>The precision watch timing app</p>
-        </div>
     </div>
+
+    <!-- Footer will be injected here -->
+    <footer></footer>
+
+    <!-- Load the shared components -->
+    <script src="/js/components.js"></script>
 
     <script>
         // Parse username from URL
@@ -187,15 +240,26 @@
         const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
 
         // Update page with username
-        document.getElementById('username').textContent = '@' + username;
+        const usernameElement = document.getElementById('profile-username');
+        usernameElement.textContent = `@${username}'s Watch Collection`;
         document.title = `@${username} - tickIQ`;
+
+        // Update Open Graph meta tags
+        const metaTags = document.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]');
+        metaTags.forEach(tag => {
+            if (tag.getAttribute('property') === 'og:title' || tag.getAttribute('name') === 'twitter:title') {
+                tag.setAttribute('content', `@${username}'s Watch Collection on tickIQ`);
+            }
+            if (tag.getAttribute('property') === 'og:description' || tag.getAttribute('name') === 'twitter:description') {
+                tag.setAttribute('content', `View @${username}'s watch collection with professional timing measurements and accuracy data on tickIQ`);
+            }
+        });
 
         // If dev mode, show indicator
         if (isDev) {
-            // Add a small dev indicator to the page
             const devBadge = document.createElement('div');
-            devBadge.style.cssText = 'position: fixed; top: 10px; right: 10px; background: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; z-index: 1000;';
-            devBadge.textContent = 'DEV MODE';
+            devBadge.className = 'dev-indicator';
+            devBadge.textContent = 'Dev Mode';
             document.body.appendChild(devBadge);
         }
 
@@ -203,23 +267,23 @@
         const openAppLink = document.getElementById('open-app');
         openAppLink.href = `${urlScheme}://profile/${username}`;
 
-        // Update button text if in dev mode
-        if (isDev) {
-            openAppLink.innerHTML = '📱 Open in tickIQ Dev App';
-        }
-
-        // Try to open the app automatically on mobile
+        // Smooth auto-redirect on iOS with better UX
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Small delay to allow page to render
+            // Wait for initial page render
             setTimeout(() => {
-                // Try to open the app
-                window.location.href = `${urlScheme}://profile/${username}`;
+                const appUrl = `${urlScheme}://profile/${username}`;
 
-                // If the app doesn't open, show download option
+                // Create invisible iframe to attempt app launch
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+
+                // Clean up iframe after attempt
                 setTimeout(() => {
-                    // Page is still visible, app probably not installed
+                    document.body.removeChild(iframe);
                 }, 1000);
-            }, 500);
+            }, 800);
         }
     </script>
 </body>
