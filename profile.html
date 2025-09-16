@@ -413,8 +413,11 @@
             document.body.appendChild(devBadge);
         }
 
-        // Detect if desktop or mobile
-        const isDesktop = !(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+        // Detect if desktop or mobile/tablet
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isMobile = isIOS || isAndroid;
+        const isDesktop = !isMobile;
         const profileUrl = `https://tickiq.app/u/${username}`;
 
         // Update Open in App link
@@ -469,7 +472,7 @@
         }
 
         // Smooth auto-redirect on iOS with better UX
-        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        if (isIOS) {
             // Wait for initial page render
             setTimeout(() => {
                 const appUrl = `${urlScheme}://profile/${username}`;
