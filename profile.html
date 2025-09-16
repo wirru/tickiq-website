@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tickIQ Profile</title>
-    <meta name="description" content="View watch collection and timing measurements on tickIQ">
+    <title>Watch Collection on tickIQ</title>
+    <meta name="description" content="Explore this watch collection with real accuracy data. See grail pieces, timing measurements, and mechanical insights on tickIQ.">
 
-    <!-- Open Graph / Twitter Cards -->
-    <meta property="og:title" content="tickIQ Profile">
-    <meta property="og:description" content="View my watch collection and timing measurements on tickIQ">
-    <meta property="og:image" content="/assets/images/og-image-landscape.png">
-    <meta property="og:url" content="/">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Watch Collection on tickIQ">
+    <meta property="og:description" content="Explore this watch collection with real accuracy data. See grail pieces, timing measurements, and mechanical insights.">
+    <meta property="og:image" content="https://tickiq.app/assets/images/og-image-landscape.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://tickiq.app/profile">
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Watch Collection on tickIQ">
+    <meta name="twitter:description" content="Explore this watch collection with real accuracy data. See grail pieces and timing measurements.">
+    <meta name="twitter:image" content="https://tickiq.app/assets/images/og-image-landscape.png">
 
     <!-- App Links for iOS -->
     <meta property="al:ios:app_name" content="tickIQ">
@@ -242,18 +250,48 @@
         // Update page with username
         const usernameElement = document.getElementById('profile-username');
         usernameElement.textContent = `@${username}'s Watch Collection`;
-        document.title = `@${username} - tickIQ`;
+
+        // Update all meta tags for better sharing
+        document.title = `@${username}'s Watch Collection - tickIQ`;
+
+        // Update meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', `Explore @${username}'s watch collection with real accuracy data. See their grail pieces, timing measurements, and mechanical insights on tickIQ.`);
+        }
 
         // Update Open Graph meta tags
-        const metaTags = document.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]');
-        metaTags.forEach(tag => {
-            if (tag.getAttribute('property') === 'og:title' || tag.getAttribute('name') === 'twitter:title') {
-                tag.setAttribute('content', `@${username}'s Watch Collection on tickIQ`);
-            }
-            if (tag.getAttribute('property') === 'og:description' || tag.getAttribute('name') === 'twitter:description') {
-                tag.setAttribute('content', `View @${username}'s watch collection with professional timing measurements and accuracy data on tickIQ`);
-            }
-        });
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.setAttribute('content', `@${username}'s Watch Collection on tickIQ`);
+        }
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) {
+            ogDesc.setAttribute('content', `Explore @${username}'s curated collection with real accuracy data. See grail pieces and timing measurements from actual wear.`);
+        }
+
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.setAttribute('content', `https://tickiq.app/u/${username}`);
+        }
+
+        // Update Twitter meta tags
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) {
+            twitterTitle.setAttribute('content', `@${username}'s Watch Collection on tickIQ`);
+        }
+
+        const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDesc) {
+            twitterDesc.setAttribute('content', `Explore @${username}'s watch collection with real accuracy data on tickIQ.`);
+        }
+
+        // Update iOS app link
+        const iosUrl = document.querySelector('meta[property="al:ios:url"]');
+        if (iosUrl) {
+            iosUrl.setAttribute('content', `tickiq://profile/${username}`);
+        }
 
         // If dev mode, show indicator
         if (isDev) {
