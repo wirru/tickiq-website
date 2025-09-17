@@ -348,25 +348,46 @@
     <script src="/js/components.js"></script>
 
     <script>
-        // Parse username from URL
-        const pathParts = window.location.pathname.split('/');
-        let username = pathParts[2] || pathParts[1]?.replace('.html', '') || '';
+        // Execute immediately when script loads
+        (function() {
+            // Parse username from URL
+            const pathname = window.location.pathname;
 
-        // If no valid username (accessing /profile directly), show 404
-        if (!username || username === 'profile' || username === 'user') {
-            document.title = '404 - Page not found';
-            document.querySelector('.profile-hero').innerHTML = `
-                <div style="text-align: center; padding: 4rem 2rem;">
-                    <h1 style="font-size: 6rem; font-weight: 200; margin-bottom: 1rem;">404</h1>
-                    <p style="font-size: 1.25rem; color: #666; margin-bottom: 2rem;">Page not found</p>
-                    <a href="/" style="color: #000; font-size: 1rem;">Return to homepage</a>
-                </div>
-            `;
-            // Hide the QR modal if someone somehow accesses /profile
-            const qrModal = document.getElementById('qr-modal');
-            if (qrModal) qrModal.remove();
-            return; // Stop execution
-        }
+            // Check if accessing /profile directly (not via /u/username rewrite)
+            if (pathname === '/profile' || pathname === '/profile.html' || pathname === '/profile/') {
+                document.title = '404 - Page not found';
+
+                // Replace content immediately when DOM is ready
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', show404);
+                } else {
+                    show404();
+                }
+
+                function show404() {
+                    const profileHero = document.querySelector('.profile-hero');
+                    if (profileHero) {
+                        profileHero.innerHTML = `
+                            <div style="text-align: center; padding: 4rem 2rem;">
+                                <h1 style="font-size: 6rem; font-weight: 200; margin-bottom: 1rem;">404</h1>
+                                <p style="font-size: 1.25rem; color: #666; margin-bottom: 2rem;">Page not found</p>
+                                <a href="/" style="color: #000; font-size: 1rem;">Return to homepage</a>
+                            </div>
+                        `;
+                    }
+
+                    // Hide the QR modal
+                    const qrModal = document.getElementById('qr-modal');
+                    if (qrModal) qrModal.remove();
+                }
+
+                return; // Stop here for 404 page
+            }
+
+            // Normal profile page logic continues here
+            // Extract username from /u/username path
+            const pathParts = pathname.split('/');
+            const username = pathParts[2] || 'user';
 
         // Check for dev parameter
         const urlParams = new URLSearchParams(window.location.search);
@@ -509,6 +530,7 @@
                 }, 1000);
             }, 800);
         }
+        })(); // End of IIFE
     </script>
 </body>
 </html>
