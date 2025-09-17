@@ -350,7 +350,23 @@
     <script>
         // Parse username from URL
         const pathParts = window.location.pathname.split('/');
-        const username = pathParts[2] || pathParts[1]?.replace('.html', '') || 'user';
+        let username = pathParts[2] || pathParts[1]?.replace('.html', '') || '';
+
+        // If no valid username (accessing /profile directly), show 404
+        if (!username || username === 'profile' || username === 'user') {
+            document.title = '404 - Page not found';
+            document.querySelector('.profile-hero').innerHTML = `
+                <div style="text-align: center; padding: 4rem 2rem;">
+                    <h1 style="font-size: 6rem; font-weight: 200; margin-bottom: 1rem;">404</h1>
+                    <p style="font-size: 1.25rem; color: #666; margin-bottom: 2rem;">Page not found</p>
+                    <a href="/" style="color: #000; font-size: 1rem;">Return to homepage</a>
+                </div>
+            `;
+            // Hide the QR modal if someone somehow accesses /profile
+            const qrModal = document.getElementById('qr-modal');
+            if (qrModal) qrModal.remove();
+            return; // Stop execution
+        }
 
         // Check for dev parameter
         const urlParams = new URLSearchParams(window.location.search);
