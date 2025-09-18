@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /profile
+Disallow: /profile.html
+
+Sitemap: https://tickiq.app/sitemap.xml
