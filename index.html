@@ -28,6 +28,62 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://tickiq.app/#organization",
+          "name": "B23, LLC",
+          "url": "https://www.b23.ai",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Los Angeles",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://tickiq.app/#website",
+          "url": "https://tickiq.app",
+          "name": "tickIQ",
+          "description": "The only app that helps you truly understand your watch. Get instant accuracy readings, AI-powered insights, and effortless collection tracking.",
+          "publisher": {
+            "@id": "https://tickiq.app/#organization"
+          }
+        },
+        {
+          "@type": "MobileApplication",
+          "@id": "https://tickiq.app/#app",
+          "name": "tickIQ - Measure Watch Accuracy",
+          "operatingSystem": "iOS",
+          "applicationCategory": "UtilitiesApplication",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5.0",
+            "ratingCount": "12"
+          },
+          "author": {
+            "@id": "https://tickiq.app/#organization"
+          },
+          "downloadUrl": "https://apps.apple.com/us/app/tickiq-measure-watch-accuracy/id6749871310",
+          "screenshot": [
+            "https://tickiq.app/assets/images/og-image-landscape.png"
+          ],
+          "description": "The #1 companion app for your mechanical watches. Get instant accuracy readings, AI-powered insights, and effortless collection tracking—all in a sleek, intuitive app. Built for serious collectors, yet simple enough for anyone with a watch they love."
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <div class="container">
