@@ -34,24 +34,33 @@ tickiq-website/
 - **Animations**: Fade-in and scale-in effects on load
 - **Responsive**: Mobile-optimized with breakpoints at 768px and 480px
 
-## Deployment Commands
+## Deployment Process
+
+### Build Process
+The project includes an Edge Function that requires building before deployment:
+1. **Build Script**: `scripts/build-edge-function.js` embeds the `profile.html` content into the Edge Function
+2. **Automatic Build**: Both `npm run deploy` and `npm run deploy:prod` automatically run the build first
+3. **Git Deployment**: When pushing to Git, Vercel automatically runs the build process
+
+### Deployment Commands
 ```bash
 # Install dependencies
 npm install
 
-# Deploy to preview
+# Deploy to preview (includes automatic build)
 npm run deploy
-# or
-vercel
 
-# Deploy to production
+# Deploy to production (includes automatic build)
 npm run deploy:prod
-# or
-vercel --prod
 
 # Login to Vercel (if needed)
 vercel login
 ```
+
+### Important Notes
+- **No manual build needed**: Never run `npm run build` manually - it's automatic
+- **Preview Authentication**: Disable Vercel Authentication on preview deployments to test social sharing
+- **Build Output**: The Edge Function gets the HTML embedded during build, no filesystem access needed
 
 ## Domain Configuration
 Both domains are managed through Vercel:
@@ -79,6 +88,57 @@ Both domains are managed through Vercel:
   - Rate Accuracy: ±6 s/d
   - Beat Error: ±0.5 ms
   - Amplitude: 200-360°
+
+## Profile Page & Edge Function Architecture
+
+### Overview
+The profile pages (`/u/username`) use a Vercel Edge Function to dynamically generate metadata for social sharing while maintaining client-side functionality.
+
+### How It Works
+1. **Request Flow**:
+   - User/crawler visits `https://tickiq.app/u/will`
+   - Vercel routes this to `/api/profile` Edge Function (configured in `vercel.json`)
+   - Edge Function extracts username from URL
+   - Returns HTML with personalized meta tags
+
+2. **Edge Function (`api/profile.js`)**:
+   - Runs at the edge (close to users) for low latency
+   - Has `profile.html` content embedded during build
+   - Dynamically replaces meta tags with username
+   - Uses current domain for image URLs (works on preview & production)
+
+3. **Build Process (`scripts/build-edge-function.js`)**:
+   - Reads `profile.html` file
+   - Embeds entire HTML as a string in the Edge Function
+   - Allows Edge Function to work without filesystem access
+
+4. **Dynamic Replacements**:
+   - Title: `@username's Watch Collection - tickIQ`
+   - OG/Twitter titles with username
+   - Correct domain URLs for images
+   - iOS deep links with username
+
+### Username Validation
+- Edge Function escapes HTML characters for safety
+- Compatible with tickIQ app rules: `[a-zA-Z0-9_-]`, 3-30 chars
+- Valid usernames never contain HTML special characters
+
+### Testing Social Previews
+
+#### Preview Deployments
+1. Run `npm run deploy` to create preview
+2. **Disable Vercel Authentication** in dashboard (Settings → Password Protection)
+3. Test URL: `https://[preview-url]/u/testuser`
+
+#### Production Testing
+1. Run `npm run deploy:prod`
+2. Test URL: `https://tickiq.app/u/username`
+
+#### Validation Tools
+- **iMessage**: Paste link directly to see preview
+- **Facebook Debugger**: https://developers.facebook.com/tools/debug/
+- **Twitter Card Validator**: https://cards-dev.twitter.com/validator
+- **View Source**: Check meta tags are properly replaced
 
 ## Security Headers
 Configured in vercel.json:

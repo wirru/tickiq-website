@@ -1,6 +1,6 @@
 {
-  "name": "tickiq-website",
   "cleanUrls": true,
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
@@ -36,7 +36,7 @@
     },
     {
       "source": "/u/:username",
-      "destination": "/profile"
+      "destination": "/api/profile"
     }
   ]
 }
