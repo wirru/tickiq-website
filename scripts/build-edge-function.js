@@ -3,27 +3,44 @@
 const fs = require('fs');
 const path = require('path');
 
-// Read the profile.html file
+// Helper function to escape HTML for JavaScript string
+function escapeHtml(html) {
+  return html
+    .replace(/\\/g, '\\\\')
+    .replace(/`/g, '\\`')
+    .replace(/\$/g, '\\$');
+}
+
+// Build profile edge function
 const profileHtmlPath = path.join(__dirname, '..', 'profile.html');
 const profileHtml = fs.readFileSync(profileHtmlPath, 'utf8');
 
-// Read the edge function template
-const edgeFunctionPath = path.join(__dirname, '..', 'api', 'profile.js');
-let edgeFunction = fs.readFileSync(edgeFunctionPath, 'utf8');
+const profileEdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile.js');
+let profileEdgeFunction = fs.readFileSync(profileEdgeFunctionPath, 'utf8');
 
-// Escape the HTML for JavaScript string
-const escapedHtml = profileHtml
-  .replace(/\\/g, '\\\\')
-  .replace(/`/g, '\\`')
-  .replace(/\$/g, '\\$');
+const escapedProfileHtml = escapeHtml(profileHtml);
 
-// Replace the placeholder with actual HTML content
-edgeFunction = edgeFunction.replace(
+profileEdgeFunction = profileEdgeFunction.replace(
   'const PROFILE_HTML_TEMPLATE = `<!-- PROFILE_HTML_CONTENT -->`;',
-  `const PROFILE_HTML_TEMPLATE = \`${escapedHtml}\`;`
+  `const PROFILE_HTML_TEMPLATE = \`${escapedProfileHtml}\`;`
 );
 
-// Write back the edge function with embedded HTML
-fs.writeFileSync(edgeFunctionPath, edgeFunction);
+fs.writeFileSync(profileEdgeFunctionPath, profileEdgeFunction);
+console.log('✅ Profile edge function built successfully with embedded profile.html');
 
-console.log('✅ Edge function built successfully with embedded profile.html');
+// Build post edge function
+const postHtmlPath = path.join(__dirname, '..', 'post.html');
+const postHtml = fs.readFileSync(postHtmlPath, 'utf8');
+
+const postEdgeFunctionPath = path.join(__dirname, '..', 'api', 'post.js');
+let postEdgeFunction = fs.readFileSync(postEdgeFunctionPath, 'utf8');
+
+const escapedPostHtml = escapeHtml(postHtml);
+
+postEdgeFunction = postEdgeFunction.replace(
+  /const POST_HTML_TEMPLATE = `<!DOCTYPE html>[\s\S]*<\/html>`;/,
+  `const POST_HTML_TEMPLATE = \`${escapedPostHtml}\`;`
+);
+
+fs.writeFileSync(postEdgeFunctionPath, postEdgeFunction);
+console.log('✅ Post edge function built successfully with embedded post.html');
