@@ -5,7 +5,8 @@
       {
         "appID": "PLF7R3UTAA.com.b23.tickIQ",
         "paths": [
-          "/u/*"
+          "/u/*",
+          "/p/*"
         ]
       }
     ]

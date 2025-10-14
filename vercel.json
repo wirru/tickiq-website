@@ -37,6 +37,10 @@
     {
       "source": "/u/:username",
       "destination": "/api/profile"
+    },
+    {
+      "source": "/p/:postId",
+      "destination": "/api/post"
     }
   ]
 }
