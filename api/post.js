@@ -82,30 +82,39 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
-    <title>View This Post on tickIQ</title>
-    <meta name="description" content="See this watch moment with real timing data. Explore mechanical watches with accuracy measurements from actual wear on tickIQ.">
+    <title>Someone Sent You a Watch</title>
+    <meta name="description" content="Open in tickIQ to see the watch, read the story behind it, and check out the conversation.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="View This Post on tickIQ">
-    <meta property="og:description" content="See this watch moment with real timing data and mechanical insights.">
-    <meta property="og:image" content="https://tickiq.app/assets/images/og-image-profile-landscape.png">
+    <meta property="og:title" content="Someone Sent You a Watch">
+    <meta property="og:description" content="Open in tickIQ to see the watch, read the story behind it, and check out the conversation.">
+    <meta property="og:image" content="https://tickiq.app/assets/images/og-image-landscape.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://tickiq.app/post">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="View This Post on tickIQ">
-    <meta name="twitter:description" content="See this watch moment with real timing data and mechanical insights.">
-    <meta name="twitter:image" content="https://tickiq.app/assets/images/og-image-profile-landscape.png">
+    <meta name="twitter:title" content="Someone Sent You a Watch">
+    <meta name="twitter:description" content="Open in tickIQ to see the watch, read the story behind it, and check out the conversation.">
+    <meta name="twitter:image" content="https://tickiq.app/assets/images/og-image-landscape.png">
 
     <!-- App Links for iOS -->
     <meta property="al:ios:app_name" content="tickIQ">
     <meta property="al:ios:url" content="tickiq://post/">
 
+    <!-- Favicons for all platforms -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="/assets/icons/app-icon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/assets/icons/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="/assets/icons/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/favicon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/favicon-512x512.png">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -384,11 +393,10 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             <div class="post-content">
                 <img src="/assets/icons/app-icon.png" alt="tickIQ" class="post-app-icon">
 
-                <h1 class="post-title" id="post-title">View This Post on tickIQ</h1>
+                <h1 class="post-title" id="post-title">You've Been Sent a Watch</h1>
 
                 <p class="post-message">
-                    See this watch moment with real timing data and mechanical insights.
-                    Explore watches with accuracy measurements from actual wear and discover the stories behind each timepiece.
+                    Open in the tickIQ app to see the watch and join the conversation.
                 </p>
 
                 <div class="post-cta-container">
@@ -477,26 +485,26 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
 
         // Update page with post ID
         const titleElement = document.getElementById('post-title');
-        titleElement.textContent = 'View This Post on tickIQ';
+        titleElement.textContent = 'You\\'ve Been Sent a Watch';
 
         // Update all meta tags for better sharing
-        document.title = 'View This Post on tickIQ';
+        document.title = 'Someone Sent You a Watch';
 
         // Update meta description
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
-            metaDesc.setAttribute('content', 'See this watch moment with real timing data and mechanical insights on tickIQ.');
+            metaDesc.setAttribute('content', 'Open in tickIQ to see the watch, read the story behind it, and check out the conversation.');
         }
 
         // Update Open Graph meta tags
         const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) {
-            ogTitle.setAttribute('content', 'View This Post on tickIQ');
+            ogTitle.setAttribute('content', 'Someone Sent You a Watch');
         }
 
         const ogDesc = document.querySelector('meta[property="og:description"]');
         if (ogDesc) {
-            ogDesc.setAttribute('content', 'See this watch moment with real timing data and mechanical insights.');
+            ogDesc.setAttribute('content', 'Open in tickIQ to see the watch, read the story behind it, and check out the conversation.');
         }
 
         const ogUrl = document.querySelector('meta[property="og:url"]');
@@ -507,12 +515,12 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         // Update Twitter meta tags
         const twitterTitle = document.querySelector('meta[name="twitter:title"]');
         if (twitterTitle) {
-            twitterTitle.setAttribute('content', 'View This Post on tickIQ');
+            twitterTitle.setAttribute('content', 'Someone Sent You a Watch');
         }
 
         const twitterDesc = document.querySelector('meta[name="twitter:description"]');
         if (twitterDesc) {
-            twitterDesc.setAttribute('content', 'See this watch moment with real timing data and mechanical insights on tickIQ.');
+            twitterDesc.setAttribute('content', 'Open in tickIQ to see the watch, read the story behind it, and check out the conversation.');
         }
 
         // Update iOS app link
@@ -618,4 +626,5 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
 </body>
-</html>`;
+</html>
+`;
