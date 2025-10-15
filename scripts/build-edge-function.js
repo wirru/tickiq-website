@@ -38,7 +38,7 @@ let postEdgeFunction = fs.readFileSync(postEdgeFunctionPath, 'utf8');
 const escapedPostHtml = escapeHtml(postHtml);
 
 postEdgeFunction = postEdgeFunction.replace(
-  /const POST_HTML_TEMPLATE = `<!DOCTYPE html>[\s\S]*<\/html>`;/,
+  'const POST_HTML_TEMPLATE = `<!-- POST_HTML_CONTENT -->`;',
   `const POST_HTML_TEMPLATE = \`${escapedPostHtml}\`;`
 );
 
