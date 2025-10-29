@@ -738,7 +738,7 @@ main {
     font-weight: 600;
     line-height: 1.15;
     color: #ffffff; /* White for dark background */
-    margin: 0 auto 3rem;
+    margin: 0 auto 1rem;
     padding: 0 3rem; /* Add padding to text elements */
     max-width: 100%; /* Full width within padding */
     letter-spacing: -0.015em;
@@ -749,6 +749,26 @@ main {
 }
 
 .showcase-headline.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.showcase-subheadline {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #a1a1a6; /* Light gray for dark background */
+    margin: 0 auto 3rem;
+    padding: 0 3rem;
+    max-width: 100%;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-delay: 0.15s; /* Stagger after headline */
+}
+
+.showcase-subheadline.animate-in {
     opacity: 1;
     transform: translateY(0);
 }
@@ -775,6 +795,11 @@ main {
     font-weight: 400;
     letter-spacing: -0.01em;
     text-align: left; /* Left-align the paragraph text */
+    margin-bottom: 1.5rem;
+}
+
+.showcase-description p:last-child {
+    margin-bottom: 0;
 }
 
 .showcase-description .highlight {
@@ -837,7 +862,7 @@ main {
     width: 100%;
     padding: 6rem 2rem;
     margin-top: 0; /* Remove extra whitespace */
-    background: #f5f5f7;
+    background: #ffffff;
     position: relative;
     z-index: 1;
 }
@@ -870,7 +895,7 @@ main {
     font-weight: 600;
     line-height: 1.15;
     color: #000000;
-    margin: 0 auto 3rem;
+    margin: 0 auto 1rem;
     max-width: 100%;
     letter-spacing: -0.015em;
     opacity: 0;
@@ -880,6 +905,25 @@ main {
 }
 
 .insights-headline.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.insights-subheadline {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #666666;
+    margin: 0 auto 3rem;
+    max-width: 100%;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-delay: 0.15s;
+}
+
+.insights-subheadline.animate-in {
     opacity: 1;
     transform: translateY(0);
 }
@@ -948,6 +992,11 @@ main {
     font-weight: 400;
     letter-spacing: -0.01em;
     text-align: left; /* Left-align like showcase */
+    margin-bottom: 1.5rem;
+}
+
+.insights-description p:last-child {
+    margin-bottom: 0;
 }
 
 .insights-description .highlight {
@@ -1000,7 +1049,7 @@ main {
     width: 100%;
     padding: 6rem 2rem 3rem; /* More padding at top, less at bottom */
     margin-top: 0; /* Remove extra whitespace */
-    background: #ffffff;
+    background: #f5f5f7;
     position: relative;
     z-index: 1;
 }
@@ -1035,10 +1084,29 @@ main {
     font-weight: 600;
     line-height: 1.15;
     color: #000000;
-    margin: 0 auto 4rem; /* More space before hero images */
+    margin: 0 auto 1rem;
     max-width: 100%;
     letter-spacing: -0.015em;
     transition-delay: 0.1s;
+}
+
+.recognition-subheadline {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #666666;
+    margin: 0 auto 4rem; /* More space before hero images */
+    max-width: 100%;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-delay: 0.15s;
+}
+
+.recognition-subheadline.animate-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .recognition-hero-image {
@@ -1123,6 +1191,11 @@ main {
     font-weight: 400;
     letter-spacing: -0.01em;
     text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.recognition-description p:last-child {
+    margin-bottom: 0;
 }
 
 .recognition-description .highlight {
@@ -1267,7 +1340,7 @@ main {
 .community-section {
     width: 100%;
     padding: 6rem 2rem;
-    margin-top: calc(2rem + 8.33vh);
+    margin-top: 0;
     background: #ffffff;
     position: relative;
     z-index: 1;
@@ -1302,10 +1375,29 @@ main {
     font-weight: 600;
     line-height: 1.15;
     color: #000000;
-    margin: 0 auto 3rem;
+    margin: 0 auto 1rem;
     max-width: 100%;
     letter-spacing: -0.015em;
     transition-delay: 0.1s;
+}
+
+.community-subheadline {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #666666;
+    margin: 0 auto 3rem;
+    max-width: 100%;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-delay: 0.15s;
+}
+
+.community-subheadline.animate-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .community-hero-image {
@@ -1354,6 +1446,11 @@ main {
     font-weight: 400;
     letter-spacing: -0.01em;
     text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.community-description p:last-child {
+    margin-bottom: 0;
 }
 
 .community-description .highlight {
@@ -1364,6 +1461,7 @@ main {
 /* Add animate-in classes for animations */
 .recognition-eyebrow.animate-in,
 .recognition-headline.animate-in,
+.recognition-subheadline.animate-in,
 .recognition-hero-image.animate-in,
 .recognition-description.animate-in,
 .collection-eyebrow.animate-in,
@@ -1372,6 +1470,7 @@ main {
 .collection-description.animate-in,
 .community-eyebrow.animate-in,
 .community-headline.animate-in,
+.community-subheadline.animate-in,
 .community-hero-image.animate-in,
 .community-description.animate-in {
     opacity: 1;
