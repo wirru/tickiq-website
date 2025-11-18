@@ -101,11 +101,18 @@ function renderProfileHTML(data, username, domain) {
   // Safely escape username for HTML
   const safeUsername = escapeHtml(username);
 
+  // Determine OG image - use first watch's image if available, otherwise static image
+  let ogImageUrl = `https://${domain}/assets/images/og-image-profile-landscape.png`;
+  if (data.watches && data.watches.length > 0 && data.watches[0].thumbnail_url) {
+    ogImageUrl = `https://${domain}/api/img/${data.watches[0].thumbnail_url}`;
+  }
+
   // Replace meta tag placeholders
   html = html
     .replace(/\{\{USERNAME\}\}/g, safeUsername)
     .replace(/\{\{DOMAIN\}\}/g, domain)
-    .replace(/\{\{WATCH_COUNT\}\}/g, data.stats.watch_count.toString());
+    .replace(/\{\{WATCH_COUNT\}\}/g, data.stats.watch_count.toString())
+    .replace(/\{\{OG_IMAGE_URL\}\}/g, ogImageUrl);
 
   // Inject profile data as JSON for client-side hydration
   const dataScript = `<script>window.__PROFILE_DATA__ = ${JSON.stringify(data)};</script>`;
@@ -243,7 +250,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{USERNAME}}'s Watch Collection on tickIQ">
     <meta property="og:description" content="Explore this curated collection with real accuracy data. See grail pieces and discover how each watch performs.">
-    <meta property="og:image" content="https://{{DOMAIN}}/assets/images/og-image-profile-landscape.png">
+    <meta property="og:image" content="{{OG_IMAGE_URL}}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://{{DOMAIN}}/u/{{USERNAME}}">
@@ -252,7 +259,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{USERNAME}}'s Watch Collection on tickIQ">
     <meta name="twitter:description" content="Explore this curated collection with real accuracy data. See timing measurements and watch performance.">
-    <meta name="twitter:image" content="https://{{DOMAIN}}/assets/images/og-image-profile-landscape.png">
+    <meta name="twitter:image" content="{{OG_IMAGE_URL}}">
 
     <!-- App Links for iOS -->
     <meta property="al:ios:app_name" content="tickIQ">
