@@ -37,7 +37,7 @@
     },
     {
       "source": "/u/:username",
-      "destination": "/api/profile"
+      "destination": "/api/profile-v2"
     },
     {
       "source": "/p/:postId",
