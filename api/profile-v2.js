@@ -5,7 +5,7 @@
  * Fetches data from Supabase Edge Function and injects into HTML template.
  *
  * Security: Uses Supabase anon key (safe - RLS policies enforce privacy)
- * Caching: 5min edge cache, 10min stale-while-revalidate
+ * Caching: 10min edge cache, 15min stale-while-revalidate (signed URLs expire in 45min)
  */
 
 export const config = {
@@ -80,8 +80,8 @@ export default async function handler(request) {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        // Cache at edge for 5 minutes, serve stale for up to 10 minutes while revalidating
-        'Cache-Control': 's-maxage=300, stale-while-revalidate=600',
+        // Cache at edge for 10 minutes, serve stale for up to 15 minutes while revalidating
+        'Cache-Control': 's-maxage=600, stale-while-revalidate=900',
       },
     });
 
