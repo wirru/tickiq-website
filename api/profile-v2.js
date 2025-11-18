@@ -769,8 +769,9 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 const referenceText = watch.reference_number ? 'Ref: ' + escapeHtml(watch.reference_number) : '';
 
                 // Image or placeholder
+                // thumbnail_url now contains encrypted token, use image proxy endpoint
                 const imageHtml = watch.thumbnail_url
-                    ? \`<img src="\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
+                    ? \`<img src="/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
                     : \`<div class="watch-image-placeholder">⌚</div>\`;
 
                 // Measurement info
