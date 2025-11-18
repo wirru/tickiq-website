@@ -3,14 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// Helper function to escape HTML for JavaScript string
-function escapeHtml(html) {
-  return html
-    .replace(/\\/g, '\\\\')
-    .replace(/`/g, '\\`')
-    .replace(/\$/g, '\\$');
-}
-
 // Build profile edge function
 const profileHtmlPath = path.join(__dirname, '..', 'profile.html');
 const profileHtml = fs.readFileSync(profileHtmlPath, 'utf8');
@@ -18,10 +10,15 @@ const profileHtml = fs.readFileSync(profileHtmlPath, 'utf8');
 const profileEdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile.js');
 let profileEdgeFunction = fs.readFileSync(profileEdgeFunctionPath, 'utf8');
 
-const escapedProfileHtml = escapeHtml(profileHtml);
+// Escape for template literal: escape backslashes, backticks, and $
+const escapedProfileHtml = profileHtml
+  .replace(/\\/g, '\\\\')    // Escape backslashes FIRST
+  .replace(/`/g, '\\`')      // Then escape backticks
+  .replace(/\$/g, '\\$');    // Then escape ALL dollar signs
 
+// Use exact string replacement (matches placeholder in source file)
 profileEdgeFunction = profileEdgeFunction.replace(
-  'const PROFILE_HTML_TEMPLATE = `<!-- PROFILE_HTML_CONTENT -->`;',
+  'const PROFILE_HTML_TEMPLATE = `...embedded during build...`;',
   `const PROFILE_HTML_TEMPLATE = \`${escapedProfileHtml}\`;`
 );
 
@@ -35,10 +32,15 @@ const postHtml = fs.readFileSync(postHtmlPath, 'utf8');
 const postEdgeFunctionPath = path.join(__dirname, '..', 'api', 'post.js');
 let postEdgeFunction = fs.readFileSync(postEdgeFunctionPath, 'utf8');
 
-const escapedPostHtml = escapeHtml(postHtml);
+// Escape for template literal: escape backslashes, backticks, and $
+const escapedPostHtml = postHtml
+  .replace(/\\/g, '\\\\')    // Escape backslashes FIRST
+  .replace(/`/g, '\\`')      // Then escape backticks
+  .replace(/\$/g, '\\$');    // Then escape ALL dollar signs
 
+// Use exact string replacement (matches placeholder in source file)
 postEdgeFunction = postEdgeFunction.replace(
-  'const POST_HTML_TEMPLATE = `<!-- POST_HTML_CONTENT -->`;',
+  'const POST_HTML_TEMPLATE = `...embedded during build...`;',
   `const POST_HTML_TEMPLATE = \`${escapedPostHtml}\`;`
 );
 
@@ -52,8 +54,13 @@ const profileV2Html = fs.readFileSync(profileV2HtmlPath, 'utf8');
 const profileV2EdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile-v2.js');
 let profileV2EdgeFunction = fs.readFileSync(profileV2EdgeFunctionPath, 'utf8');
 
-const escapedProfileV2Html = escapeHtml(profileV2Html);
+// Escape for template literal: escape backslashes, backticks, and $
+const escapedProfileV2Html = profileV2Html
+  .replace(/\\/g, '\\\\')    // Escape backslashes FIRST
+  .replace(/`/g, '\\`')      // Then escape backticks
+  .replace(/\$/g, '\\$');    // Then escape ALL dollar signs
 
+// Use exact string replacement (matches placeholder in source file)
 profileV2EdgeFunction = profileV2EdgeFunction.replace(
   'const PROFILE_V2_HTML_TEMPLATE = `...embedded during build...`;',
   `const PROFILE_V2_HTML_TEMPLATE = \`${escapedProfileV2Html}\`;`

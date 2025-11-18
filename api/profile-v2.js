@@ -5,7 +5,7 @@
  * Fetches data from Supabase Edge Function and injects into HTML template.
  *
  * Security: Uses Supabase anon key (safe - RLS policies enforce privacy)
- * Caching: 10min edge cache, 15min stale-while-revalidate (signed URLs expire in 45min)
+ * Caching: 5min edge cache, 10min stale-while-revalidate
  */
 
 export const config = {
@@ -80,8 +80,8 @@ export default async function handler(request) {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        // Cache at edge for 10 minutes, serve stale for up to 15 minutes while revalidating
-        'Cache-Control': 's-maxage=600, stale-while-revalidate=900',
+        // Cache at edge for 5 minutes, serve stale for up to 10 minutes while revalidating
+        'Cache-Control': 's-maxage=300, stale-while-revalidate=600',
       },
     });
 
@@ -101,18 +101,11 @@ function renderProfileHTML(data, username, domain) {
   // Safely escape username for HTML
   const safeUsername = escapeHtml(username);
 
-  // Determine OG image - use first watch's image if available, otherwise static image
-  let ogImageUrl = `https://${domain}/assets/images/og-image-profile-landscape.png`;
-  if (data.watches && data.watches.length > 0 && data.watches[0].thumbnail_url) {
-    ogImageUrl = `https://${domain}/api/img/${data.watches[0].thumbnail_url}`;
-  }
-
   // Replace meta tag placeholders
   html = html
     .replace(/\{\{USERNAME\}\}/g, safeUsername)
     .replace(/\{\{DOMAIN\}\}/g, domain)
-    .replace(/\{\{WATCH_COUNT\}\}/g, data.stats.watch_count.toString())
-    .replace(/\{\{OG_IMAGE_URL\}\}/g, ogImageUrl);
+    .replace(/\{\{WATCH_COUNT\}\}/g, data.stats.watch_count.toString());
 
   // Inject profile data as JSON for client-side hydration
   const dataScript = `<script>window.__PROFILE_DATA__ = ${JSON.stringify(data)};</script>`;
@@ -276,6 +269,9 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Main site styles (includes header/footer) -->
+    <link rel="stylesheet" href="/css/styles.css">
+
     <style>
         * {
             margin: 0;
@@ -292,26 +288,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            z-index: 100;
-            padding: 1rem 2rem;
-        }
-
-        .b23-logo {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #000;
-            text-decoration: none;
-        }
-
         /* Main Container */
         .container {
             max-width: 1200px;
@@ -321,7 +297,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         /* Profile Header */
         .profile-header {
-            padding: 8rem 0 4rem 0;
+            padding: 10rem 0 4rem 0; /* Extra top padding for floating header */
             text-align: center;
         }
 
@@ -516,23 +492,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
         }
 
-        /* Footer */
-        .footer {
-            padding: 3rem 2rem;
-            text-align: center;
-            color: #999;
-            font-size: 0.875rem;
-        }
-
-        .footer a {
-            color: #666;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            color: #000;
-        }
-
         /* Loading State */
         .loading-state {
             display: flex;
@@ -645,10 +604,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
     </style>
 </head>
 <body>
-    <!-- Site Header -->
-    <header class="site-header">
-        <a href="https://www.b23.ai" class="b23-logo">B23</a>
-    </header>
+    <!-- Header will be injected by components.js -->
+    <header></header>
 
     <!-- Loading State -->
     <div id="loading" class="loading-state">
@@ -706,11 +663,13 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             <a href="https://apps.apple.com/app/tickiq/id6504108092" class="cta-button">Download tickIQ for iOS</a>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2025 <a href="https://www.b23.ai">B23, LLC</a>. All rights reserved.</p>
-        </footer>
     </div>
+
+    <!-- Footer will be injected by components.js -->
+    <footer></footer>
+
+    <!-- Load shared components -->
+    <script src="/js/components.js"></script>
 
     <script>
         // Client-side rendering (will be hydrated with server-side data)
@@ -776,7 +735,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 const referenceText = watch.reference_number ? 'Ref: ' + escapeHtml(watch.reference_number) : '';
 
                 // Image or placeholder
-                // thumbnail_url now contains encrypted token, use image proxy endpoint
                 const imageHtml = watch.thumbnail_url
                     ? \`<img src="/api/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
                     : \`<div class="watch-image-placeholder">⌚</div>\`;

@@ -41,6 +41,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Main site styles (includes header/footer) -->
+    <link rel="stylesheet" href="/css/styles.css">
+
     <style>
         * {
             margin: 0;
@@ -57,26 +60,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            z-index: 100;
-            padding: 1rem 2rem;
-        }
-
-        .b23-logo {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #000;
-            text-decoration: none;
-        }
-
         /* Main Container */
         .container {
             max-width: 1200px;
@@ -86,7 +69,7 @@
 
         /* Profile Header */
         .profile-header {
-            padding: 8rem 0 4rem 0;
+            padding: 10rem 0 4rem 0; /* Extra top padding for floating header */
             text-align: center;
         }
 
@@ -281,23 +264,6 @@
             box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
         }
 
-        /* Footer */
-        .footer {
-            padding: 3rem 2rem;
-            text-align: center;
-            color: #999;
-            font-size: 0.875rem;
-        }
-
-        .footer a {
-            color: #666;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            color: #000;
-        }
-
         /* Loading State */
         .loading-state {
             display: flex;
@@ -410,10 +376,8 @@
     </style>
 </head>
 <body>
-    <!-- Site Header -->
-    <header class="site-header">
-        <a href="https://www.b23.ai" class="b23-logo">B23</a>
-    </header>
+    <!-- Header will be injected by components.js -->
+    <header></header>
 
     <!-- Loading State -->
     <div id="loading" class="loading-state">
@@ -471,11 +435,13 @@
             <a href="https://apps.apple.com/app/tickiq/id6504108092" class="cta-button">Download tickIQ for iOS</a>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2025 <a href="https://www.b23.ai">B23, LLC</a>. All rights reserved.</p>
-        </footer>
     </div>
+
+    <!-- Footer will be injected by components.js -->
+    <footer></footer>
+
+    <!-- Load shared components -->
+    <script src="/js/components.js"></script>
 
     <script>
         // Client-side rendering (will be hydrated with server-side data)
@@ -542,7 +508,7 @@
 
                 // Image or placeholder
                 const imageHtml = watch.thumbnail_url
-                    ? `<img src="${escapeHtml(watch.thumbnail_url)}" alt="${escapeHtml(watchName)}" class="watch-image" loading="lazy">`
+                    ? `<img src="/api/img/${escapeHtml(watch.thumbnail_url)}" alt="${escapeHtml(watchName)}" class="watch-image" loading="lazy">`
                     : `<div class="watch-image-placeholder">⌚</div>`;
 
                 // Measurement info

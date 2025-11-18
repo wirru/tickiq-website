@@ -629,3 +629,671 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
 </body>
 </html>
 `;
+                    }
+
+                    // Hide the QR modal
+                    const qrModal = document.getElementById('qr-modal');
+                    if (qrModal) qrModal.remove();
+                }
+
+                return; // Stop here for 404 page
+            }
+
+            // Normal post page logic continues here
+            // Extract post ID from /p/postId path
+            const pathParts = pathname.split('/');
+            const postId = pathParts[2] || 'post';
+
+        // Check for dev parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDev = urlParams.get('dev') === 'true';
+
+        // Determine which URL scheme to use
+        const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
+
+        // Update page with post ID
+        const titleElement = document.getElementById('post-title');
+        titleElement.textContent = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update all meta tags for better sharing
+        document.title = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update Open Graph meta tags
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) {
+            ogDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.setAttribute('content', \`https://tickiq.app/p/\${postId}\`);
+        }
+
+        // Update Twitter meta tags
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) {
+            twitterTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDesc) {
+            twitterDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update iOS app link
+        const iosUrl = document.querySelector('meta[property="al:ios:url"]');
+        if (iosUrl) {
+            iosUrl.setAttribute('content', \`tickiq://post/\${postId}\`);
+        }
+
+        // If dev mode, show indicator
+        if (isDev) {
+            const devBadge = document.createElement('div');
+            devBadge.className = 'dev-indicator';
+            devBadge.textContent = 'Dev Mode';
+            document.body.appendChild(devBadge);
+        }
+
+        // Detect if desktop or mobile/tablet
+        // Modern iPad detection: iPadOS 13+ reports as MacIntel but has touch support
+        const isIPad = /iPad/.test(navigator.userAgent) ||
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+        const isIOS = isIPad || isIPhone || /iPhone|iPod/.test(navigator.platform);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isMobile = isIOS || isAndroid;
+        const isDesktop = !isMobile;
+        const postUrl = \`https://tickiq.app/p/\${postId}\`;
+
+        // Update Open in App link
+        const openAppLink = document.getElementById('open-app');
+        const downloadButton = document.querySelector('.post-cta-button.secondary');
+
+        if (isDesktop) {
+            // Desktop: Show QR code on click
+            openAppLink.textContent = 'Open on iPhone';
+            openAppLink.href = '#';
+            openAppLink.classList.add('desktop');
+
+            // Change download button text for desktop
+            if (downloadButton) {
+                downloadButton.textContent = 'View on App Store';
+            }
+
+            // Generate QR code
+            const qrCodeUrl = \`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=\${encodeURIComponent(postUrl)}\`;
+            document.getElementById('qr-code-img').src = qrCodeUrl;
+            document.getElementById('post-url-display').textContent = postUrl.replace('https://', '');
+
+            // Update modal title
+            document.getElementById('qr-modal-title').textContent = 'View This Post';
+
+            // Handle click to show modal
+            openAppLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('qr-modal').classList.add('active');
+            });
+
+            // Close modal handlers
+            document.getElementById('qr-modal-close').addEventListener('click', () => {
+                document.getElementById('qr-modal').classList.remove('active');
+            });
+
+            document.getElementById('qr-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'qr-modal') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+        } else {
+            // Mobile: Deep link to app
+            openAppLink.href = \`\${urlScheme}://post/\${postId}\`;
+        }
+
+        // Smooth auto-redirect on iOS with better UX
+        if (isIOS) {
+            // Wait for initial page render
+            setTimeout(() => {
+                const appUrl = \`\${urlScheme}://post/\${postId}\`;
+
+                // Create invisible iframe to attempt app launch
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+
+                // Clean up iframe after attempt
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 1000);
+            }, 800);
+        }
+        })(); // End of IIFE
+    </script>
+
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+`;
+                    }
+
+                    // Hide the QR modal
+                    const qrModal = document.getElementById('qr-modal');
+                    if (qrModal) qrModal.remove();
+                }
+
+                return; // Stop here for 404 page
+            }
+
+            // Normal post page logic continues here
+            // Extract post ID from /p/postId path
+            const pathParts = pathname.split('/');
+            const postId = pathParts[2] || 'post';
+
+        // Check for dev parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDev = urlParams.get('dev') === 'true';
+
+        // Determine which URL scheme to use
+        const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
+
+        // Update page with post ID
+        const titleElement = document.getElementById('post-title');
+        titleElement.textContent = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update all meta tags for better sharing
+        document.title = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update Open Graph meta tags
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) {
+            ogDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.setAttribute('content', \`https://tickiq.app/p/\${postId}\`);
+        }
+
+        // Update Twitter meta tags
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) {
+            twitterTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDesc) {
+            twitterDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update iOS app link
+        const iosUrl = document.querySelector('meta[property="al:ios:url"]');
+        if (iosUrl) {
+            iosUrl.setAttribute('content', \`tickiq://post/\${postId}\`);
+        }
+
+        // If dev mode, show indicator
+        if (isDev) {
+            const devBadge = document.createElement('div');
+            devBadge.className = 'dev-indicator';
+            devBadge.textContent = 'Dev Mode';
+            document.body.appendChild(devBadge);
+        }
+
+        // Detect if desktop or mobile/tablet
+        // Modern iPad detection: iPadOS 13+ reports as MacIntel but has touch support
+        const isIPad = /iPad/.test(navigator.userAgent) ||
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+        const isIOS = isIPad || isIPhone || /iPhone|iPod/.test(navigator.platform);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isMobile = isIOS || isAndroid;
+        const isDesktop = !isMobile;
+        const postUrl = \`https://tickiq.app/p/\${postId}\`;
+
+        // Update Open in App link
+        const openAppLink = document.getElementById('open-app');
+        const downloadButton = document.querySelector('.post-cta-button.secondary');
+
+        if (isDesktop) {
+            // Desktop: Show QR code on click
+            openAppLink.textContent = 'Open on iPhone';
+            openAppLink.href = '#';
+            openAppLink.classList.add('desktop');
+
+            // Change download button text for desktop
+            if (downloadButton) {
+                downloadButton.textContent = 'View on App Store';
+            }
+
+            // Generate QR code
+            const qrCodeUrl = \`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=\${encodeURIComponent(postUrl)}\`;
+            document.getElementById('qr-code-img').src = qrCodeUrl;
+            document.getElementById('post-url-display').textContent = postUrl.replace('https://', '');
+
+            // Update modal title
+            document.getElementById('qr-modal-title').textContent = 'View This Post';
+
+            // Handle click to show modal
+            openAppLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('qr-modal').classList.add('active');
+            });
+
+            // Close modal handlers
+            document.getElementById('qr-modal-close').addEventListener('click', () => {
+                document.getElementById('qr-modal').classList.remove('active');
+            });
+
+            document.getElementById('qr-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'qr-modal') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+        } else {
+            // Mobile: Deep link to app
+            openAppLink.href = \`\${urlScheme}://post/\${postId}\`;
+        }
+
+        // Smooth auto-redirect on iOS with better UX
+        if (isIOS) {
+            // Wait for initial page render
+            setTimeout(() => {
+                const appUrl = \`\${urlScheme}://post/\${postId}\`;
+
+                // Create invisible iframe to attempt app launch
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+
+                // Clean up iframe after attempt
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 1000);
+            }, 800);
+        }
+        })(); // End of IIFE
+    </script>
+
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+`;
+                    }
+
+                    // Hide the QR modal
+                    const qrModal = document.getElementById('qr-modal');
+                    if (qrModal) qrModal.remove();
+                }
+
+                return; // Stop here for 404 page
+            }
+
+            // Normal post page logic continues here
+            // Extract post ID from /p/postId path
+            const pathParts = pathname.split('/');
+            const postId = pathParts[2] || 'post';
+
+        // Check for dev parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDev = urlParams.get('dev') === 'true';
+
+        // Determine which URL scheme to use
+        const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
+
+        // Update page with post ID
+        const titleElement = document.getElementById('post-title');
+        titleElement.textContent = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update all meta tags for better sharing
+        document.title = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update Open Graph meta tags
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) {
+            ogDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.setAttribute('content', \`https://tickiq.app/p/\${postId}\`);
+        }
+
+        // Update Twitter meta tags
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) {
+            twitterTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDesc) {
+            twitterDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update iOS app link
+        const iosUrl = document.querySelector('meta[property="al:ios:url"]');
+        if (iosUrl) {
+            iosUrl.setAttribute('content', \`tickiq://post/\${postId}\`);
+        }
+
+        // If dev mode, show indicator
+        if (isDev) {
+            const devBadge = document.createElement('div');
+            devBadge.className = 'dev-indicator';
+            devBadge.textContent = 'Dev Mode';
+            document.body.appendChild(devBadge);
+        }
+
+        // Detect if desktop or mobile/tablet
+        // Modern iPad detection: iPadOS 13+ reports as MacIntel but has touch support
+        const isIPad = /iPad/.test(navigator.userAgent) ||
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+        const isIOS = isIPad || isIPhone || /iPhone|iPod/.test(navigator.platform);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isMobile = isIOS || isAndroid;
+        const isDesktop = !isMobile;
+        const postUrl = \`https://tickiq.app/p/\${postId}\`;
+
+        // Update Open in App link
+        const openAppLink = document.getElementById('open-app');
+        const downloadButton = document.querySelector('.post-cta-button.secondary');
+
+        if (isDesktop) {
+            // Desktop: Show QR code on click
+            openAppLink.textContent = 'Open on iPhone';
+            openAppLink.href = '#';
+            openAppLink.classList.add('desktop');
+
+            // Change download button text for desktop
+            if (downloadButton) {
+                downloadButton.textContent = 'View on App Store';
+            }
+
+            // Generate QR code
+            const qrCodeUrl = \`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=\${encodeURIComponent(postUrl)}\`;
+            document.getElementById('qr-code-img').src = qrCodeUrl;
+            document.getElementById('post-url-display').textContent = postUrl.replace('https://', '');
+
+            // Update modal title
+            document.getElementById('qr-modal-title').textContent = 'View This Post';
+
+            // Handle click to show modal
+            openAppLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('qr-modal').classList.add('active');
+            });
+
+            // Close modal handlers
+            document.getElementById('qr-modal-close').addEventListener('click', () => {
+                document.getElementById('qr-modal').classList.remove('active');
+            });
+
+            document.getElementById('qr-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'qr-modal') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+        } else {
+            // Mobile: Deep link to app
+            openAppLink.href = \`\${urlScheme}://post/\${postId}\`;
+        }
+
+        // Smooth auto-redirect on iOS with better UX
+        if (isIOS) {
+            // Wait for initial page render
+            setTimeout(() => {
+                const appUrl = \`\${urlScheme}://post/\${postId}\`;
+
+                // Create invisible iframe to attempt app launch
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+
+                // Clean up iframe after attempt
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 1000);
+            }, 800);
+        }
+        })(); // End of IIFE
+    </script>
+
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+`;
+                    }
+
+                    // Hide the QR modal
+                    const qrModal = document.getElementById('qr-modal');
+                    if (qrModal) qrModal.remove();
+                }
+
+                return; // Stop here for 404 page
+            }
+
+            // Normal post page logic continues here
+            // Extract post ID from /p/postId path
+            const pathParts = pathname.split('/');
+            const postId = pathParts[2] || 'post';
+
+        // Check for dev parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDev = urlParams.get('dev') === 'true';
+
+        // Determine which URL scheme to use
+        const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
+
+        // Update page with post ID
+        const titleElement = document.getElementById('post-title');
+        titleElement.textContent = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update all meta tags for better sharing
+        document.title = 'You\\'ve Been Sent a Wrist Shot';
+
+        // Update meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update Open Graph meta tags
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) {
+            ogDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.setAttribute('content', \`https://tickiq.app/p/\${postId}\`);
+        }
+
+        // Update Twitter meta tags
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) {
+            twitterTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
+        }
+
+        const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDesc) {
+            twitterDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
+        }
+
+        // Update iOS app link
+        const iosUrl = document.querySelector('meta[property="al:ios:url"]');
+        if (iosUrl) {
+            iosUrl.setAttribute('content', \`tickiq://post/\${postId}\`);
+        }
+
+        // If dev mode, show indicator
+        if (isDev) {
+            const devBadge = document.createElement('div');
+            devBadge.className = 'dev-indicator';
+            devBadge.textContent = 'Dev Mode';
+            document.body.appendChild(devBadge);
+        }
+
+        // Detect if desktop or mobile/tablet
+        // Modern iPad detection: iPadOS 13+ reports as MacIntel but has touch support
+        const isIPad = /iPad/.test(navigator.userAgent) ||
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+        const isIOS = isIPad || isIPhone || /iPhone|iPod/.test(navigator.platform);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isMobile = isIOS || isAndroid;
+        const isDesktop = !isMobile;
+        const postUrl = \`https://tickiq.app/p/\${postId}\`;
+
+        // Update Open in App link
+        const openAppLink = document.getElementById('open-app');
+        const downloadButton = document.querySelector('.post-cta-button.secondary');
+
+        if (isDesktop) {
+            // Desktop: Show QR code on click
+            openAppLink.textContent = 'Open on iPhone';
+            openAppLink.href = '#';
+            openAppLink.classList.add('desktop');
+
+            // Change download button text for desktop
+            if (downloadButton) {
+                downloadButton.textContent = 'View on App Store';
+            }
+
+            // Generate QR code
+            const qrCodeUrl = \`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=\${encodeURIComponent(postUrl)}\`;
+            document.getElementById('qr-code-img').src = qrCodeUrl;
+            document.getElementById('post-url-display').textContent = postUrl.replace('https://', '');
+
+            // Update modal title
+            document.getElementById('qr-modal-title').textContent = 'View This Post';
+
+            // Handle click to show modal
+            openAppLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('qr-modal').classList.add('active');
+            });
+
+            // Close modal handlers
+            document.getElementById('qr-modal-close').addEventListener('click', () => {
+                document.getElementById('qr-modal').classList.remove('active');
+            });
+
+            document.getElementById('qr-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'qr-modal') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('qr-modal').classList.remove('active');
+                }
+            });
+        } else {
+            // Mobile: Deep link to app
+            openAppLink.href = \`\${urlScheme}://post/\${postId}\`;
+        }
+
+        // Smooth auto-redirect on iOS with better UX
+        if (isIOS) {
+            // Wait for initial page render
+            setTimeout(() => {
+                const appUrl = \`\${urlScheme}://post/\${postId}\`;
+
+                // Create invisible iframe to attempt app launch
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+
+                // Clean up iframe after attempt
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 1000);
+            }, 800);
+        }
+        })(); // End of IIFE
+    </script>
+
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+`;
