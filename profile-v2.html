@@ -215,6 +215,24 @@
             letter-spacing: 0.05em;
         }
 
+        /* Wearing Stats */
+        .wearing-stats {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .days-worn {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .percentage {
+            color: #999;
+        }
+
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -521,6 +539,18 @@
                     ? `<img src="/api/img/${escapeHtml(watch.thumbnail_url)}" alt="${escapeHtml(watchName)}" class="watch-image" loading="lazy">`
                     : `<div class="watch-image-placeholder">⌚</div>`;
 
+                // Wearing stats (days worn)
+                let wearingHtml = '';
+                if (watch.days_worn > 0) {
+                    const daysText = watch.days_worn === 1 ? 'day' : 'days';
+                    wearingHtml = `
+                        <div class="wearing-stats">
+                            <span class="days-worn">Worn ${watch.days_worn} ${daysText}</span>
+                            <span class="percentage">${watch.percentage_of_rotation.toFixed(1)}%</span>
+                        </div>
+                    `;
+                }
+
                 // Measurement info
                 let measurementHtml = '';
                 if (watch.latest_measurement) {
@@ -556,6 +586,7 @@
                         <div class="watch-info">
                             <div class="watch-name">${escapeHtml(watchName)}</div>
                             ${referenceText ? `<div class="watch-reference">${referenceText}</div>` : ''}
+                            ${wearingHtml}
                             ${measurementHtml}
                         </div>
                     </div>
