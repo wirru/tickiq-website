@@ -469,6 +469,15 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             min-width: 0;
         }
 
+        .watch-rank {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
         .watch-name {
             font-size: 3.5rem;
             font-weight: 600;
@@ -538,6 +547,28 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             font-size: 1.5rem;
             color: #FFFFFF;
             font-weight: 500;
+        }
+
+        /* Rotation Pie Chart */
+        .rotation-stat-with-chart {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .rotation-pie-chart {
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+        }
+
+        .rotation-pie-chart circle {
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+
+        .rotation-stat-content {
+            flex: 1;
         }
 
         /* Empty State */
@@ -893,10 +924,18 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     document.getElementById('measurement-count').textContent = data.stats.measurement_count;
                     document.getElementById('days-logged').textContent = data.stats.total_posting_days || 0;
 
-                    // Render watches
+                    // Render watches with cumulative rotation offset
                     if (data.watches && data.watches.length > 0) {
                         const watchCollection = document.getElementById('watch-collection');
-                        watchCollection.innerHTML = data.watches.map(watch => renderWatchSection(watch)).join('');
+                        let cumulativeRotation = 0;
+
+                        const sections = data.watches.map((watch, index) => {
+                            const section = renderWatchSection(watch, index + 1, cumulativeRotation);
+                            cumulativeRotation += watch.percentage_of_rotation;
+                            return section;
+                        });
+
+                        watchCollection.innerHTML = sections.join('');
 
                         // Initialize scroll animations
                         initScrollAnimations();
@@ -912,7 +951,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 }
             }
 
-            function renderWatchSection(watch) {
+            function renderWatchSection(watch, rank, rotationOffset) {
                 const watchName = [watch.make, watch.model].filter(Boolean).join(' ') || 'Watch';
                 const referenceText = watch.reference_number ? escapeHtml(watch.reference_number) : '';
 
@@ -939,6 +978,60 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     \`;
                 }
 
+                // Format dates
+                const formatDate = (dateStr) => {
+                    if (!dateStr) return null;
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                };
+
+                // Pie chart for rotation percentage (iOS-style compositional pie)
+                const createPieChart = (percentage, offset) => {
+                    const center = 30;
+                    const radius = 28;
+
+                    // Calculate angles (start from top, -90 degrees)
+                    const baseAngle = -Math.PI / 2;
+                    const offsetAngle = 2 * Math.PI * (offset / 100);
+                    const startAngle = baseAngle + offsetAngle;
+                    const sweepAngle = 2 * Math.PI * (percentage / 100);
+                    const endAngle = startAngle + sweepAngle;
+
+                    // Convert to cartesian coordinates for SVG path
+                    const startX = center + radius * Math.cos(startAngle);
+                    const startY = center + radius * Math.sin(startAngle);
+                    const endX = center + radius * Math.cos(endAngle);
+                    const endY = center + radius * Math.sin(endAngle);
+
+                    // Large arc flag (1 if angle > 180°)
+                    const largeArcFlag = sweepAngle > Math.PI ? 1 : 0;
+
+                    // Create filled pie slice path
+                    const fillPath = percentage > 0
+                        ? \`M \${center},\${center} L \${startX},\${startY} A \${radius},\${radius} 0 \${largeArcFlag},1 \${endX},\${endY} Z\`
+                        : '';
+
+                    // Create empty portion path
+                    const emptyPath = percentage > 0 && percentage < 100
+                        ? \`M \${center},\${center} L \${endX},\${endY} A \${radius},\${radius} 0 \${1 - largeArcFlag},1 \${startX},\${startY} Z\`
+                        : '';
+
+                    return \`
+                        <svg class="rotation-pie-chart" viewBox="0 0 60 60">
+                            <circle
+                                cx="\${center}"
+                                cy="\${center}"
+                                r="\${radius}"
+                                fill="none"
+                                stroke="rgba(255, 255, 255, 0.08)"
+                                stroke-width="0.5"
+                            />
+                            \${emptyPath ? \`<path d="\${emptyPath}" fill="rgba(255, 255, 255, 0.12)" />\` : ''}
+                            \${fillPath ? \`<path d="\${fillPath}" fill="rgba(255, 255, 255, 0.95)" />\` : ''}
+                        </svg>
+                    \`;
+                };
+
                 // Stats grid
                 const statsHtml = \`
                     <div class="watch-stats-grid">
@@ -947,9 +1040,24 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 <div class="watch-stat-label">Days Worn</div>
                                 <div class="watch-stat-value">\${watch.days_worn}</div>
                             </div>
+                            <div class="watch-stat rotation-stat-with-chart">
+                                \${createPieChart(watch.percentage_of_rotation, rotationOffset)}
+                                <div class="rotation-stat-content">
+                                    <div class="watch-stat-label">% of Rotation</div>
+                                    <div class="watch-stat-value">\${watch.percentage_of_rotation.toFixed(1)}%</div>
+                                </div>
+                            </div>
+                        \` : ''}
+                        \${watch.first_worn_date ? \`
                             <div class="watch-stat">
-                                <div class="watch-stat-label">% of Rotation</div>
-                                <div class="watch-stat-value">\${watch.percentage_of_rotation.toFixed(1)}%</div>
+                                <div class="watch-stat-label">First Worn</div>
+                                <div class="watch-stat-value">\${formatDate(watch.first_worn_date)}</div>
+                            </div>
+                        \` : ''}
+                        \${watch.last_worn_date ? \`
+                            <div class="watch-stat">
+                                <div class="watch-stat-label">Last Worn</div>
+                                <div class="watch-stat-value">\${formatDate(watch.last_worn_date)}</div>
                             </div>
                         \` : ''}
                         \${watch.measurement_count > 0 ? \`
@@ -970,6 +1078,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 </div>
                             </div>
                             <div class="watch-details-side">
+                                <div class="watch-rank">No. \${rank}</div>
                                 <h2 class="watch-name">\${escapeHtml(watchName)}</h2>
                                 \${referenceText ? \`<div class="watch-reference">\${referenceText}</div>\` : ''}
                                 \${measurementHtml}

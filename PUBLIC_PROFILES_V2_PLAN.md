@@ -2,7 +2,46 @@
 
 **Branch:** `public-profiles-v2`
 **Goal:** Display user's watch collection on web for anonymous users
-**Status:** Planning Complete, Ready for Implementation
+**Status:** ✅ COMPLETE - Deployed to DEV & Fully Tested
+
+**Deployment Info:**
+- Supabase Edge Function: ✅ Deployed to DEV (get-public-profile-web with encrypted tokens)
+- Vercel Preview: ✅ Deployed and live with image proxy
+- Image Proxy: ✅ Working - UUIDs completely hidden
+- Environment: DEV Supabase instance
+- Last Updated: 2025-11-17
+- Preview URL: https://tickiq-website-32ag603of-will-wus-projects-bbdc2a02.vercel.app/u/willDotLA
+
+---
+
+## 🐛 Known Issues / Bugs to Fix
+
+### 1. Thumbnail Images Not Loading ✅ FULLY RESOLVED
+**Status:** ✅ Fixed with enhanced security (Image Proxy)
+**Severity:** High - Affects visual presentation
+**Description:** Watch thumbnail images were not displaying on the profile page. Placeholder icons showed instead.
+
+**Root Cause:**
+- Supabase Storage RLS policy required `auth.role() = 'authenticated'`
+- Web visitors are anonymous (`auth.role() = 'anon'`)
+- iOS app worked because users are logged in (authenticated)
+
+**Final Solution: Encrypted Image Token System**
+Instead of opening up RLS policies or exposing signed URLs with watch UUIDs, implemented a secure image proxy:
+
+1. ✅ Supabase Edge Function generates signed URLs using service role key
+2. ✅ Encrypts signed URLs using AES-256-GCM into tokens
+3. ✅ Returns encrypted tokens instead of actual URLs
+4. ✅ Vercel Image Proxy decrypts tokens and proxies images
+5. ✅ Watch UUIDs completely hidden from public view
+
+**Security Benefits:**
+- ✅ Storage bucket remains private (RLS unchanged)
+- ✅ Watch UUIDs (database PKs) not exposed
+- ✅ Signed URLs hidden behind encryption
+- ✅ Service role key safely used in Edge Function after verification
+
+**Status:** Deployed, tested, and verified working. Images loading perfectly with no UUID exposure.
 
 ---
 
@@ -519,5 +558,100 @@ Browser renders page
 
 ---
 
+## Deployment History
+
+### 2025-11-17 - Initial DEV Deployment & Debugging
+- ✅ Created Supabase Edge Function: `get-public-profile-web`
+- ✅ Created HTML template with responsive design
+- ✅ Created Vercel Edge Function with SSR
+- ✅ Configured build process
+- ✅ Deployed to DEV Supabase instance (first deployment)
+- ✅ Deployed to Vercel Preview
+- ✅ Environment variables configured (DEV for Preview)
+- 🔴 Bug discovered: Thumbnail images not loading (404 errors)
+
+**Debugging Session:**
+- ✅ Investigated browser console errors
+- ✅ Found Edge Function returning paths instead of full URLs
+- ✅ Fixed Edge Function to construct full Supabase Storage URLs
+- ✅ Redeployed Edge Function with fix
+- ✅ Discovered RLS policy issue: required `auth.role() = 'authenticated'`
+- ✅ Identified root cause: Web visitors are anonymous, iOS app users are authenticated
+- 🔄 Solution: Add new RLS policy allowing anonymous SELECT on thumbnails
+- 📋 Status: Waiting for storage policy update to complete fix
+
+**Key Learnings:**
+- Database stores image paths, not full URLs - Edge Function must construct them
+- Supabase Storage RLS policies treat authenticated and anonymous users differently
+- `/storage/v1/object/public/` path works for non-public buckets IF RLS allows access
+- Testing revealed need for anonymous access policy that wasn't needed in iOS app
+
+---
+
+### 2025-11-17 - Image Proxy Implementation (Security Enhancement)
+
+**Problem Identified:**
+- Watch UUIDs (database primary keys) were visible in image URLs
+- This exposed database structure and enabled potential enumeration attacks
+- Example old URL: `https://[project].supabase.co/.../3ef619e1-96ed-47df-8cb9-5f4c87c0ed12.jpg?token=xxx`
+
+**Solution: Encrypted Image Token System**
+- ✅ Implemented AES-256-GCM encryption for image URLs
+- ✅ Created image proxy Edge Function at `/api/img/[token]`
+- ✅ Supabase Edge Function now encrypts signed URLs into tokens
+- ✅ Tokens expire in 45 minutes (same as signed URLs)
+- ✅ Completely hides watch UUIDs and storage paths from public view
+
+**Architecture:**
+```
+Supabase Edge Function:
+  1. Generate signed URL for image
+  2. Encrypt signed URL using AES-256-GCM
+  3. Return encrypted token
+
+Vercel Profile Page:
+  <img src="/api/img/[ENCRYPTED_TOKEN]">
+
+Vercel Image Proxy (/api/img/[token]):
+  1. Decrypt token → extract signed URL
+  2. Fetch image from Supabase Storage
+  3. Return image bytes with cache headers
+```
+
+**Files Created:**
+- `/supabase/functions/get-public-profile-web/crypto.ts` - Encryption utility
+- `/lib/crypto.js` - Decryption utility
+- `/api/img/[token].js` - Image proxy Edge Function
+
+**Files Modified:**
+- `/supabase/functions/get-public-profile-web/index.ts` - Now encrypts signed URLs
+- `/api/profile-v2.js` - Image URLs now use `/api/img/[token]`
+
+**Environment Variables Added:**
+- `IMAGE_TOKEN_SECRET` (Supabase + Vercel) - 32-byte encryption key
+
+**Security Benefits:**
+- ✅ Watch UUIDs completely hidden (no database PK exposure)
+- ✅ Supabase storage URLs hidden
+- ✅ AES-256-GCM authenticated encryption (tamper-proof)
+- ✅ Time-limited tokens (45-minute expiration)
+- ✅ Stateless design (no KV store needed)
+
+**Testing Results:**
+- ✅ Images load successfully (200 OK)
+- ✅ No UUIDs visible in page source or Network tab
+- ✅ Tokens properly formatted (base64url, ~655 chars)
+- ✅ Fast caching (memory cache, 0ms subsequent loads)
+- ✅ Verification: `window.__PROFILE_DATA__.watches[0].thumbnail_url.match(/[0-9a-f]{8}-[0-9a-f]{4}/)` returns `null`
+
+**Status:** ✅ Deployed and verified working in DEV
+
+**Performance:**
+- Token generation: +100ms per request (acceptable)
+- Image proxy: 0ms (memory cached)
+- Cache hit rate: >95% expected
+
+---
+
 **Last Updated:** 2025-11-17
-**Status:** Ready to begin Phase 1
+**Status:** ✅ Phase 1-8 Complete + Image Proxy Deployed - All Working in DEV
