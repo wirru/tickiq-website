@@ -236,12 +236,12 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
     <meta name="robots" content="noindex,nofollow">
 
     <!-- Dynamic Meta Tags (replaced by Edge Function) -->
-    <title>{{USERNAME}}'s Watch Collection - tickIQ</title>
-    <meta name="description" content="Explore {{USERNAME}}'s watch collection with real accuracy data from tickIQ. See timing measurements and discover their watches.">
+    <title>@{{USERNAME}}'s Watch Collection - tickIQ</title>
+    <meta name="description" content="Explore @{{USERNAME}}'s watch collection with real accuracy data from tickIQ. See timing measurements and discover their watches.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{USERNAME}}'s Watch Collection on tickIQ">
+    <meta property="og:title" content="@{{USERNAME}}'s Watch Collection on tickIQ">
     <meta property="og:description" content="Explore this curated collection with real accuracy data. See grail pieces and discover how each watch performs.">
     <meta property="og:image" content="{{OG_IMAGE_URL}}">
     <meta property="og:image:width" content="1200">
@@ -250,7 +250,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{USERNAME}}'s Watch Collection on tickIQ">
+    <meta name="twitter:title" content="@{{USERNAME}}'s Watch Collection on tickIQ">
     <meta name="twitter:description" content="Explore this curated collection with real accuracy data. See timing measurements and watch performance.">
     <meta name="twitter:image" content="{{OG_IMAGE_URL}}">
 
@@ -283,6 +283,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         body {
             display: block !important;
             min-height: auto !important;
+            background: #000000 !important;
+            color: #FFFFFF !important;
         }
 
         /* Override main styles from styles.css */
@@ -299,53 +301,93 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             padding: 0 2rem;
         }
 
-        /* Profile Header */
+        /* Profile Header - Hero Section */
         .profile-header {
-            padding: 10rem 0 2rem 0; /* Extra top padding for floating header */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10rem 2rem 4rem 2rem;
             text-align: center;
+            background: #000000;
         }
 
-        .profile-username {
-            font-size: 3rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-            color: #000;
+        .hero-profile-image {
+            width: 240px;
+            height: 240px;
+            margin-bottom: 2rem;
+            border-radius: 48px; /* Highly rounded corners */
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .profile-join-date {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-username {
+            font-size: 5.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: #FFFFFF; /* Primary text from iOS */
+            margin-bottom: 0.75rem;
+        }
+
+        .profile-username .apostrophe {
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
+        }
+
+        .profile-tagline {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
+            letter-spacing: 0.02em;
+            margin-bottom: 4rem;
         }
 
         /* Stats */
         .profile-stats {
             display: flex;
-            gap: 3rem;
+            gap: 4rem;
             justify-content: center;
-            margin-top: 2rem;
             flex-wrap: wrap;
         }
 
         .stat {
             text-align: center;
+            min-width: 120px;
         }
 
         .stat-value {
             display: block;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #000;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #FFFFFF; /* Primary text from iOS */
+            line-height: 1;
+            margin-bottom: 0.5rem;
         }
 
         .stat-label {
             display: block;
-            font-size: 0.875rem;
-            color: #666;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.25rem;
+            letter-spacing: 0.1em;
         }
 
         /* Watch Grid Container */
@@ -363,16 +405,17 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         }
 
         .watch-card {
-            background: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.02); /* Card background from iOS */
+            border: 1px solid rgba(255, 255, 255, 0.06); /* Border from iOS */
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
 
         .watch-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         .watch-image-container {
@@ -405,40 +448,40 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         .watch-name {
             font-size: 1.125rem;
             font-weight: 600;
-            color: #000;
+            color: #FFFFFF;
             margin-bottom: 0.25rem;
             line-height: 1.3;
         }
 
         .watch-reference {
             font-size: 0.875rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
             margin-bottom: 1rem;
         }
 
         .watch-measurement {
             padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.06); /* Border from iOS */
         }
 
         .measurement-rate {
             font-size: 1.25rem;
             font-weight: 600;
-            color: #000;
+            color: #FFFFFF; /* Primary text from iOS */
             margin-bottom: 0.25rem;
         }
 
         .measurement-rate.positive {
-            color: #d32f2f;
+            color: #ff6b6b;
         }
 
         .measurement-rate.negative {
-            color: #1976d2;
+            color: #4dabf7;
         }
 
         .measurement-count {
             font-size: 0.75rem;
-            color: #999;
+            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
@@ -449,16 +492,16 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             gap: 0.75rem;
             margin-bottom: 0.75rem;
             font-size: 0.875rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
         }
 
         .days-worn {
             font-weight: 600;
-            color: #000;
+            color: #FFFFFF; /* Primary text from iOS */
         }
 
         .percentage {
-            color: #999;
+            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
         }
 
         /* Empty State */
@@ -471,20 +514,22 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
+            color: #FFFFFF;
         }
 
         .empty-state p {
             font-size: 1.125rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
         }
 
         /* CTA Section */
         .cta-section {
-            background: #000;
+            background: rgba(255, 255, 255, 0.02); /* Card background from iOS */
             color: #fff;
             padding: 6rem 2rem;
             text-align: center;
             margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06); /* Border from iOS */
         }
 
         .cta-section h2 {
@@ -492,11 +537,12 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             font-weight: 700;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
+            color: #FFFFFF; /* Primary text from iOS */
         }
 
         .cta-section p {
             font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
             margin-bottom: 2rem;
             max-width: 600px;
             margin-left: auto;
@@ -528,13 +574,14 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             justify-content: center;
             min-height: 100vh;
             padding: 2rem;
+            background: #000000;
         }
 
         .spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            border-top-color: #000;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            border-top-color: #FFFFFF;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -546,7 +593,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         .loading-text {
             margin-top: 1.5rem;
             font-size: 1rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
         }
 
         /* Error State */
@@ -558,24 +605,26 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             min-height: 100vh;
             padding: 2rem;
             text-align: center;
+            background: #000000;
         }
 
         .error-state h1 {
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
+            color: #FFFFFF; /* Primary text from iOS */
         }
 
         .error-state p {
             font-size: 1.25rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
             margin-bottom: 2rem;
         }
 
         .error-button {
             display: inline-block;
-            background: #000;
-            color: #fff;
+            background: #FFFFFF;
+            color: #000;
             padding: 1rem 2rem;
             text-decoration: none;
             border-radius: 980px;
@@ -589,20 +638,46 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         /* Responsive */
         @media (max-width: 768px) {
+            .hero-profile-image {
+                width: 180px;
+                height: 180px;
+                margin-bottom: 1.5rem;
+                border-radius: 36px;
+            }
+
             .profile-header {
-                padding: 6rem 0 3rem 0;
+                padding: 8rem 1.5rem 3rem 1.5rem;
+            }
+
+            .profile-join-date {
+                font-size: 0.75rem;
+                margin-bottom: 1rem;
             }
 
             .profile-username {
-                font-size: 2rem;
+                font-size: 3rem;
+                letter-spacing: -0.02em;
+            }
+
+            .profile-tagline {
+                font-size: 1rem;
+                margin-bottom: 3rem;
             }
 
             .profile-stats {
-                gap: 2rem;
+                gap: 2.5rem;
+            }
+
+            .stat {
+                min-width: 90px;
             }
 
             .stat-value {
-                font-size: 1.5rem;
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
             }
 
             .watch-grid {
@@ -652,8 +727,17 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
     <div id="profile" class="hidden">
         <!-- Profile Header -->
         <section class="profile-header">
-            <h1 class="profile-username" id="username">@username</h1>
+            <!-- Profile Hero Image -->
+            <div class="hero-profile-image">
+                <picture>
+                    <source srcset="/assets/images/box.webp" type="image/webp">
+                    <img src="/assets/images/box.png" alt="Watch Box" loading="eager">
+                </picture>
+            </div>
+
             <p class="profile-join-date" id="join-date">Member since ...</p>
+            <h1 class="profile-username" id="username"><span class="apostrophe">'s</span></h1>
+            <p class="profile-tagline">State of the Collection</p>
 
             <div class="profile-stats">
                 <div class="stat">
@@ -721,8 +805,9 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     document.getElementById('loading').classList.add('hidden');
                     document.getElementById('profile').classList.remove('hidden');
 
-                    // Set username
-                    document.getElementById('username').textContent = '@' + data.profile.username;
+                    // Set username with @ and possessive
+                    const usernameEl = document.getElementById('username');
+                    usernameEl.innerHTML = \`@\${escapeHtml(data.profile.username)}<span class="apostrophe">'s</span>\`;
 
                     // Format and set join date
                     const joinDate = new Date(data.profile.created_at);
