@@ -287,7 +287,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         body {
             display: block !important;
             min-height: auto !important;
-            background: #000000 !important;
+            background: #1C160D !important;
             color: #FFFFFF !important;
         }
 
@@ -313,7 +313,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             align-items: center;
             padding: 12rem 2rem 10rem 2rem;
             text-align: center;
-            background: #000000;
+            background: #1C160D;
             min-height: 100vh;
         }
 
@@ -356,7 +356,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             border-radius: 24px;
             padding: 2.5rem 3rem;
             max-width: 800px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
         }
 
         /* Stats */
@@ -407,7 +406,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         /* Watch Collection - Apple Scrollytelling Style */
         .watch-collection-container {
-            background: #000000;
+            background: #1C160D;
         }
 
         .watch-section {
@@ -445,7 +444,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             border-radius: 32px;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.02);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
 
         .watch-image {
@@ -507,12 +505,20 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             margin-bottom: 0.5rem;
         }
 
-        .measurement-rate.positive {
-            color: #ff6b6b;
+        .measurement-rate.great {
+            color: #00CC33;
         }
 
-        .measurement-rate.negative {
-            color: #4dabf7;
+        .measurement-rate.good {
+            color: #99CC00;
+        }
+
+        .measurement-rate.fair {
+            color: #FFB300;
+        }
+
+        .measurement-rate.poor {
+            color: #FF4D4D;
         }
 
         .measurement-count {
@@ -642,7 +648,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             justify-content: center;
             min-height: 100vh;
             padding: 2rem;
-            background: #000000;
+            background: #1C160D;
         }
 
         .spinner {
@@ -673,7 +679,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             min-height: 100vh;
             padding: 2rem;
             text-align: center;
-            background: #000000;
+            background: #1C160D;
         }
 
         .error-state h1 {
@@ -966,7 +972,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 if (watch.latest_measurement) {
                     const rate = watch.latest_measurement.rate;
                     const sign = rate >= 0 ? '+' : '';
-                    const rateClass = rate >= 0 ? 'positive' : 'negative';
+                    const rateClass = watch.latest_measurement.rate_color_class || '';
                     const measurementText = watch.measurement_count === 1
                         ? '1 Measurement'
                         : \`\${watch.measurement_count} Measurements\`;
