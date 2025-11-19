@@ -51,6 +51,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* Override body styles from styles.css */
         body {
             display: block !important;
@@ -172,39 +176,47 @@
             white-space: nowrap;
         }
 
-        /* Watch Grid Container */
-        .watch-grid-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
+        /* Watch Collection - Apple Scrollytelling Style */
+        .watch-collection-container {
+            background: #000000;
         }
 
-        /* Watch Grid */
-        .watch-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+        .watch-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 4rem;
+            scroll-snap-align: start;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .watch-card {
-            background: rgba(255, 255, 255, 0.02); /* Card background from iOS */
-            border: 1px solid rgba(255, 255, 255, 0.06); /* Border from iOS */
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        .watch-section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .watch-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-            border-color: rgba(255, 255, 255, 0.12);
+        .watch-section-inner {
+            display: flex;
+            align-items: center;
+            gap: 8rem;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .watch-image-side {
+            flex: 0 0 55%;
+            max-width: 700px;
         }
 
         .watch-image-container {
             aspect-ratio: 1;
-            background: #f5f5f5;
-            position: relative;
+            border-radius: 32px;
             overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
 
         .watch-image {
@@ -219,38 +231,42 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%);
-            font-size: 3rem;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.1);
         }
 
-        .watch-info {
-            padding: 1.25rem;
+        .watch-details-side {
+            flex: 1;
+            min-width: 0;
         }
 
         .watch-name {
-            font-size: 1.125rem;
+            font-size: 3.5rem;
             font-weight: 600;
             color: #FFFFFF;
-            margin-bottom: 0.25rem;
-            line-height: 1.3;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
         }
 
         .watch-reference {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
-            margin-bottom: 1rem;
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 3rem;
+            font-weight: 400;
         }
 
-        .watch-measurement {
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.06); /* Border from iOS */
+        .watch-measurement-display {
+            margin-bottom: 3rem;
         }
 
         .measurement-rate {
-            font-size: 1.25rem;
+            font-size: 4rem;
             font-weight: 600;
-            color: #FFFFFF; /* Primary text from iOS */
-            margin-bottom: 0.25rem;
+            color: #FFFFFF;
+            line-height: 1;
+            margin-bottom: 0.5rem;
         }
 
         .measurement-rate.positive {
@@ -262,28 +278,38 @@
         }
 
         .measurement-count {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Wearing Stats */
-        .wearing-stats {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
             font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
         }
 
-        .days-worn {
-            font-weight: 600;
-            color: #FFFFFF; /* Primary text from iOS */
+        .watch-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
-        .percentage {
-            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
+        .watch-stat {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+
+        .watch-stat-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .watch-stat-value {
+            font-size: 1.5rem;
+            color: #FFFFFF;
+            font-weight: 500;
         }
 
         /* Empty State */
@@ -471,24 +497,58 @@
                 font-size: 0.7rem;
             }
 
-            .watch-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            /* Apple Scrollytelling - Mobile */
+            .watch-section {
+                min-height: auto;
+                padding: 4rem 1.5rem;
+            }
+
+            .watch-section-inner {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .watch-image-side {
+                flex: none;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .watch-details-side {
+                width: 100%;
+            }
+
+            .watch-name {
+                font-size: 2.5rem;
+            }
+
+            .watch-reference {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .measurement-rate {
+                font-size: 3rem;
+            }
+
+            .watch-stats-grid {
+                grid-template-columns: 1fr;
                 gap: 1.5rem;
+                margin-top: 2rem;
             }
 
             .cta-section h2 {
                 font-size: 2rem;
             }
-
-            .watch-grid-container {
-                padding: 1rem 1.5rem;
-            }
         }
 
         @media (max-width: 480px) {
-            .watch-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .watch-name {
+                font-size: 2rem;
+            }
+
+            .measurement-rate {
+                font-size: 2.5rem;
             }
 
             .profile-stats {
@@ -541,10 +601,10 @@
             </div>
         </section>
 
-        <!-- Watch Grid -->
-        <main class="watch-grid-container">
-            <div id="watch-grid" class="watch-grid">
-                <!-- Watches will be inserted here by JavaScript -->
+        <!-- Watch Collection - Apple Scrollytelling -->
+        <main class="watch-collection-container">
+            <div id="watch-collection">
+                <!-- Watch sections will be inserted here by JavaScript -->
             </div>
 
             <!-- Empty State -->
@@ -607,11 +667,14 @@
 
                     // Render watches
                     if (data.watches && data.watches.length > 0) {
-                        const watchGrid = document.getElementById('watch-grid');
-                        watchGrid.innerHTML = data.watches.map(watch => renderWatchCard(watch)).join('');
+                        const watchCollection = document.getElementById('watch-collection');
+                        watchCollection.innerHTML = data.watches.map(watch => renderWatchSection(watch)).join('');
+
+                        // Initialize scroll animations
+                        initScrollAnimations();
                     } else {
                         // Show empty state
-                        document.getElementById('watch-grid').classList.add('hidden');
+                        document.getElementById('watch-collection').classList.add('hidden');
                         document.getElementById('empty-state').classList.remove('hidden');
                     }
 
@@ -621,67 +684,92 @@
                 }
             }
 
-            function renderWatchCard(watch) {
+            function renderWatchSection(watch) {
                 const watchName = [watch.make, watch.model].filter(Boolean).join(' ') || 'Watch';
-                const referenceText = watch.reference_number ? 'Ref: ' + escapeHtml(watch.reference_number) : '';
+                const referenceText = watch.reference_number ? escapeHtml(watch.reference_number) : '';
 
                 // Image or placeholder
                 const imageHtml = watch.thumbnail_url
                     ? `<img src="/api/img/${escapeHtml(watch.thumbnail_url)}" alt="${escapeHtml(watchName)}" class="watch-image" loading="lazy">`
                     : `<div class="watch-image-placeholder">⌚</div>`;
 
-                // Wearing stats (days worn)
-                let wearingHtml = '';
-                if (watch.days_worn > 0) {
-                    const daysText = watch.days_worn === 1 ? 'day' : 'days';
-                    wearingHtml = `
-                        <div class="wearing-stats">
-                            <span class="days-worn">Worn ${watch.days_worn} ${daysText}</span>
-                            <span class="percentage">${watch.percentage_of_rotation.toFixed(1)}%</span>
-                        </div>
-                    `;
-                }
-
-                // Measurement info
+                // Measurement display
                 let measurementHtml = '';
                 if (watch.latest_measurement) {
                     const rate = watch.latest_measurement.rate;
                     const sign = rate >= 0 ? '+' : '';
                     const rateClass = rate >= 0 ? 'positive' : 'negative';
                     const measurementText = watch.measurement_count === 1
-                        ? '1 measurement'
-                        : watch.measurement_count + ' measurements';
+                        ? '1 Measurement'
+                        : `${watch.measurement_count} Measurements`;
 
                     measurementHtml = `
-                        <div class="watch-measurement">
+                        <div class="watch-measurement-display">
                             <div class="measurement-rate ${rateClass}">${sign}${rate.toFixed(1)} s/d</div>
-                            <div class="measurement-count">${measurementText}</div>
-                        </div>
-                    `;
-                } else if (watch.measurement_count > 0) {
-                    const measurementText = watch.measurement_count === 1
-                        ? '1 measurement'
-                        : watch.measurement_count + ' measurements';
-                    measurementHtml = `
-                        <div class="watch-measurement">
                             <div class="measurement-count">${measurementText}</div>
                         </div>
                     `;
                 }
 
-                return `
-                    <div class="watch-card">
-                        <div class="watch-image-container">
-                            ${imageHtml}
-                        </div>
-                        <div class="watch-info">
-                            <div class="watch-name">${escapeHtml(watchName)}</div>
-                            ${referenceText ? `<div class="watch-reference">${referenceText}</div>` : ''}
-                            ${wearingHtml}
-                            ${measurementHtml}
-                        </div>
+                // Stats grid
+                const statsHtml = `
+                    <div class="watch-stats-grid">
+                        ${watch.days_worn > 0 ? `
+                            <div class="watch-stat">
+                                <div class="watch-stat-label">Days Worn</div>
+                                <div class="watch-stat-value">${watch.days_worn}</div>
+                            </div>
+                            <div class="watch-stat">
+                                <div class="watch-stat-label">% of Rotation</div>
+                                <div class="watch-stat-value">${watch.percentage_of_rotation.toFixed(1)}%</div>
+                            </div>
+                        ` : ''}
+                        ${watch.measurement_count > 0 ? `
+                            <div class="watch-stat">
+                                <div class="watch-stat-label">Total Scans</div>
+                                <div class="watch-stat-value">${watch.measurement_count}</div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
+
+                return `
+                    <section class="watch-section">
+                        <div class="watch-section-inner">
+                            <div class="watch-image-side">
+                                <div class="watch-image-container">
+                                    ${imageHtml}
+                                </div>
+                            </div>
+                            <div class="watch-details-side">
+                                <h2 class="watch-name">${escapeHtml(watchName)}</h2>
+                                ${referenceText ? `<div class="watch-reference">${referenceText}</div>` : ''}
+                                ${measurementHtml}
+                                ${statsHtml}
+                            </div>
+                        </div>
+                    </section>
+                `;
+            }
+
+            function initScrollAnimations() {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.2
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.watch-section').forEach(section => {
+                    observer.observe(section);
+                });
             }
 
             function showError() {
