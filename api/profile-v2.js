@@ -307,9 +307,10 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 10rem 2rem 5rem 2rem;
+            padding: 12rem 2rem 10rem 2rem;
             text-align: center;
             background: #000000;
+            min-height: 100vh;
         }
 
         .profile-username {
@@ -648,7 +649,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         /* Responsive */
         @media (max-width: 768px) {
             .profile-header {
-                padding: 8rem 1.5rem 4rem 1.5rem;
+                padding: 10rem 1.5rem 8rem 1.5rem;
+                min-height: 100vh;
             }
 
             .profile-username {
