@@ -8,7 +8,7 @@ const profileHtmlPath = path.join(__dirname, '..', 'profile.html');
 const profileHtml = fs.readFileSync(profileHtmlPath, 'utf8');
 
 const profileEdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile.js');
-const profileTemplatePath = path.join(__dirname, '..', 'api', 'profile.template.js');
+const profileTemplatePath = path.join(__dirname, '..', 'templates', 'profile.template.js');
 
 // Always read from the template (with placeholder), never from the built file
 let profileEdgeFunction = fs.readFileSync(profileTemplatePath, 'utf8');
@@ -33,7 +33,7 @@ const postHtmlPath = path.join(__dirname, '..', 'post.html');
 const postHtml = fs.readFileSync(postHtmlPath, 'utf8');
 
 const postEdgeFunctionPath = path.join(__dirname, '..', 'api', 'post.js');
-const postTemplatePath = path.join(__dirname, '..', 'api', 'post.template.js');
+const postTemplatePath = path.join(__dirname, '..', 'templates', 'post.template.js');
 
 // Always read from the template (with placeholder), never from the built file
 let postEdgeFunction = fs.readFileSync(postTemplatePath, 'utf8');
@@ -58,7 +58,7 @@ const profileV2HtmlPath = path.join(__dirname, '..', 'profile-v2.html');
 const profileV2Html = fs.readFileSync(profileV2HtmlPath, 'utf8');
 
 const profileV2EdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile-v2.js');
-const profileV2TemplatePath = path.join(__dirname, '..', 'api', 'profile-v2.template.js');
+const profileV2TemplatePath = path.join(__dirname, '..', 'templates', 'profile-v2.template.js');
 
 // Always read from the template (with placeholder), never from the built file
 let profileV2EdgeFunction = fs.readFileSync(profileV2TemplatePath, 'utf8');
