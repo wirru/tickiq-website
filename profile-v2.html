@@ -79,87 +79,96 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 10rem 2rem 4rem 2rem;
+            padding: 10rem 2rem 5rem 2rem;
             text-align: center;
             background: #000000;
         }
 
-        .hero-profile-image {
-            width: 240px;
-            height: 240px;
-            margin-bottom: 2rem;
-            border-radius: 48px; /* Highly rounded corners */
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero-profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .profile-join-date {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
-        }
-
         .profile-username {
-            font-size: 5.5rem;
+            font-size: 6rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1;
-            color: #FFFFFF; /* Primary text from iOS */
-            margin-bottom: 0.75rem;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            color: #FFFFFF;
+            margin-bottom: 0.5rem;
         }
 
         .profile-username .apostrophe {
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .profile-tagline {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 400;
-            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
-            letter-spacing: 0.02em;
-            margin-bottom: 4rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.01em;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-join-date {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        /* Stats Card */
+        .profile-stats-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 2.5rem 3rem;
+            max-width: 800px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
         }
 
         /* Stats */
         .profile-stats {
             display: flex;
-            gap: 4rem;
-            justify-content: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
         }
 
         .stat {
             text-align: center;
-            min-width: 120px;
+            flex: 1;
+            min-width: 140px;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .stat:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .stat-value {
             display: block;
-            font-size: 3rem;
-            font-weight: 600;
-            color: #FFFFFF; /* Primary text from iOS */
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: #FFFFFF;
             line-height: 1;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.625rem;
         }
 
         .stat-label {
             display: block;
             font-size: 0.75rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.5); /* Tertiary text from iOS */
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: capitalize;
+            letter-spacing: 0;
+            white-space: nowrap;
         }
 
         /* Watch Grid Container */
@@ -410,34 +419,42 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero-profile-image {
-                width: 180px;
-                height: 180px;
-                margin-bottom: 1.5rem;
-                border-radius: 36px;
-            }
-
             .profile-header {
-                padding: 8rem 1.5rem 3rem 1.5rem;
-            }
-
-            .profile-join-date {
-                font-size: 0.75rem;
-                margin-bottom: 1rem;
+                padding: 8rem 1.5rem 4rem 1.5rem;
             }
 
             .profile-username {
-                font-size: 3rem;
-                letter-spacing: -0.02em;
+                font-size: 3.5rem;
+                letter-spacing: -0.03em;
+                margin-bottom: 0.5rem;
             }
 
             .profile-tagline {
-                font-size: 1rem;
-                margin-bottom: 3rem;
+                font-size: 1.125rem;
+                margin-bottom: 1rem;
             }
 
-            .profile-stats {
-                gap: 2.5rem;
+            .profile-join-date {
+                font-size: 0.7rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .profile-stats-card {
+                padding: 2rem 1.25rem;
+                max-width: 100%;
+                margin: 0 1rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .stat:not(:last-child)::after {
+                height: 60px;
             }
 
             .stat {
@@ -499,30 +516,25 @@
     <div id="profile" class="hidden">
         <!-- Profile Header -->
         <section class="profile-header">
-            <!-- Profile Hero Image -->
-            <div class="hero-profile-image">
-                <picture>
-                    <source srcset="/assets/images/box.webp" type="image/webp">
-                    <img src="/assets/images/box.png" alt="Watch Box" loading="eager">
-                </picture>
-            </div>
-
-            <p class="profile-join-date" id="join-date">Member since ...</p>
             <h1 class="profile-username" id="username"><span class="apostrophe">'s</span></h1>
             <p class="profile-tagline">State of the Collection</p>
+            <p class="profile-join-date" id="join-date">Tracking since ...</p>
 
-            <div class="profile-stats">
-                <div class="stat">
-                    <span class="stat-value" id="watch-count">0</span>
-                    <span class="stat-label">Watches</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-value" id="measurement-count">0</span>
-                    <span class="stat-label">Measurements</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-value" id="avg-rate">--</span>
-                    <span class="stat-label">Avg Rate</span>
+            <!-- Stats Card -->
+            <div class="profile-stats-card">
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="watch-count">0</span>
+                        <span class="stat-label">Watches</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="measurement-count">0</span>
+                        <span class="stat-label">Measurements</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="days-logged">0</span>
+                        <span class="stat-label">Days Logged</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -584,20 +596,12 @@
                     // Format and set join date
                     const joinDate = new Date(data.profile.created_at);
                     const monthYear = joinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                    document.getElementById('join-date').textContent = 'Member since ' + monthYear;
+                    document.getElementById('join-date').textContent = 'Tracking since ' + monthYear;
 
                     // Set stats
                     document.getElementById('watch-count').textContent = data.stats.watch_count;
                     document.getElementById('measurement-count').textContent = data.stats.measurement_count;
-
-                    // Format average rate
-                    if (data.stats.average_rate !== null) {
-                        const avgRate = data.stats.average_rate;
-                        const sign = avgRate >= 0 ? '+' : '';
-                        document.getElementById('avg-rate').textContent = sign + avgRate.toFixed(1) + ' s/d';
-                    } else {
-                        document.getElementById('avg-rate').textContent = '--';
-                    }
+                    document.getElementById('days-logged').textContent = data.stats.total_posting_days || 0;
 
                     // Render watches
                     if (data.watches && data.watches.length > 0) {
