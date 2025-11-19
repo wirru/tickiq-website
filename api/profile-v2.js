@@ -323,28 +323,29 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             letter-spacing: -0.04em;
             line-height: 1.1;
             color: #FFFFFF;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .profile-username .apostrophe {
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .profile-tagline {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 0.01em;
-            margin-bottom: 1.5rem;
+            font-size: 2.75rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 2rem;
         }
 
         .profile-join-date {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.3);
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.2em;
             text-align: center;
             margin-bottom: 3.5rem;
         }
@@ -713,12 +714,12 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             .profile-username {
                 font-size: 3.5rem;
                 letter-spacing: -0.03em;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.75rem;
             }
 
             .profile-tagline {
-                font-size: 1.125rem;
-                margin-bottom: 1rem;
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
             }
 
             .profile-join-date {
