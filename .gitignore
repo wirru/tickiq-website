@@ -22,3 +22,8 @@ npm-debug.log*
 *.psd
 *.ai
 *.sketch
+
+# Generated edge functions (built from templates)
+api/profile.js
+api/post.js
+api/profile-v2.js

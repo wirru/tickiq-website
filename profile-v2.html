@@ -58,6 +58,16 @@
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            /* Override styles.css flexbox layout */
+            display: block !important;
+            min-height: auto !important;
+        }
+
+        /* Override main styles from styles.css */
+        main {
+            flex: none !important;
+            padding-top: 0 !important;
+            min-height: auto !important;
         }
 
         /* Main Container */
@@ -69,7 +79,7 @@
 
         /* Profile Header */
         .profile-header {
-            padding: 10rem 0 4rem 0; /* Extra top padding for floating header */
+            padding: 10rem 0 2rem 0; /* Extra top padding for floating header */
             text-align: center;
         }
 
@@ -116,12 +126,18 @@
             margin-top: 0.25rem;
         }
 
+        /* Watch Grid Container */
+        .watch-grid-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
         /* Watch Grid */
         .watch-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
-            padding: 3rem 0;
         }
 
         .watch-card {
@@ -358,8 +374,8 @@
                 font-size: 2rem;
             }
 
-            .container {
-                padding: 0 1.5rem;
+            .watch-grid-container {
+                padding: 1rem 1.5rem;
             }
         }
 
@@ -395,7 +411,7 @@
     <!-- Profile Content -->
     <div id="profile" class="hidden">
         <!-- Profile Header -->
-        <section class="profile-header container">
+        <section class="profile-header">
             <h1 class="profile-username" id="username">@username</h1>
             <p class="profile-join-date" id="join-date">Member since ...</p>
 
@@ -416,7 +432,7 @@
         </section>
 
         <!-- Watch Grid -->
-        <main class="container">
+        <main class="watch-grid-container">
             <div id="watch-grid" class="watch-grid">
                 <!-- Watches will be inserted here by JavaScript -->
             </div>
