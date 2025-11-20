@@ -662,7 +662,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         /* Mid-Page CTA */
         .cta-mid {
             background: linear-gradient(135deg, #2A1F15 0%, #1A1410 100%);
-            padding: 8rem 2rem;
+            padding: 4rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
