@@ -291,9 +291,9 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             color: #FFFFFF !important;
         }
 
-        /* Profile page header - muted nav links in expanded state */
+        /* Profile page header - white nav links in expanded state */
         #header:not(.collapsed) .nav-link {
-            color: rgba(255, 255, 255, 0.3) !important;
+            color: rgba(255, 255, 255, 0.7) !important;
         }
 
         /* Profile page header - white logo in expanded state */
