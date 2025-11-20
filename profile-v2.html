@@ -84,6 +84,21 @@
             color: #000000 !important;
         }
 
+        /* Profile page header - white hamburger icon in expanded state */
+        #header:not(.collapsed) .hamburger,
+        #header:not(.collapsed) .menu-icon,
+        #header:not(.collapsed) .mobile-menu-toggle,
+        #header:not(.collapsed) .hamburger-icon {
+            filter: brightness(0) invert(1) !important;
+        }
+
+        #header:not(.collapsed) .hamburger span,
+        #header:not(.collapsed) .menu-icon span,
+        #header:not(.collapsed) .mobile-menu-toggle span,
+        #header:not(.collapsed) .hamburger-icon span {
+            background: #FFFFFF !important;
+        }
+
         /* Override main styles from styles.css */
         main {
             flex: none !important;
@@ -699,14 +714,25 @@
 
         /* Rotation Pie Chart */
         .rotation-stat-with-chart {
-            display: flex;
+            display: grid;
+            grid-template-areas:
+                "label label"
+                "chart value";
+            grid-template-columns: auto 1fr;
+            row-gap: 0.5rem;
+            column-gap: 0.625rem;
             align-items: center;
-            gap: 1.5rem;
+        }
+
+        .rotation-stat-with-chart .watch-stat-label {
+            grid-area: label;
+            margin-bottom: 0;
         }
 
         .rotation-pie-chart {
-            width: 60px;
-            height: 60px;
+            grid-area: chart;
+            width: 1.4rem;
+            height: 1.4rem;
             flex-shrink: 0;
         }
 
@@ -716,7 +742,16 @@
         }
 
         .rotation-stat-content {
-            flex: 1;
+            display: contents;
+        }
+
+        .rotation-stat-with-chart .watch-stat-label {
+            grid-area: label;
+        }
+
+        .rotation-stat-with-chart .watch-stat-value {
+            grid-area: value;
+            align-self: center;
         }
 
         /* Empty State */
@@ -885,6 +920,11 @@
                 margin-bottom: 2.5rem;
             }
 
+            .join-date-logo {
+                height: 1.2rem;
+                transform: translateY(-0.05rem);
+            }
+
             .profile-stats-card {
                 padding: 2rem 1.25rem;
                 max-width: 100%;
@@ -907,15 +947,106 @@
                 min-width: 90px;
             }
 
-            .stat-value {
-                font-size: 2rem;
+            /* Birds Eye View - Mobile */
+            .birds-eye-view-section {
+                padding: 4rem 1.5rem;
             }
 
-            .stat-label {
+            .box-image-container {
+                max-width: 120px;
+                margin-bottom: -30px;
+            }
+
+            .birds-eye-card {
+                padding: 60px 0.75rem 2rem 0.75rem;
+                border-radius: 24px;
+            }
+
+            .birds-eye-title {
+                font-size: 0.75rem;
+                margin-bottom: 2rem;
+            }
+
+            .watch-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.25rem;
+            }
+
+            .watch-grid-item {
+                padding: 1rem 0.75rem;
+            }
+
+            .watch-grid-name {
                 font-size: 0.7rem;
+                margin-bottom: 0.5rem;
+                height: 2.2em;
             }
 
-            /* Apple Scrollytelling - Mobile */
+            .watch-grid-divider {
+                margin: 0 0.25rem 0.625rem 0.25rem;
+            }
+
+            .grid-pie-chart {
+                width: 18px;
+                height: 18px;
+            }
+
+            .grid-percentage {
+                font-size: 1.25rem;
+            }
+
+            .watch-grid-context {
+                font-size: 0.5625rem;
+            }
+
+            .watch-grid-rank {
+                font-size: 0.5rem;
+            }
+
+            /* Mid-Page CTA - Mobile */
+            .cta-mid {
+                padding: 3rem 1.5rem;
+            }
+
+            .cta-mid-badge {
+                font-size: 0.625rem;
+                padding: 0.4rem 0.875rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-mid-title {
+                font-size: 2rem;
+                margin-bottom: 1.25rem;
+                line-height: 1.15;
+            }
+
+            .cta-mid-description {
+                font-size: 1rem;
+                margin-bottom: 2.25rem;
+                line-height: 1.5;
+            }
+
+            .cta-mid-logo {
+                height: 1.35rem;
+            }
+
+            .cta-mid-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                gap: 0.625rem;
+            }
+
+            .cta-mid-button svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            /* Scrollytelling - Mobile */
+            .scrollytelling-title {
+                font-size: 0.75rem;
+                padding: 1.5rem 1.5rem 1rem 1.5rem;
+            }
+
             .watch-section {
                 min-height: auto;
                 padding: 4rem 1.5rem;
@@ -955,64 +1086,274 @@
                 margin-top: 2rem;
             }
 
-            /* Birds Eye View - Mobile */
-            .box-image-container {
-                max-width: 100px;
-                margin-bottom: -30px;
+            .watch-stat {
+                border-top: none;
+                padding-top: 0;
             }
 
-            .birds-eye-card {
-                padding: 50px 1.5rem 1.5rem 1.5rem;
-                border-radius: 24px;
-            }
-
-            .birds-eye-title {
-                font-size: 0.75rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .watch-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1rem;
-            }
-
-            .watch-grid-name {
-                font-size: 0.75rem;
-            }
-
-            .watch-grid-rank {
-                font-size: 0.5rem;
-            }
-
+            /* Bottom CTA - Mobile */
             .cta-section {
-                padding: 8rem 1.5rem 6rem 1.5rem;
+                padding: 6rem 1.5rem 5rem 1.5rem;
                 flex-direction: column;
                 gap: 2rem;
             }
 
             .cta-section h2 {
-                font-size: 2.25rem;
+                font-size: 2rem;
                 white-space: normal;
                 text-align: center;
             }
 
             .cta-button {
-                padding: 0.625rem 1.5rem;
-                font-size: 0.9375rem;
+                padding: 0.875rem 1.75rem !important;
+                font-size: 1rem !important;
+                transform: translateY(0) !important;
+            }
+
+            .cta-button:hover {
+                transform: translateY(-2px) !important;
             }
         }
 
         @media (max-width: 480px) {
+            /* Profile Header */
+            .profile-username {
+                font-size: 2.75rem;
+            }
+
+            .profile-tagline {
+                font-size: 1.5rem;
+            }
+
+            .profile-join-date {
+                font-size: 0.65rem;
+                flex-wrap: nowrap;
+                gap: 0.3rem;
+            }
+
+            .join-date-logo {
+                height: 1rem;
+            }
+
+            .profile-stats {
+                gap: 1.5rem;
+            }
+
+            .stat {
+                min-width: 80px;
+            }
+
+            .stat-value {
+                font-size: 1.75rem;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+            }
+
+            /* Birds Eye View - 2 columns on small screens */
+            .watch-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .watch-grid-item {
+                padding: 1.25rem 1rem;
+            }
+
+            .watch-grid-name {
+                font-size: 0.8125rem;
+                height: auto;
+                min-height: 2.6em;
+            }
+
+            .grid-percentage {
+                font-size: 1.5rem;
+            }
+
+            .watch-grid-context {
+                font-size: 0.625rem;
+            }
+
+            /* Mid-Page CTA */
+            .cta-mid {
+                padding: 2.5rem 1.25rem;
+            }
+
+            .cta-mid-title {
+                font-size: 1.75rem;
+            }
+
+            .cta-mid-description {
+                font-size: 0.9375rem;
+            }
+
+            .cta-mid-logo {
+                height: 1.2rem;
+            }
+
+            .cta-mid-button {
+                padding: 0.875rem 1.75rem;
+                font-size: 0.9375rem;
+            }
+
+            .cta-mid-button svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* Scrollytelling */
+            .watch-section {
+                padding: 3rem 1.25rem;
+            }
+
             .watch-name {
                 font-size: 2rem;
+            }
+
+            .watch-reference {
+                font-size: 0.9375rem;
             }
 
             .measurement-rate {
                 font-size: 2.5rem;
             }
 
+            .watch-stats-grid {
+                gap: 1.25rem;
+            }
+
+            /* Bottom CTA */
+            .cta-section {
+                padding: 5rem 1.25rem 4rem 1.25rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .cta-button {
+                padding: 0.75rem 1.5rem !important;
+                font-size: 0.9375rem !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            /* Small screens - prevent join date wrapping */
+            .profile-join-date {
+                font-size: 0.6rem;
+                flex-wrap: nowrap;
+                gap: 0.25rem;
+            }
+
+            .join-date-logo {
+                height: 0.95rem;
+            }
+        }
+
+        @media (max-width: 350px) {
+            /* Extra small screens (< 350px) - fix layout issues */
+
+            /* Ensure no horizontal overflow */
+            body {
+                overflow-x: hidden;
+            }
+
+            /* Profile Header - tighter spacing */
+            .profile-header {
+                padding: 10rem 1rem 8rem 1rem;
+            }
+
+            .profile-username {
+                font-size: 2.25rem;
+            }
+
+            .profile-tagline {
+                font-size: 1.25rem;
+            }
+
+            .profile-join-date {
+                font-size: 0.52rem;
+                flex-wrap: nowrap !important;
+                gap: 0.2rem;
+            }
+
+            .join-date-logo {
+                height: 0.8rem;
+                transform: translateY(0);
+            }
+
+            /* Stats Card - prevent overflow */
+            .profile-stats-card {
+                padding: 1.25rem 0.5rem;
+                margin: 0 0.5rem;
+            }
+
             .profile-stats {
-                gap: 1.5rem;
+                gap: 1rem;
+            }
+
+            .stat {
+                min-width: 60px;
+                flex: 1;
+            }
+
+            .stat-value {
+                font-size: 1.35rem;
+            }
+
+            .stat-label {
+                font-size: 0.55rem;
+                letter-spacing: 0.01em;
+                line-height: 1.3;
+            }
+
+            /* Reduce separator height */
+            .stat:not(:last-child)::after {
+                height: 45px;
+            }
+
+            /* All sections - prevent background gaps */
+            .profile-header,
+            .birds-eye-view-section,
+            .cta-mid,
+            .watch-collection-container,
+            .cta-section {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* Birds Eye View */
+            .birds-eye-view-section {
+                padding: 4rem 1rem;
+            }
+
+            .birds-eye-card {
+                padding: 60px 0.5rem 2rem 0.5rem;
+            }
+
+            /* Mid-Page CTA */
+            .cta-mid {
+                padding: 2.5rem 1rem;
+            }
+
+            .cta-mid-title {
+                font-size: 1.5rem;
+            }
+
+            /* Scrollytelling */
+            .watch-section {
+                padding: 3rem 1rem;
+            }
+
+            /* Bottom CTA */
+            .cta-section {
+                padding: 5rem 1rem 4rem 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
