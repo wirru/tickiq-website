@@ -143,6 +143,21 @@
             letter-spacing: 0.2em;
             text-align: center;
             margin-bottom: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+        }
+
+        .join-date-logo {
+            height: 1.5rem;
+            width: auto;
+            color: rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+            display: block;
+            margin: 0 0.125rem;
+            align-self: center;
+            transform: translateY(-0.2rem);
         }
 
         /* Scroll Indicator */
@@ -231,35 +246,6 @@
             white-space: nowrap;
         }
 
-        /* Journey Line - Visual Continuity */
-        .journey-line {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            background: linear-gradient(
-                to bottom,
-                transparent 0%,
-                rgba(255, 255, 255, 0.06) 10%,
-                rgba(255, 255, 255, 0.06) 90%,
-                transparent 100%
-            );
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .journey-node {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid #1C160D;
-            z-index: 1;
-            pointer-events: none;
-        }
 
         /* Birds Eye View Section */
         .birds-eye-view-section {
@@ -287,6 +273,7 @@
             margin-bottom: 3.5rem;
             position: relative;
             padding-bottom: 1.5rem;
+            text-indent: 0.2em;
         }
 
         .birds-eye-title::after {
@@ -313,6 +300,7 @@
             right: 0;
             z-index: 10;
             padding-bottom: 1.5rem;
+            text-indent: 0.2em;
         }
 
         .scrollytelling-title::after {
@@ -394,12 +382,162 @@
         }
 
         .watch-grid-name {
-            font-size: 0.75rem;
-            font-weight: 400;
+            font-size: 0.8125rem;
+            font-weight: 500;
             color: rgba(255, 255, 255, 0.7);
             text-align: center;
             line-height: 1.4;
             letter-spacing: -0.01em;
+            margin-bottom: 0.625rem;
+            height: 2.4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .watch-grid-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 0 0.5rem 0.75rem 0.5rem;
+        }
+
+        .watch-grid-metric {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .grid-pie-chart {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .grid-percentage {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .watch-grid-context {
+            font-size: 0.625rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.45);
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        /* Mid-Page CTA */
+        .cta-mid {
+            background: linear-gradient(135deg, #2A1F15 0%, #1A1410 100%);
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-mid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .cta-mid::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .cta-mid-content {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-mid-badge {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .cta-mid-title {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #FFFFFF;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .cta-mid-description {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-mid-logo {
+            height: 1.65rem;
+            width: auto;
+            color: rgba(255, 255, 255, 0.65);
+            flex-shrink: 0;
+            display: inline-block;
+            margin: 0 0.125rem 0 -0.2rem;
+            transform: translateY(-0.075rem);
+        }
+
+        .cta-mid-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #FFFFFF;
+            color: #000000;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .cta-mid-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+        }
+
+        .cta-mid-button svg {
+            transition: transform 0.3s ease;
+            transform: translateY(-3px);
+        }
+
+        .cta-mid-button:hover svg {
+            transform: translateY(-3px) scale(1.1);
         }
 
         /* Watch Collection - Apple Scrollytelling Style */
@@ -407,6 +545,7 @@
             background: linear-gradient(to bottom, #1A1612, #000000);
             position: relative;
             padding-top: 0;
+            margin-bottom: 0;
         }
 
 
@@ -423,29 +562,9 @@
             position: relative;
         }
 
-        .watch-section::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid #1C160D;
-            z-index: 0;
-            opacity: 0;
-            transition: opacity 0.8s ease 0.4s;
-        }
-
         .watch-section.visible {
             opacity: 1;
             transform: translateY(0);
-        }
-
-        .watch-section.visible::before {
-            opacity: 1;
         }
 
         .watch-section-inner {
@@ -618,48 +737,59 @@
             color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
         }
 
-        /* CTA Section */
+        /* Bottom CTA Section - Refined */
         .cta-section {
-            background: rgba(255, 255, 255, 0.02); /* Card background from iOS */
+            background: transparent;
             color: #fff;
-            padding: 6rem 2rem;
-            text-align: center;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.06); /* Border from iOS */
+            padding: 9rem 2rem;
+            margin-top: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
         }
+
 
         .cta-section h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 2.75rem;
+            font-weight: 600;
+            margin-bottom: 0;
             letter-spacing: -0.02em;
-            color: #FFFFFF; /* Primary text from iOS */
-        }
-
-        .cta-section p {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7); /* Secondary text from iOS */
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            color: #FFFFFF;
+            white-space: nowrap;
         }
 
         .cta-button {
-            display: inline-block;
-            background: #fff;
-            color: #000;
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 980px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            padding: 0.75rem 2rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+            text-decoration: none !important;
+            border-radius: 50px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 24px rgba(255, 255, 255, 0.12) !important;
+            height: auto !important;
+            max-height: 60px !important;
+            transform: translateY(3px) !important;
         }
 
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(1px) !important;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button svg {
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover svg {
+            transform: scale(1.05);
         }
 
         /* Loading State */
@@ -854,8 +984,21 @@
                 font-size: 0.5rem;
             }
 
+            .cta-section {
+                padding: 8rem 1.5rem 6rem 1.5rem;
+                flex-direction: column;
+                gap: 2rem;
+            }
+
             .cta-section h2 {
-                font-size: 2rem;
+                font-size: 2.25rem;
+                white-space: normal;
+                text-align: center;
+            }
+
+            .cta-button {
+                padding: 0.625rem 1.5rem;
+                font-size: 0.9375rem;
             }
         }
 
@@ -912,7 +1055,7 @@
                     </div>
                     <div class="stat">
                         <span class="stat-value" id="days-logged">0</span>
-                        <span class="stat-label">Days Logged</span>
+                        <span class="stat-label">Days Tracked</span>
                     </div>
                 </div>
             </div>
@@ -934,6 +1077,36 @@
             </div>
         </section>
 
+        <!-- Mid-Page CTA -->
+        <section class="cta-mid">
+            <div class="cta-mid-content">
+                <div class="cta-mid-badge">Get Started</div>
+                <h2 class="cta-mid-title">Build Your Watch Collection</h2>
+                <p class="cta-mid-description">
+                    <span>Your collection, always up-to-date with</span>
+                    <svg class="cta-mid-logo" viewBox="0 0 256 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_cta)">
+                            <path d="M30.507 82.008C22.499 82.008 18.495 77.332 18.495 67.98V40.68H14.463V39.588C16.815 38.356 19.251 36.704 21.771 34.632C24.347 32.56 26.559 30.404 28.407 28.164L29.583 28.752V39.084L40.671 38.916V41.016L35.127 40.848C32.551 40.736 30.703 40.68 29.583 40.68V64.62C29.583 68.932 30.059 71.956 31.011 73.692C32.019 75.372 33.587 76.212 35.715 76.212C36.667 76.212 37.591 76.016 38.487 75.624C39.383 75.176 40.111 74.616 40.671 73.944L41.763 74.784C40.755 76.856 39.243 78.592 37.227 79.992C35.211 81.336 32.971 82.008 30.507 82.008ZM43.5237 79.74C45.0917 79.46 46.3237 78.872 47.2197 77.976C48.1157 77.08 48.5637 75.988 48.5637 74.7V49.584C48.5637 48.184 48.1717 47.064 47.3877 46.224C46.6037 45.384 45.3157 44.852 43.5237 44.628V43.368L58.6437 38.16L59.6517 38.916V74.7C59.6517 76.044 60.1277 77.164 61.0797 78.06C62.0317 78.956 63.3197 79.516 64.9437 79.74V81H43.5237V79.74ZM46.8837 25.392C46.8837 23.6 47.5277 22.06 48.8157 20.772C50.1597 19.428 51.7277 18.756 53.5197 18.756C55.3117 18.756 56.8517 19.428 58.1397 20.772C59.4837 22.06 60.1557 23.6 60.1557 25.392C60.1557 27.184 59.4837 28.752 58.1397 30.096C56.8517 31.384 55.3117 32.028 53.5197 32.028C51.7277 32.028 50.1597 31.384 48.8157 30.096C47.5277 28.752 46.8837 27.184 46.8837 25.392ZM87.5705 81.84C83.9865 81.84 80.6545 80.972 77.5745 79.236C74.4945 77.444 72.0305 74.84 70.1825 71.424C68.3905 67.952 67.4945 63.864 67.4945 59.16C67.4945 54.68 68.3905 50.844 70.1825 47.652C71.9745 44.404 74.3825 41.968 77.4065 40.344C80.4305 38.664 83.7625 37.824 87.4025 37.824C90.6505 37.824 93.4785 38.272 95.8865 39.168C98.2945 40.064 100.115 41.24 101.347 42.696C102.579 44.152 103.195 45.748 103.195 47.484C103.195 48.884 102.803 50.032 102.019 50.928C101.235 51.824 100.115 52.272 98.6585 52.272C96.9785 52.272 95.7465 51.74 94.9625 50.676C94.2345 49.612 93.5065 47.988 92.7785 45.804C92.1065 43.676 91.3785 42.08 90.5945 41.016C89.8665 39.896 88.6345 39.336 86.8985 39.336C84.3785 39.336 82.4745 40.876 81.1865 43.956C79.8985 47.036 79.2545 51.46 79.2545 57.228C79.2545 63.444 80.4585 68.176 82.8665 71.424C85.3305 74.616 88.4385 76.212 92.1905 76.212C96.0545 76.212 99.2745 74.672 101.851 71.592L102.943 72.264C101.431 75.344 99.3585 77.724 96.7265 79.404C94.1505 81.028 91.0985 81.84 87.5705 81.84ZM130.313 79.74C131.377 79.628 132.133 79.404 132.581 79.068C133.085 78.676 133.337 78.144 133.337 77.472C133.337 76.52 132.805 75.036 131.741 73.02L127.205 64.872C126.141 62.912 125.217 61.596 124.433 60.924C123.649 60.252 122.865 59.916 122.081 59.916H121.913V74.7C121.913 76.044 122.389 77.164 123.341 78.06C124.293 78.956 125.581 79.516 127.205 79.74V81H105.785V79.74C107.353 79.46 108.585 78.872 109.481 77.976C110.377 77.08 110.825 75.988 110.825 74.7V26.316C110.825 24.748 110.433 23.572 109.649 22.788C108.865 21.948 107.577 21.416 105.785 21.192V19.932L120.905 15.396L121.913 16.152V58.236C123.201 58.18 125.161 57.032 127.793 54.792C130.425 52.552 132.861 49.976 135.101 47.064C136.109 45.776 136.613 44.656 136.613 43.704C136.613 42.752 136.137 41.968 135.185 41.352C134.289 40.736 132.917 40.372 131.069 40.26V39H150.137V40.26C147.561 40.764 145.321 41.52 143.417 42.528C141.569 43.48 139.581 45.104 137.453 47.4L132.665 52.608L144.593 73.02C145.825 75.26 147.113 76.884 148.457 77.892C149.801 78.9 151.397 79.516 153.245 79.74V81H130.313V79.74ZM155.34 79.74C157.58 79.46 159.204 78.9 160.212 78.06C161.22 77.164 161.724 75.792 161.724 73.944V26.904C161.724 25.056 161.22 23.712 160.212 22.872C159.204 21.976 157.58 21.388 155.34 21.108V19.848H180.288V21.108C177.992 21.332 176.312 21.892 175.248 22.788C174.184 23.684 173.652 25.056 173.652 26.904V73.944C173.652 75.792 174.184 77.164 175.248 78.06C176.312 78.956 177.992 79.516 180.288 79.74V81H155.34V79.74ZM235.909 94.944C232.885 94.944 230.169 94.524 227.761 93.684C225.353 92.9 223.281 91.948 221.545 90.828C219.865 89.764 217.989 88.364 215.917 86.628C213.845 85.004 212.221 83.828 211.045 83.1C209.925 82.428 208.721 82.008 207.433 81.84C202.841 81.392 198.725 79.768 195.085 76.968C191.501 74.112 188.701 70.388 186.685 65.796C184.669 61.204 183.661 56.08 183.661 50.424C183.661 44.096 184.809 38.552 187.105 33.792C189.457 29.032 192.677 25.364 196.765 22.788C200.853 20.212 205.445 18.924 210.541 18.924C215.637 18.924 220.201 20.212 224.233 22.788C228.265 25.308 231.429 28.92 233.725 33.624C236.021 38.328 237.169 43.788 237.169 50.004C237.169 56.668 235.937 62.492 233.473 67.476C231.009 72.46 227.621 76.184 223.309 78.648C227.901 82.176 231.765 84.752 234.901 86.376C238.093 88 240.893 88.812 243.301 88.812C245.149 88.812 247.025 88.336 248.929 87.384L249.601 88.644C247.137 90.996 244.869 92.62 242.797 93.516C240.725 94.468 238.429 94.944 235.909 94.944ZM196.513 49.836C196.513 59.468 197.773 66.972 200.293 72.348C202.869 77.668 206.677 80.328 211.717 80.328C215.861 80.328 218.997 77.836 221.125 72.852C223.253 67.812 224.317 60.7 224.317 51.516C224.317 41.716 223.113 34.156 220.705 28.836C218.353 23.516 214.769 20.856 209.953 20.856C205.417 20.856 202.029 23.376 199.789 28.416C197.605 33.4 196.513 40.54 196.513 49.836Z" fill="currentColor"/>
+                            <path d="M221 40.1052C220.674 40.4827 219.466 41.78 219.371 42.1345C219.282 42.4715 219.372 42.8291 219.375 42.8406L212.981 49.2341L212.459 49.1414L211.372 50.1804L210.757 49.5652L211.847 48.53L211.754 48.0076L218.147 41.614C218.147 41.614 218.545 41.723 218.904 41.6179C219.301 41.5016 220.886 39.9998 220.886 39.9998L221 40.1052Z" fill="currentColor"/>
+                            <path d="M203.101 42.6697C203.477 42.9971 204.773 44.2068 205.122 44.3064C205.46 44.402 205.814 44.3162 205.814 44.3162L209.6 48.0037L209.519 48.5134L210.559 49.5994L209.968 50.1902L208.932 49.1003L208.421 49.1814L204.636 45.4949C204.636 45.4949 204.735 45.1065 204.625 44.7527C204.502 44.3611 203 42.7791 203 42.7791L203.101 42.6697Z" fill="currentColor"/>
+                            <path d="M210.648 49.437C211.128 49.437 211.517 49.8259 211.517 50.3052C211.516 50.7843 211.128 51.1724 210.648 51.1724C210.169 51.1723 209.78 50.7843 209.78 50.3052C209.78 49.8259 210.169 49.4371 210.648 49.437ZM210.647 49.8726C210.408 49.8727 210.214 50.0666 210.214 50.3062C210.214 50.5456 210.408 50.7396 210.647 50.7397C210.887 50.7397 211.082 50.5457 211.082 50.3062C211.082 50.0665 210.887 49.8726 210.647 49.8726Z" fill="currentColor"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_cta">
+                                <rect width="256" height="101" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </p>
+                <a href="https://apps.apple.com/app/tickiq/id6504108092" class="cta-mid-button">
+                    <span>Download for iOS</span>
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 16.97 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
         <!-- Watch Collection - Apple Scrollytelling -->
         <main class="watch-collection-container">
             <h2 class="scrollytelling-title">Details</h2>
@@ -950,9 +1123,13 @@
 
         <!-- CTA Section -->
         <section class="cta-section">
-            <h2>Create Your Own Collection</h2>
-            <p>Track your watches with professional accuracy. See real performance data and build your collection.</p>
-            <a href="https://apps.apple.com/app/tickiq/id6504108092" class="cta-button">Download tickIQ for iOS</a>
+            <h2>Join thousands of collectors</h2>
+            <a href="https://apps.apple.com/app/tickiq/id6504108092" class="cta-button">
+                <span>Download for iOS</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 16.97 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+                </svg>
+            </a>
         </section>
 
     </div>
@@ -989,10 +1166,11 @@
                     const usernameEl = document.getElementById('username');
                     usernameEl.innerHTML = `@${escapeHtml(data.profile.username)}<span class="apostrophe">'s</span>`;
 
-                    // Format and set join date
+                    // Format and set join date with logo
                     const joinDate = new Date(data.profile.created_at);
                     const monthYear = joinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                    document.getElementById('join-date').textContent = 'Tracking since ' + monthYear;
+                    const logoSvg = `<svg class="join-date-logo" viewBox="0 0 256 101" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_join)"><path d="M30.507 82.008C22.499 82.008 18.495 77.332 18.495 67.98V40.68H14.463V39.588C16.815 38.356 19.251 36.704 21.771 34.632C24.347 32.56 26.559 30.404 28.407 28.164L29.583 28.752V39.084L40.671 38.916V41.016L35.127 40.848C32.551 40.736 30.703 40.68 29.583 40.68V64.62C29.583 68.932 30.059 71.956 31.011 73.692C32.019 75.372 33.587 76.212 35.715 76.212C36.667 76.212 37.591 76.016 38.487 75.624C39.383 75.176 40.111 74.616 40.671 73.944L41.763 74.784C40.755 76.856 39.243 78.592 37.227 79.992C35.211 81.336 32.971 82.008 30.507 82.008ZM43.5237 79.74C45.0917 79.46 46.3237 78.872 47.2197 77.976C48.1157 77.08 48.5637 75.988 48.5637 74.7V49.584C48.5637 48.184 48.1717 47.064 47.3877 46.224C46.6037 45.384 45.3157 44.852 43.5237 44.628V43.368L58.6437 38.16L59.6517 38.916V74.7C59.6517 76.044 60.1277 77.164 61.0797 78.06C62.0317 78.956 63.3197 79.516 64.9437 79.74V81H43.5237V79.74ZM46.8837 25.392C46.8837 23.6 47.5277 22.06 48.8157 20.772C50.1597 19.428 51.7277 18.756 53.5197 18.756C55.3117 18.756 56.8517 19.428 58.1397 20.772C59.4837 22.06 60.1557 23.6 60.1557 25.392C60.1557 27.184 59.4837 28.752 58.1397 30.096C56.8517 31.384 55.3117 32.028 53.5197 32.028C51.7277 32.028 50.1597 31.384 48.8157 30.096C47.5277 28.752 46.8837 27.184 46.8837 25.392ZM87.5705 81.84C83.9865 81.84 80.6545 80.972 77.5745 79.236C74.4945 77.444 72.0305 74.84 70.1825 71.424C68.3905 67.952 67.4945 63.864 67.4945 59.16C67.4945 54.68 68.3905 50.844 70.1825 47.652C71.9745 44.404 74.3825 41.968 77.4065 40.344C80.4305 38.664 83.7625 37.824 87.4025 37.824C90.6505 37.824 93.4785 38.272 95.8865 39.168C98.2945 40.064 100.115 41.24 101.347 42.696C102.579 44.152 103.195 45.748 103.195 47.484C103.195 48.884 102.803 50.032 102.019 50.928C101.235 51.824 100.115 52.272 98.6585 52.272C96.9785 52.272 95.7465 51.74 94.9625 50.676C94.2345 49.612 93.5065 47.988 92.7785 45.804C92.1065 43.676 91.3785 42.08 90.5945 41.016C89.8665 39.896 88.6345 39.336 86.8985 39.336C84.3785 39.336 82.4745 40.876 81.1865 43.956C79.8985 47.036 79.2545 51.46 79.2545 57.228C79.2545 63.444 80.4585 68.176 82.8665 71.424C85.3305 74.616 88.4385 76.212 92.1905 76.212C96.0545 76.212 99.2745 74.672 101.851 71.592L102.943 72.264C101.431 75.344 99.3585 77.724 96.7265 79.404C94.1505 81.028 91.0985 81.84 87.5705 81.84ZM130.313 79.74C131.377 79.628 132.133 79.404 132.581 79.068C133.085 78.676 133.337 78.144 133.337 77.472C133.337 76.52 132.805 75.036 131.741 73.02L127.205 64.872C126.141 62.912 125.217 61.596 124.433 60.924C123.649 60.252 122.865 59.916 122.081 59.916H121.913V74.7C121.913 76.044 122.389 77.164 123.341 78.06C124.293 78.956 125.581 79.516 127.205 79.74V81H105.785V79.74C107.353 79.46 108.585 78.872 109.481 77.976C110.377 77.08 110.825 75.988 110.825 74.7V26.316C110.825 24.748 110.433 23.572 109.649 22.788C108.865 21.948 107.577 21.416 105.785 21.192V19.932L120.905 15.396L121.913 16.152V58.236C123.201 58.18 125.161 57.032 127.793 54.792C130.425 52.552 132.861 49.976 135.101 47.064C136.109 45.776 136.613 44.656 136.613 43.704C136.613 42.752 136.137 41.968 135.185 41.352C134.289 40.736 132.917 40.372 131.069 40.26V39H150.137V40.26C147.561 40.764 145.321 41.52 143.417 42.528C141.569 43.48 139.581 45.104 137.453 47.4L132.665 52.608L144.593 73.02C145.825 75.26 147.113 76.884 148.457 77.892C149.801 78.9 151.397 79.516 153.245 79.74V81H130.313V79.74ZM155.34 79.74C157.58 79.46 159.204 78.9 160.212 78.06C161.22 77.164 161.724 75.792 161.724 73.944V26.904C161.724 25.056 161.22 23.712 160.212 22.872C159.204 21.976 157.58 21.388 155.34 21.108V19.848H180.288V21.108C177.992 21.332 176.312 21.892 175.248 22.788C174.184 23.684 173.652 25.056 173.652 26.904V73.944C173.652 75.792 174.184 77.164 175.248 78.06C176.312 78.956 177.992 79.516 180.288 79.74V81H155.34V79.74ZM235.909 94.944C232.885 94.944 230.169 94.524 227.761 93.684C225.353 92.9 223.281 91.948 221.545 90.828C219.865 89.764 217.989 88.364 215.917 86.628C213.845 85.004 212.221 83.828 211.045 83.1C209.925 82.428 208.721 82.008 207.433 81.84C202.841 81.392 198.725 79.768 195.085 76.968C191.501 74.112 188.701 70.388 186.685 65.796C184.669 61.204 183.661 56.08 183.661 50.424C183.661 44.096 184.809 38.552 187.105 33.792C189.457 29.032 192.677 25.364 196.765 22.788C200.853 20.212 205.445 18.924 210.541 18.924C215.637 18.924 220.201 20.212 224.233 22.788C228.265 25.308 231.429 28.92 233.725 33.624C236.021 38.328 237.169 43.788 237.169 50.004C237.169 56.668 235.937 62.492 233.473 67.476C231.009 72.46 227.621 76.184 223.309 78.648C227.901 82.176 231.765 84.752 234.901 86.376C238.093 88 240.893 88.812 243.301 88.812C245.149 88.812 247.025 88.336 248.929 87.384L249.601 88.644C247.137 90.996 244.869 92.62 242.797 93.516C240.725 94.468 238.429 94.944 235.909 94.944ZM196.513 49.836C196.513 59.468 197.773 66.972 200.293 72.348C202.869 77.668 206.677 80.328 211.717 80.328C215.861 80.328 218.997 77.836 221.125 72.852C223.253 67.812 224.317 60.7 224.317 51.516C224.317 41.716 223.113 34.156 220.705 28.836C218.353 23.516 214.769 20.856 209.953 20.856C205.417 20.856 202.029 23.376 199.789 28.416C197.605 33.4 196.513 40.54 196.513 49.836Z" fill="currentColor"/><path d="M221 40.1052C220.674 40.4827 219.466 41.78 219.371 42.1345C219.282 42.4715 219.372 42.8291 219.375 42.8406L212.981 49.2341L212.459 49.1414L211.372 50.1804L210.757 49.5652L211.847 48.53L211.754 48.0076L218.147 41.614C218.147 41.614 218.545 41.723 218.904 41.6179C219.301 41.5016 220.886 39.9998 220.886 39.9998L221 40.1052Z" fill="currentColor"/><path d="M203.101 42.6697C203.477 42.9971 204.773 44.2068 205.122 44.3064C205.46 44.402 205.814 44.3162 205.814 44.3162L209.6 48.0037L209.519 48.5134L210.559 49.5994L209.968 50.1902L208.932 49.1003L208.421 49.1814L204.636 45.4949C204.636 45.4949 204.735 45.1065 204.625 44.7527C204.502 44.3611 203 42.7791 203 42.7791L203.101 42.6697Z" fill="currentColor"/><path d="M210.648 49.437C211.128 49.437 211.517 49.8259 211.517 50.3052C211.516 50.7843 211.128 51.1724 210.648 51.1724C210.169 51.1723 209.78 50.7843 209.78 50.3052C209.78 49.8259 210.169 49.4371 210.648 49.437ZM210.647 49.8726C210.408 49.8727 210.214 50.0666 210.214 50.3062C210.214 50.5456 210.408 50.7396 210.647 50.7397C210.887 50.7397 211.082 50.5457 211.082 50.3062C211.082 50.0665 210.887 49.8726 210.647 49.8726Z" fill="currentColor"/></g><clipPath id="clip0_join"><rect width="256" height="101" fill="white"/></clipPath></svg>`;
+                    document.getElementById('join-date').innerHTML = `Tracking with ${logoSvg} since ${monthYear}`;
 
                     // Set stats
                     document.getElementById('watch-count').textContent = data.stats.watch_count;
@@ -1034,6 +1212,38 @@
             function renderBirdsEyeView(watches) {
                 const watchGrid = document.getElementById('watch-grid');
 
+                // Helper to create filled pie chart (matching scrollytelling style)
+                const createGridPieChart = (percentage) => {
+                    const center = 10;
+                    const radius = 9.5;
+                    const baseAngle = -Math.PI / 2;
+                    const sweepAngle = 2 * Math.PI * (percentage / 100);
+                    const endAngle = baseAngle + sweepAngle;
+
+                    const startX = center + radius * Math.cos(baseAngle);
+                    const startY = center + radius * Math.sin(baseAngle);
+                    const endX = center + radius * Math.cos(endAngle);
+                    const endY = center + radius * Math.sin(endAngle);
+
+                    const largeArcFlag = sweepAngle > Math.PI ? 1 : 0;
+
+                    const fillPath = percentage > 0
+                        ? `M ${center},${center} L ${startX},${startY} A ${radius},${radius} 0 ${largeArcFlag},1 ${endX},${endY} Z`
+                        : '';
+
+                    const emptyPath = percentage > 0 && percentage < 100
+                        ? `M ${center},${center} L ${endX},${endY} A ${radius},${radius} 0 ${1 - largeArcFlag},1 ${startX},${startY} Z`
+                        : '';
+
+                    return `
+                        <svg class="grid-pie-chart" viewBox="0 0 20 20">
+                            <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="0.5"/>
+                            ${emptyPath ? `<path d="${emptyPath}" fill="rgba(255, 255, 255, 0.12)"/>` : ''}
+                            ${fillPath ? `<path d="${fillPath}" fill="rgba(255, 255, 255, 0.95)"/>` : ''}
+                        </svg>
+                    `;
+                };
+
                 const gridItems = watches.map((watch, index) => {
                     const watchName = [watch.make, watch.model].filter(Boolean).join(' ') || 'Watch';
                     const rank = index + 1;
@@ -1043,6 +1253,9 @@
                         ? `<img src="/api/img/${escapeHtml(watch.thumbnail_url)}" alt="${escapeHtml(watchName)}" loading="lazy">`
                         : `<div class="watch-grid-placeholder">⌚</div>`;
 
+                    // Rotation percentage
+                    const percentage = watch.percentage_of_rotation || 0;
+
                     return `
                         <a href="#watch-${watch.id}" class="watch-grid-item" data-watch-id="${watch.id}">
                             <div class="watch-grid-rank">#${rank}</div>
@@ -1050,6 +1263,12 @@
                                 ${imageHtml}
                             </div>
                             <div class="watch-grid-name">${escapeHtml(watchName)}</div>
+                            <div class="watch-grid-divider"></div>
+                            <div class="watch-grid-metric">
+                                ${createGridPieChart(percentage)}
+                                <span class="grid-percentage">${Math.round(percentage)}%</span>
+                            </div>
+                            <div class="watch-grid-context">of rotation</div>
                         </a>
                     `;
                 }).join('');
@@ -1091,7 +1310,7 @@
 
                     measurementHtml = `
                         <div class="watch-measurement-display">
-                            <div class="measurement-rate ${rateClass}">${sign}${rate.toFixed(1)} s/d</div>
+                            <div class="measurement-rate ${rateClass}">${sign}${rate.toFixed(1)} sec/day</div>
                             <div class="measurement-count">${measurementText}</div>
                         </div>
                     `;
@@ -1163,7 +1382,7 @@
                                 ${createPieChart(watch.percentage_of_rotation, rotationOffset)}
                                 <div class="rotation-stat-content">
                                     <div class="watch-stat-label">% of Rotation</div>
-                                    <div class="watch-stat-value">${watch.percentage_of_rotation.toFixed(1)}%</div>
+                                    <div class="watch-stat-value">${Math.round(watch.percentage_of_rotation)}%</div>
                                 </div>
                             </div>
                         ` : ''}
@@ -1177,12 +1396,6 @@
                             <div class="watch-stat">
                                 <div class="watch-stat-label">Last Worn</div>
                                 <div class="watch-stat-value">${formatDate(watch.last_worn_date)}</div>
-                            </div>
-                        ` : ''}
-                        ${watch.measurement_count > 0 ? `
-                            <div class="watch-stat">
-                                <div class="watch-stat-label">Total Scans</div>
-                                <div class="watch-stat-value">${watch.measurement_count}</div>
                             </div>
                         ` : ''}
                     </div>
