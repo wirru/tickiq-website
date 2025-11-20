@@ -287,7 +287,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         body {
             display: block !important;
             min-height: auto !important;
-            background: #1C160D !important;
+            background: linear-gradient(to bottom, #2B2318 0%, #1C160D 50%, #120D06 100%) !important;
             color: #FFFFFF !important;
         }
 
@@ -313,7 +313,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             align-items: center;
             padding: 12rem 2rem 10rem 2rem;
             text-align: center;
-            background: #1C160D;
+            background: transparent;
             min-height: 100vh;
         }
 
@@ -321,19 +321,20 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             font-size: 6rem;
             font-weight: 700;
             letter-spacing: -0.04em;
-            line-height: 1.1;
+            line-height: 1.15;
             color: #FFFFFF;
             margin-bottom: 1rem;
+            padding-bottom: 0.1em;
         }
 
         .profile-username .apostrophe {
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.35);
         }
 
         .profile-tagline {
             font-size: 2.75rem;
-            font-weight: 600;
+            font-weight: 500;
             color: #FFFFFF;
             letter-spacing: -0.02em;
             line-height: 1.2;
@@ -354,44 +355,52 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         .profile-stats-card {
             background: rgba(255, 255, 255, 0.04);
             border-radius: 24px;
-            padding: 2.5rem 3rem;
-            max-width: 800px;
+            padding: 1.25rem 2rem;
+            max-width: 550px;
+            position: relative;
+        }
+
+        .profile-stats-card::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+            width: 1px;
+            height: 14rem;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.06) 0px,
+                rgba(255, 255, 255, 0.06) 4px,
+                transparent 4px,
+                transparent 8px
+            );
+            z-index: 1;
+            pointer-events: none;
         }
 
         /* Stats */
         .profile-stats {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             align-items: center;
             width: 100%;
+            gap: 2rem;
         }
 
         .stat {
             text-align: center;
-            flex: 1;
-            min-width: 140px;
-            padding: 0.5rem 0;
             position: relative;
         }
 
-        .stat:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.08);
-        }
 
         .stat-value {
             display: block;
-            font-size: 2.5rem;
+            font-size: 1.75rem;
             font-weight: 500;
             color: #FFFFFF;
             line-height: 1;
-            margin-bottom: 0.625rem;
+            margin-bottom: 0.5rem;
         }
 
         .stat-label {
@@ -404,10 +413,189 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             white-space: nowrap;
         }
 
+        /* Journey Line - Visual Continuity */
+        .journey-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(255, 255, 255, 0.06) 10%,
+                rgba(255, 255, 255, 0.06) 90%,
+                transparent 100%
+            );
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .journey-node {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #1C160D;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Birds Eye View Section */
+        .birds-eye-view-section {
+            position: relative;
+            padding: 0 2rem 6rem 2rem;
+            background: transparent;
+            margin-top: -6rem;
+        }
+
+
+
+        .box-image-container {
+            position: relative;
+            width: 100%;
+            max-width: 120px;
+            margin: 0 auto;
+            margin-bottom: -40px;
+            z-index: 3;
+        }
+
+        .box-image-container::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 3px solid #1C160D;
+            z-index: -1;
+        }
+
+        .box-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 50%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .birds-eye-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 60px 2rem 2rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        .birds-eye-card::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+            width: 1px;
+            height: 6rem;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.06) 0px,
+                rgba(255, 255, 255, 0.06) 4px,
+                transparent 4px,
+                transparent 8px
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .birds-eye-title {
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+        }
+
+        .watch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .watch-grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .watch-grid-item:hover {
+            transform: translateY(-4px);
+            opacity: 0.8;
+        }
+
+        .watch-grid-thumbnail {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 0.4rem;
+        }
+
+        .watch-grid-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .watch-grid-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .watch-grid-name {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .watch-grid-rank {
+            font-size: 0.55rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.2rem;
+        }
+
         /* Watch Collection - Apple Scrollytelling Style */
         .watch-collection-container {
-            background: #1C160D;
+            background: linear-gradient(to bottom, #080808, #000000);
+            position: relative;
+            padding-top: 4rem;
+            border-radius: 48px 48px 0 0;
         }
+
 
         .watch-section {
             min-height: 100vh;
@@ -419,11 +607,32 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 0.8s ease, transform 0.8s ease;
+            position: relative;
+        }
+
+        .watch-section::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #1C160D;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.4s;
         }
 
         .watch-section.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .watch-section.visible::before {
+            opacity: 1;
         }
 
         .watch-section-inner {
@@ -803,6 +1012,35 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 margin-top: 2rem;
             }
 
+            /* Birds Eye View - Mobile */
+            .box-image-container {
+                max-width: 100px;
+                margin-bottom: -30px;
+            }
+
+            .birds-eye-card {
+                padding: 50px 1.5rem 1.5rem 1.5rem;
+                border-radius: 24px;
+            }
+
+            .birds-eye-title {
+                font-size: 0.75rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .watch-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .watch-grid-name {
+                font-size: 0.75rem;
+            }
+
+            .watch-grid-rank {
+                font-size: 0.5rem;
+            }
+
             .cta-section h2 {
                 font-size: 2rem;
             }
@@ -863,6 +1101,19 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                         <span class="stat-value" id="days-logged">0</span>
                         <span class="stat-label">Days Logged</span>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Birds Eye View -->
+        <section class="birds-eye-view-section" id="birds-eye-view">
+            <div class="box-image-container">
+                <img src="/assets/images/box.webp" alt="Watch Collection Box" class="box-image">
+            </div>
+            <div class="birds-eye-card">
+                <h2 class="birds-eye-title">Overview</h2>
+                <div id="watch-grid" class="watch-grid">
+                    <!-- Watch grid items will be inserted here by JavaScript -->
                 </div>
             </div>
         </section>
@@ -933,6 +1184,10 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
                     // Render watches with cumulative rotation offset
                     if (data.watches && data.watches.length > 0) {
+                        // Render birds eye view grid
+                        renderBirdsEyeView(data.watches);
+
+                        // Render scrollytelling sections
                         const watchCollection = document.getElementById('watch-collection');
                         let cumulativeRotation = 0;
 
@@ -947,7 +1202,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                         // Initialize scroll animations
                         initScrollAnimations();
                     } else {
-                        // Show empty state
+                        // Hide birds eye view and show empty state
+                        document.getElementById('birds-eye-view').classList.add('hidden');
                         document.getElementById('watch-collection').classList.add('hidden');
                         document.getElementById('empty-state').classList.remove('hidden');
                     }
@@ -958,13 +1214,52 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 }
             }
 
+            function renderBirdsEyeView(watches) {
+                const watchGrid = document.getElementById('watch-grid');
+
+                const gridItems = watches.map((watch, index) => {
+                    const watchName = [watch.make, watch.model].filter(Boolean).join(' ') || 'Watch';
+                    const rank = index + 1;
+
+                    // Image or placeholder
+                    const imageHtml = watch.thumbnail_url
+                        ? \`<img src="/api/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" loading="lazy">\`
+                        : \`<div class="watch-grid-placeholder">⌚</div>\`;
+
+                    return \`
+                        <a href="#watch-\${watch.id}" class="watch-grid-item" data-watch-id="\${watch.id}">
+                            <div class="watch-grid-rank">No. \${rank}</div>
+                            <div class="watch-grid-thumbnail">
+                                \${imageHtml}
+                            </div>
+                            <div class="watch-grid-name">\${escapeHtml(watchName)}</div>
+                        </a>
+                    \`;
+                }).join('');
+
+                watchGrid.innerHTML = gridItems;
+
+                // Add smooth scroll to watch sections
+                document.querySelectorAll('.watch-grid-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const watchId = item.getAttribute('data-watch-id');
+                        const watchSection = document.querySelector(\`[data-watch-id="\${watchId}"].watch-section\`);
+                        if (watchSection) {
+                            watchSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                });
+            }
+
             function renderWatchSection(watch, rank, rotationOffset) {
                 const watchName = [watch.make, watch.model].filter(Boolean).join(' ') || 'Watch';
                 const referenceText = watch.reference_number ? escapeHtml(watch.reference_number) : '';
 
-                // Image or placeholder
-                const imageHtml = watch.thumbnail_url
-                    ? \`<img src="/api/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
+                // Image or placeholder - use full image for scrollytelling
+                const imageUrl = watch.full_image_url || watch.thumbnail_url;
+                const imageHtml = imageUrl
+                    ? \`<img src="/api/img/\${escapeHtml(imageUrl)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
                     : \`<div class="watch-image-placeholder">⌚</div>\`;
 
                 // Measurement display
@@ -1077,7 +1372,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 \`;
 
                 return \`
-                    <section class="watch-section">
+                    <section class="watch-section" id="watch-\${watch.id}" data-watch-id="\${watch.id}">
                         <div class="watch-section-inner">
                             <div class="watch-image-side">
                                 <div class="watch-image-container">
