@@ -291,6 +291,27 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             color: #FFFFFF !important;
         }
 
+        /* Profile page header - muted nav links in expanded state */
+        #header:not(.collapsed) .nav-link {
+            color: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        /* Profile page header - white logo in expanded state */
+        #header:not(.collapsed) .header-logo {
+            filter: brightness(0) invert(1) !important;
+        }
+
+        /* Profile page header - inverted "Get the app" button in expanded state */
+        #header:not(.collapsed) .get-app-button {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border: 1px solid #FFFFFF !important;
+        }
+
+        #header:not(.collapsed) .get-app-button .apple-icon {
+            color: #000000 !important;
+        }
+
         /* Override main styles from styles.css */
         main {
             flex: none !important;
