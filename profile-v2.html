@@ -166,34 +166,24 @@
         }
 
         .scroll-indicator-arrow {
-            width: 1px;
-            height: 2rem;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
-            position: relative;
+            width: 10px;
+            height: 10px;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transform: rotate(45deg);
             animation: scrollPulse 2s ease-in-out infinite;
-        }
-
-        .scroll-indicator-arrow::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 3px solid transparent;
-            border-right: 3px solid transparent;
-            border-top: 4px solid rgba(255, 255, 255, 0.2);
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @keyframes scrollPulse {
             0%, 100% {
                 opacity: 0.3;
-                transform: translateY(0);
+                transform: translate(0, 0) rotate(45deg);
             }
             50% {
                 opacity: 1;
-                transform: translateY(8px);
+                transform: translate(0, 6px) rotate(45deg);
             }
         }
 
