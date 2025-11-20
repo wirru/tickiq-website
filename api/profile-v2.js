@@ -334,7 +334,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             align-items: center;
             padding: 12rem 2rem 10rem 2rem;
             text-align: center;
-            background: transparent;
+            background: linear-gradient(to bottom, #130D0A, #41331F);
             min-height: 100vh;
             position: relative;
         }
@@ -503,7 +503,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         .birds-eye-view-section {
             position: relative;
             padding: 8rem 2rem 6rem 2rem;
-            background: linear-gradient(to bottom, #0F0B07 0%, #080604 100%);
+            background: linear-gradient(to bottom, #1F1A15, #0D0A07);
         }
 
         .birds-eye-card {
@@ -610,7 +610,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         /* Watch Collection - Apple Scrollytelling Style */
         .watch-collection-container {
-            background: linear-gradient(to bottom, #080808, #000000);
+            background: linear-gradient(to bottom, #1A1612, #000000);
             position: relative;
             padding-top: 4rem;
         }
