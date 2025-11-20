@@ -280,10 +280,54 @@
         .birds-eye-title {
             text-align: center;
             font-size: 1rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 0.02em;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
             margin-bottom: 3.5rem;
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .birds-eye-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .scrollytelling-title {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: absolute;
+            top: 6rem;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding-bottom: 1.5rem;
+        }
+
+        .scrollytelling-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #watch-collection {
+            padding-top: 12rem;
         }
 
         .watch-grid {
@@ -298,34 +342,39 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, opacity 1.2s ease;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            padding: 1.75rem 1.25rem 1.5rem 1.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 0.75rem 0.5rem 1.25rem 0.5rem;
             position: relative;
+            opacity: 0;
         }
 
-        .watch-grid-item:hover {
-            transform: translateY(-12px) scale(1.02);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
+        .watch-grid-item.animate-in {
             opacity: 1;
+        }
+
+        .watch-grid-item.animate-in:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .watch-grid-rank {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-bottom: 0.5rem;
         }
 
         .watch-grid-thumbnail {
             width: 100%;
             aspect-ratio: 1;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
-            margin-bottom: 1.25rem;
-            box-shadow:
-                0 8px 24px rgba(0, 0, 0, 0.3),
-                0 2px 8px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 1rem;
         }
 
         .watch-grid-thumbnail img {
@@ -344,27 +393,10 @@
             opacity: 0.3;
         }
 
-        .watch-grid-rank {
-            position: absolute;
-            top: 0.875rem;
-            left: 0.875rem;
-            font-size: 0.625rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 0.35rem 0.65rem;
-            border-radius: 10px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
         .watch-grid-name {
-            font-size: 0.8125rem;
+            font-size: 0.75rem;
             font-weight: 400;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             text-align: center;
             line-height: 1.4;
             letter-spacing: -0.01em;
@@ -374,7 +406,7 @@
         .watch-collection-container {
             background: linear-gradient(to bottom, #1A1612, #000000);
             position: relative;
-            padding-top: 4rem;
+            padding-top: 0;
         }
 
 
@@ -895,7 +927,7 @@
         <!-- Birds Eye View -->
         <section class="birds-eye-view-section" id="birds-eye-view">
             <div class="birds-eye-card">
-                <h2 class="birds-eye-title">The Collection</h2>
+                <h2 class="birds-eye-title">At a Glance</h2>
                 <div id="watch-grid" class="watch-grid">
                     <!-- Watch grid items will be inserted here by JavaScript -->
                 </div>
@@ -904,6 +936,7 @@
 
         <!-- Watch Collection - Apple Scrollytelling -->
         <main class="watch-collection-container">
+            <h2 class="scrollytelling-title">Details</h2>
             <div id="watch-collection">
                 <!-- Watch sections will be inserted here by JavaScript -->
             </div>
@@ -1012,8 +1045,8 @@
 
                     return `
                         <a href="#watch-${watch.id}" class="watch-grid-item" data-watch-id="${watch.id}">
+                            <div class="watch-grid-rank">#${rank}</div>
                             <div class="watch-grid-thumbnail">
-                                <div class="watch-grid-rank">No. ${rank}</div>
                                 ${imageHtml}
                             </div>
                             <div class="watch-grid-name">${escapeHtml(watchName)}</div>
@@ -1193,6 +1226,26 @@
                 document.querySelectorAll('.watch-section').forEach(section => {
                     observer.observe(section);
                 });
+
+                // Animate birds-eye-view grid items
+                const birdsEyeSection = document.getElementById('birds-eye-view');
+                if (birdsEyeSection) {
+                    const birdsEyeObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const gridItems = entry.target.querySelectorAll('.watch-grid-item');
+                                gridItems.forEach((item, index) => {
+                                    setTimeout(() => {
+                                        item.classList.add('animate-in');
+                                    }, index * 120); // 120ms stagger between each item
+                                });
+                                birdsEyeObserver.unobserve(entry.target);
+                            }
+                        });
+                    }, observerOptions);
+
+                    birdsEyeObserver.observe(birdsEyeSection);
+                }
             }
 
             function showError() {
