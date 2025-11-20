@@ -315,6 +315,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             text-align: center;
             background: transparent;
             min-height: 100vh;
+            position: relative;
         }
 
         .profile-username {
@@ -351,6 +352,58 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             margin-bottom: 3.5rem;
         }
 
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .scroll-indicator-text {
+            font-size: 0.6875rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .scroll-indicator-arrow {
+            width: 1px;
+            height: 2rem;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            position: relative;
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        .scroll-indicator-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-top: 4px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(8px);
+            }
+        }
+
         /* Stats Card */
         .profile-stats-card {
             background: rgba(255, 255, 255, 0.04);
@@ -360,24 +413,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             position: relative;
         }
 
-        .profile-stats-card::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 100%;
-            width: 1px;
-            height: 14rem;
-            background-image: repeating-linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0.06) 0px,
-                rgba(255, 255, 255, 0.06) 4px,
-                transparent 4px,
-                transparent 8px
-            );
-            z-index: 1;
-            pointer-events: none;
-        }
 
         /* Stats */
         .profile-stats {
@@ -446,91 +481,33 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         /* Birds Eye View Section */
         .birds-eye-view-section {
             position: relative;
-            padding: 0 2rem 6rem 2rem;
-            background: transparent;
-            margin-top: -6rem;
-        }
-
-
-
-        .box-image-container {
-            position: relative;
-            width: 100%;
-            max-width: 120px;
-            margin: 0 auto;
-            margin-bottom: -40px;
-            z-index: 3;
-        }
-
-        .box-image-container::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.12);
-            border: 3px solid #1C160D;
-            z-index: -1;
-        }
-
-        .box-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 50%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.08);
+            padding: 8rem 2rem 6rem 2rem;
+            background: linear-gradient(to bottom, #0F0B07 0%, #080604 100%);
         }
 
         .birds-eye-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 24px;
-            padding: 60px 2rem 2rem 2rem;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+            padding: 0 2rem;
             z-index: 2;
         }
 
-        .birds-eye-card::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 100%;
-            width: 1px;
-            height: 6rem;
-            background-image: repeating-linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0.06) 0px,
-                rgba(255, 255, 255, 0.06) 4px,
-                transparent 4px,
-                transparent 8px
-            );
-            z-index: 1;
-            pointer-events: none;
-        }
 
         .birds-eye-title {
             text-align: center;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.02em;
+            margin-bottom: 3.5rem;
         }
 
         .watch-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1.5rem;
-            max-width: 700px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
         }
 
         .watch-grid-item {
@@ -538,22 +515,34 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             flex-direction: column;
             align-items: center;
             text-decoration: none;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
             cursor: pointer;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 1.75rem 1.25rem 1.5rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
         }
 
         .watch-grid-item:hover {
-            transform: translateY(-4px);
-            opacity: 0.8;
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            opacity: 1;
         }
 
         .watch-grid-thumbnail {
             width: 100%;
             aspect-ratio: 1;
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.02);
-            margin-bottom: 0.4rem;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+            margin-bottom: 1.25rem;
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
         }
 
         .watch-grid-thumbnail img {
@@ -568,24 +557,34 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.1);
-        }
-
-        .watch-grid-name {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #FFFFFF;
-            text-align: center;
-            line-height: 1.2;
+            font-size: 3rem;
+            opacity: 0.3;
         }
 
         .watch-grid-rank {
-            font-size: 0.55rem;
-            color: rgba(255, 255, 255, 0.3);
+            position: absolute;
+            top: 0.875rem;
+            left: 0.875rem;
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
             text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.2rem;
+            letter-spacing: 0.1em;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.35rem 0.65rem;
+            border-radius: 10px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .watch-grid-name {
+            font-size: 0.8125rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
         }
 
         /* Watch Collection - Apple Scrollytelling Style */
@@ -593,7 +592,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             background: linear-gradient(to bottom, #080808, #000000);
             position: relative;
             padding-top: 4rem;
-            border-radius: 48px 48px 0 0;
         }
 
 
@@ -1103,15 +1101,18 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     </div>
                 </div>
             </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <span class="scroll-indicator-text">Scroll to explore</span>
+                <div class="scroll-indicator-arrow"></div>
+            </div>
         </section>
 
         <!-- Birds Eye View -->
         <section class="birds-eye-view-section" id="birds-eye-view">
-            <div class="box-image-container">
-                <img src="/assets/images/box.webp" alt="Watch Collection Box" class="box-image">
-            </div>
             <div class="birds-eye-card">
-                <h2 class="birds-eye-title">Overview</h2>
+                <h2 class="birds-eye-title">The Collection</h2>
                 <div id="watch-grid" class="watch-grid">
                     <!-- Watch grid items will be inserted here by JavaScript -->
                 </div>
@@ -1228,8 +1229,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
                     return \`
                         <a href="#watch-\${watch.id}" class="watch-grid-item" data-watch-id="\${watch.id}">
-                            <div class="watch-grid-rank">No. \${rank}</div>
                             <div class="watch-grid-thumbnail">
+                                <div class="watch-grid-rank">No. \${rank}</div>
                                 \${imageHtml}
                             </div>
                             <div class="watch-grid-name">\${escapeHtml(watchName)}</div>
