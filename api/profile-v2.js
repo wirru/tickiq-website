@@ -862,7 +862,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         }
 
         .watch-name {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 0.5rem + 3vw, 3.5rem);
             font-weight: 600;
             color: #FFFFFF;
             line-height: 1.1;
@@ -882,7 +882,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         }
 
         .measurement-rate {
-            font-size: 4rem;
+            font-size: clamp(3rem, 1rem + 3.5vw, 4rem);
             font-weight: 600;
             color: #FFFFFF;
             line-height: 1;
