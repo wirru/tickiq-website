@@ -668,9 +668,10 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         .watch-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 240px));
             gap: 2.5rem;
             width: 100%;
+            justify-content: center;
         }
 
         .watch-grid-item {
@@ -685,6 +686,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             padding: 0.75rem 0.5rem 1.25rem 0.5rem;
             position: relative;
             opacity: 0;
+            width: 100%;
             max-width: 240px;
             justify-self: center;
         }
@@ -1329,7 +1331,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             }
 
             .watch-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, minmax(180px, 240px));
                 gap: 1.25rem;
             }
 
