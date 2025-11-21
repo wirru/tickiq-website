@@ -1,7 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /profile
-Disallow: /profile.html
 Disallow: /u/
 
 # Block AI training bots from profile pages only
