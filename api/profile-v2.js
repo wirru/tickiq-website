@@ -685,6 +685,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             padding: 0.75rem 0.5rem 1.25rem 0.5rem;
             position: relative;
             opacity: 0;
+            max-width: 240px;
+            justify-self: center;
         }
 
         .watch-grid-item.animate-in {
