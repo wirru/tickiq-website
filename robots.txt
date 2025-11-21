@@ -2,5 +2,19 @@ User-agent: *
 Allow: /
 Disallow: /profile
 Disallow: /profile.html
+Disallow: /u/
+
+# Block AI training bots from profile pages only
+User-agent: GPTBot
+Disallow: /u/
+
+User-agent: ClaudeBot
+Disallow: /u/
+
+User-agent: Google-Extended
+Disallow: /u/
+
+User-agent: Meta-ExternalAgent
+Disallow: /u/
 
 Sitemap: https://tickiq.app/sitemap.xml
