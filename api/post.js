@@ -384,7 +384,7 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         }
     </style>
 </head>
-<body>
+<body data-campaign-token="web-post">
     <div class="container">
         <!-- Header will be injected here -->
         <header></header>
