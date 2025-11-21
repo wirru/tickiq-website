@@ -558,6 +558,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         }
 
         #watch-collection {
+            width: 100%;
             padding-top: 12rem;
         }
 
@@ -604,7 +605,14 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             aspect-ratio: 1;
             border-radius: 12px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.03);
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 0%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.03) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 4s infinite ease-in-out;
             margin-bottom: 1rem;
         }
 
@@ -785,6 +793,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         /* Watch Collection - Apple Scrollytelling Style */
         .watch-collection-container {
+            width: 100%;
             background: linear-gradient(to bottom, #1A1612, #000000);
             position: relative;
             padding-top: 0;
@@ -794,6 +803,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
         .watch-section {
             min-height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -815,7 +825,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             align-items: center;
             gap: 8rem;
             max-width: 1400px;
-            width: 100%;
+            width: 100% !important;
+            flex-shrink: 0;
         }
 
         .watch-image-side {
@@ -827,7 +838,23 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             aspect-ratio: 1;
             border-radius: 32px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.02);
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.02) 0%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.02) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 4s infinite ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         .watch-image {
@@ -1823,7 +1850,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
                     // Image or placeholder
                     const imageHtml = watch.thumbnail_url
-                        ? \`<img src="/api/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" loading="lazy">\`
+                        ? \`<img src="/api/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" width="512" height="512">\`
                         : \`<div class="watch-grid-placeholder">⌚</div>\`;
 
                     // Rotation percentage
@@ -1868,7 +1895,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 // Image or placeholder - use full image for scrollytelling
                 const imageUrl = watch.full_image_url || watch.thumbnail_url;
                 const imageHtml = imageUrl
-                    ? \`<img src="/api/img/\${escapeHtml(imageUrl)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
+                    ? \`<img src="/api/img/\${escapeHtml(imageUrl)}" alt="\${escapeHtml(watchName)}" class="watch-image" width="1024" height="1024" loading="lazy">\`
                     : \`<div class="watch-image-placeholder">⌚</div>\`;
 
                 // Prepare measurement data for stats grid
