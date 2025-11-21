@@ -713,6 +713,17 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             aspect-ratio: 1;
             border-radius: 12px;
             overflow: hidden;
+            margin-bottom: 1rem;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.02) 0%,
+                rgba(255, 255, 255, 0.04) 50%,
+                rgba(255, 255, 255, 0.02) 100%
+            );
+        }
+
+        /* Only shimmer when loading actual images */
+        .watch-grid-thumbnail.has-image {
             background: linear-gradient(
                 90deg,
                 rgba(255, 255, 255, 0.03) 0%,
@@ -721,7 +732,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             );
             background-size: 200% 100%;
             animation: shimmer 4s infinite ease-in-out;
-            margin-bottom: 1rem;
         }
 
         .watch-grid-thumbnail img {
@@ -734,10 +744,24 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            opacity: 0.3;
+            gap: 0.75rem;
+        }
+
+        .placeholder-icon {
+            width: 32px;
+            height: 32px;
+            opacity: 0.25;
+        }
+
+        .placeholder-text {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .watch-grid-name {
@@ -947,6 +971,16 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             border-radius: 32px;
             overflow: hidden;
             background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.02) 0%,
+                rgba(255, 255, 255, 0.04) 50%,
+                rgba(255, 255, 255, 0.02) 100%
+            );
+        }
+
+        /* Only shimmer when loading actual images */
+        .watch-image-container.has-image {
+            background: linear-gradient(
                 90deg,
                 rgba(255, 255, 255, 0.02) 0%,
                 rgba(255, 255, 255, 0.08) 50%,
@@ -975,11 +1009,24 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.02);
-            font-size: 4rem;
-            color: rgba(255, 255, 255, 0.1);
+            gap: 1rem;
+        }
+
+        .watch-image-placeholder .placeholder-icon {
+            width: 48px;
+            height: 48px;
+            opacity: 0.25;
+        }
+
+        .watch-image-placeholder .placeholder-text {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .watch-details-side {
@@ -1960,7 +2007,16 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     // Image or placeholder
                     const imageHtml = watch.thumbnail_url
                         ? \`<img src="/api/img/\${escapeHtml(watch.thumbnail_url)}" alt="\${escapeHtml(watchName)}" width="512" height="512">\`
-                        : \`<div class="watch-grid-placeholder">⌚</div>\`;
+                        : \`<div class="watch-grid-placeholder">
+                            <svg class="placeholder-icon" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="13" cy="13" r="12" fill="white" opacity="0.15"/>
+                                <path d="M13 6C11.3431 6 10 7.34315 10 9V11H9C8.44772 11 8 11.4477 8 12V18C8 18.5523 8.44772 19 9 19H17C17.5523 19 18 18.5523 18 18V12C18 11.4477 17.5523 11 17 11H16V9C16 7.34315 14.6569 6 13 6ZM11.5 9C11.5 8.17157 12.1716 7.5 13 7.5C13.8284 7.5 14.5 8.17157 14.5 9V11H11.5V9Z" fill="white" opacity="0.4"/>
+                            </svg>
+                            <div class="placeholder-text">Premium</div>
+                        </div>\`;
+
+                    // Add has-image class only when there's an actual image
+                    const thumbnailClass = watch.thumbnail_url ? 'watch-grid-thumbnail has-image' : 'watch-grid-thumbnail';
 
                     // Rotation percentage
                     const percentage = watch.percentage_of_rotation || 0;
@@ -1968,7 +2024,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     return \`
                         <a href="#watch-\${watch.id}" class="watch-grid-item" data-watch-id="\${watch.id}">
                             <div class="watch-grid-rank">#\${rank}</div>
-                            <div class="watch-grid-thumbnail">
+                            <div class="\${thumbnailClass}">
                                 \${imageHtml}
                             </div>
                             <div class="watch-grid-name">\${escapeHtml(watchName)}</div>
@@ -2005,7 +2061,16 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 const imageUrl = watch.full_image_url || watch.thumbnail_url;
                 const imageHtml = imageUrl
                     ? \`<img src="/api/img/\${escapeHtml(imageUrl)}" alt="\${escapeHtml(watchName)}" class="watch-image" width="1024" height="1024" loading="lazy">\`
-                    : \`<div class="watch-image-placeholder">⌚</div>\`;
+                    : \`<div class="watch-image-placeholder">
+                        <svg class="placeholder-icon" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="13" cy="13" r="12" fill="white" opacity="0.15"/>
+                            <path d="M13 6C11.3431 6 10 7.34315 10 9V11H9C8.44772 11 8 11.4477 8 12V18C8 18.5523 8.44772 19 9 19H17C17.5523 19 18 18.5523 18 18V12C18 11.4477 17.5523 11 17 11H16V9C16 7.34315 14.6569 6 13 6ZM11.5 9C11.5 8.17157 12.1716 7.5 13 7.5C13.8284 7.5 14.5 8.17157 14.5 9V11H11.5V9Z" fill="white" opacity="0.4"/>
+                        </svg>
+                        <div class="placeholder-text">Premium</div>
+                    </div>\`;
+
+                // Add has-image class only when there's an actual image
+                const imageContainerClass = imageUrl ? 'watch-image-container has-image' : 'watch-image-container';
 
                 // Prepare measurement data for stats grid
                 let measurementData = null;
@@ -2123,7 +2188,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     <section class="watch-section" id="watch-\${watch.id}" data-watch-id="\${watch.id}">
                         <div class="watch-section-inner">
                             <div class="watch-image-side">
-                                <div class="watch-image-container">
+                                <div class="\${imageContainerClass}">
                                     \${imageHtml}
                                 </div>
                             </div>
