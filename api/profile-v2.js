@@ -882,8 +882,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
         }
 
         .measurement-rate {
-            font-size: clamp(3rem, 1rem + 3.5vw, 4rem);
-            font-weight: 600;
+            font-size: clamp(2rem, 0.5rem + 2vw, 2.5rem);
+            font-weight: 500;
             color: #FFFFFF;
             line-height: 1;
             margin-bottom: 0.5rem;
@@ -931,7 +931,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
             text-transform: uppercase;
             letter-spacing: 0.1em;
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .watch-stat-value {
@@ -1310,13 +1310,17 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
 
             .watch-stats-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 1.25rem;
                 margin-top: 2rem;
             }
 
             .watch-stat {
                 border-top: none;
-                padding-top: 0;
+                padding-top: 0.75rem;
+            }
+
+            .watch-stat-label {
+                margin-bottom: 0.3rem;
             }
 
             /* Bottom CTA - Mobile */
@@ -1867,22 +1871,17 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     ? \`<img src="/api/img/\${escapeHtml(imageUrl)}" alt="\${escapeHtml(watchName)}" class="watch-image" loading="lazy">\`
                     : \`<div class="watch-image-placeholder">⌚</div>\`;
 
-                // Measurement display
-                let measurementHtml = '';
+                // Prepare measurement data for stats grid
+                let measurementData = null;
                 if (watch.latest_measurement) {
                     const rate = watch.latest_measurement.rate;
                     const sign = rate >= 0 ? '+' : '';
                     const rateClass = watch.latest_measurement.rate_color_class || '';
-                    const measurementText = watch.measurement_count === 1
-                        ? '1 Measurement'
-                        : \`\${watch.measurement_count} Measurements\`;
-
-                    measurementHtml = \`
-                        <div class="watch-measurement-display">
-                            <div class="measurement-rate \${rateClass}">\${sign}\${rate.toFixed(1)} sec/day</div>
-                            <div class="measurement-count">\${measurementText}</div>
-                        </div>
-                    \`;
+                    measurementData = {
+                        rate: \`\${sign}\${rate.toFixed(1)} sec/day\`,
+                        rateClass: rateClass,
+                        count: watch.measurement_count
+                    };
                 }
 
                 // Format dates
@@ -1939,14 +1938,16 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     \`;
                 };
 
-                // Stats grid
+                // Stats grid - Order: Accuracy, % of Rotation, # of Measurements, Days Worn, Last Worn, First Worn
                 const statsHtml = \`
                     <div class="watch-stats-grid">
-                        \${watch.days_worn > 0 ? \`
+                        \${measurementData ? \`
                             <div class="watch-stat">
-                                <div class="watch-stat-label">Days Worn</div>
-                                <div class="watch-stat-value">\${watch.days_worn}</div>
+                                <div class="watch-stat-label">Accuracy</div>
+                                <div class="watch-stat-value \${measurementData.rateClass}">\${measurementData.rate}</div>
                             </div>
+                        \` : ''}
+                        \${watch.days_worn > 0 ? \`
                             <div class="watch-stat rotation-stat-with-chart">
                                 \${createPieChart(watch.percentage_of_rotation, rotationOffset)}
                                 <div class="rotation-stat-content">
@@ -1955,16 +1956,28 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 </div>
                             </div>
                         \` : ''}
-                        \${watch.first_worn_date ? \`
+                        \${measurementData ? \`
                             <div class="watch-stat">
-                                <div class="watch-stat-label">First Worn</div>
-                                <div class="watch-stat-value">\${formatDate(watch.first_worn_date)}</div>
+                                <div class="watch-stat-label">Measurements</div>
+                                <div class="watch-stat-value">\${measurementData.count}</div>
+                            </div>
+                        \` : ''}
+                        \${watch.days_worn > 0 ? \`
+                            <div class="watch-stat">
+                                <div class="watch-stat-label">Days Worn</div>
+                                <div class="watch-stat-value">\${watch.days_worn}</div>
                             </div>
                         \` : ''}
                         \${watch.last_worn_date ? \`
                             <div class="watch-stat">
                                 <div class="watch-stat-label">Last Worn</div>
                                 <div class="watch-stat-value">\${formatDate(watch.last_worn_date)}</div>
+                            </div>
+                        \` : ''}
+                        \${watch.first_worn_date ? \`
+                            <div class="watch-stat">
+                                <div class="watch-stat-label">First Worn</div>
+                                <div class="watch-stat-value">\${formatDate(watch.first_worn_date)}</div>
                             </div>
                         \` : ''}
                     </div>
@@ -1982,7 +1995,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 <div class="watch-rank">No. \${rank}</div>
                                 <h2 class="watch-name">\${escapeHtml(watchName)}</h2>
                                 \${referenceText ? \`<div class="watch-reference">\${referenceText}</div>\` : ''}
-                                \${measurementHtml}
                                 \${statsHtml}
                             </div>
                         </div>
