@@ -101,11 +101,22 @@ function renderProfileHTML(data, username, domain) {
   // Safely escape username for HTML
   const safeUsername = escapeHtml(username);
 
+  // Get OG image from first watch's image (thumbnail preferred for OG size)
+  let ogImageUrl = `https://${domain}/assets/images/og-image-profile-landscape.png`; // Default fallback
+  if (data.watches && data.watches.length > 0) {
+    const firstWatch = data.watches[0];
+    const imageToken = firstWatch.thumbnail_url || firstWatch.full_image_url;
+    if (imageToken) {
+      ogImageUrl = `https://${domain}/api/img/${imageToken}`;
+    }
+  }
+
   // Replace meta tag placeholders
   html = html
     .replace(/\{\{USERNAME\}\}/g, safeUsername)
     .replace(/\{\{DOMAIN\}\}/g, domain)
-    .replace(/\{\{WATCH_COUNT\}\}/g, data.stats.watch_count.toString());
+    .replace(/\{\{WATCH_COUNT\}\}/g, data.stats.watch_count.toString())
+    .replace(/\{\{OG_IMAGE_URL\}\}/g, ogImageUrl);
 
   // Inject profile data as JSON for client-side hydration
   const dataScript = `<script>window.__PROFILE_DATA__ = ${JSON.stringify(data)};</script>`;
