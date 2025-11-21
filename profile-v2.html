@@ -1481,7 +1481,7 @@
 
         <!-- Watch Collection - Apple Scrollytelling -->
         <main class="watch-collection-container">
-            <h2 class="scrollytelling-title">Details</h2>
+            <h2 id="details-title" class="scrollytelling-title">Details</h2>
             <div id="watch-collection">
                 <!-- Watch sections will be inserted here by JavaScript -->
             </div>
@@ -1571,6 +1571,7 @@
                     } else {
                         // Hide birds eye view and show empty state
                         document.getElementById('birds-eye-view').classList.add('hidden');
+                        document.getElementById('details-title').classList.add('hidden');
                         document.getElementById('watch-collection').classList.add('hidden');
                         document.getElementById('empty-state').classList.remove('hidden');
                     }

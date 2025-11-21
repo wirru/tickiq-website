@@ -123,8 +123,8 @@ function renderErrorPage(username, domain, errorType) {
   let title, message, statusCode;
 
   if (errorType === '404') {
-    title = 'Profile Not Found';
-    message = `The profile @${safeUsername} is private or doesn't exist.`;
+    title = 'Private Profile';
+    message = 'This profile is not publicly accessible';
     statusCode = 404;
   } else if (errorType === 'invalid') {
     title = 'Invalid Profile';
@@ -143,62 +143,166 @@ function renderErrorPage(username, domain, errorType) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
     <title>${title} - tickIQ</title>
+
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/favicon-180x180.png">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Main site styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #ffffff;
-            color: #000000;
+            background: linear-gradient(to bottom, #1A1612 0%, #000000 100%);
+            color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        /* Profile page header - white nav links in expanded state */
+        #header:not(.collapsed) .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        /* Profile page header - white logo in expanded state */
+        #header:not(.collapsed) .header-logo {
+            filter: brightness(0) invert(1) !important;
+        }
+
+        /* Profile page header - inverted "Get the app" button in expanded state */
+        #header:not(.collapsed) .get-app-button {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border: 1px solid #FFFFFF !important;
+        }
+
+        #header:not(.collapsed) .get-app-button .apple-icon {
+            color: #000000 !important;
+        }
+
+        /* Profile page header - white hamburger icon in expanded state */
+        #header:not(.collapsed) .hamburger,
+        #header:not(.collapsed) .menu-icon,
+        #header:not(.collapsed) .mobile-menu-toggle,
+        #header:not(.collapsed) .hamburger-icon {
+            filter: brightness(0) invert(1) !important;
+        }
+
+        #header:not(.collapsed) .hamburger span,
+        #header:not(.collapsed) .menu-icon span,
+        #header:not(.collapsed) .mobile-menu-toggle span,
+        #header:not(.collapsed) .hamburger-icon span {
+            background: #FFFFFF !important;
+        }
+
+        .private-profile-container {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 12rem 2rem 10rem 2rem;
             text-align: center;
         }
-        .error-container {
-            max-width: 500px;
+
+        .private-profile-content {
+            animation: fadeIn 0.6s ease;
         }
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        p {
-            font-size: 1.25rem;
-            color: #666;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+
+        /* Lock Icon - matches iOS .font(.system(size: 64)) */
+        .lock-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            opacity: 0.3;
+            display: block;
         }
-        a {
-            display: inline-block;
-            background: #000;
-            color: #fff;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 980px;
+
+        /* Inner content wrapper for title + message - matches iOS VStack(spacing: 12) */
+        .private-profile-text {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Title - matches iOS .title2 .semibold */
+        .private-profile-title {
+            font-size: 1.375rem;
             font-weight: 600;
-            transition: transform 0.2s ease;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
         }
-        a:hover {
-            transform: translateY(-2px);
+
+        /* Message - matches iOS .body */
+        .private-profile-message {
+            font-size: 1.0625rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+            padding: 0 40px;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .private-profile-container {
+                padding: 10rem 1.5rem 8rem 1.5rem;
+                min-height: 100vh;
+            }
+
+            .private-profile-message {
+                padding: 0 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="error-container">
-        <h1>${title}</h1>
-        <p>${message}</p>
-        <a href="https://${domain}">Go to tickIQ</a>
+    <!-- Header will be injected by components.js -->
+    <header></header>
+
+    <div class="private-profile-container">
+        <div class="private-profile-content">
+            <!-- Lock Icon (SF Symbols style - lock.circle.fill) -->
+            <svg class="lock-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                <!-- Circle background -->
+                <circle cx="32" cy="32" r="28" fill="white"/>
+                <!-- Lock symbol - bigger and optically centered -->
+                <!-- Shackle (top rounded part) -->
+                <path d="M25 29V25C25 21.134 28.134 18 32 18C35.866 18 39 21.134 39 25V29" stroke="#1A1612" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                <!-- Lock body (rounded rectangle) -->
+                <rect x="23" y="29" width="18" height="16" rx="3" fill="#1A1612"/>
+                <!-- Keyhole -->
+                <circle cx="32" cy="35.5" r="1.5" fill="white"/>
+                <rect x="31" y="35.5" width="2" height="4.5" rx="1" fill="white"/>
+            </svg>
+
+            <div class="private-profile-text">
+                <h1 class="private-profile-title">${title}</h1>
+                <p class="private-profile-message">${message}</p>
+            </div>
+        </div>
     </div>
+
+    <!-- Footer will be injected by components.js -->
+    <footer></footer>
+
+    <!-- Load shared components -->
+    <script src="/js/components.js"></script>
 </body>
 </html>`;
 
