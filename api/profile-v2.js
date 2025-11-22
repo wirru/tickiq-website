@@ -2180,18 +2180,6 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 <div class="watch-stat-value">\${watch.days_worn}</div>
                             </div>
                         \` : ''}
-                        \${watch.last_worn_date ? \`
-                            <div class="watch-stat">
-                                <div class="watch-stat-label">Last Worn</div>
-                                <div class="watch-stat-value">\${formatDate(watch.last_worn_date)}</div>
-                            </div>
-                        \` : ''}
-                        \${watch.first_worn_date ? \`
-                            <div class="watch-stat">
-                                <div class="watch-stat-label">First Worn</div>
-                                <div class="watch-stat-value">\${formatDate(watch.first_worn_date)}</div>
-                            </div>
-                        \` : ''}
                     </div>
                 \`;
 
