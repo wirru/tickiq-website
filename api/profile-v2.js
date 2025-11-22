@@ -2224,6 +2224,15 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 // Animate birds-eye-view grid items
                 const birdsEyeSection = document.getElementById('birds-eye-view');
                 if (birdsEyeSection) {
+                    // Use lower threshold for birds-eye-view since it can be very tall with many watches
+                    // On mobile with 24 watches, the section might be 4000px tall
+                    // threshold: 0.2 would require 800px visible (more than viewport!)
+                    const birdsEyeObserverOptions = {
+                        root: null,
+                        rootMargin: '0px',
+                        threshold: 0.01  // Only need 1% visible to trigger
+                    };
+
                     const birdsEyeObserver = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
@@ -2236,7 +2245,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 birdsEyeObserver.unobserve(entry.target);
                             }
                         });
-                    }, observerOptions);
+                    }, birdsEyeObserverOptions);
 
                     birdsEyeObserver.observe(birdsEyeSection);
                 }
