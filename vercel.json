@@ -37,6 +37,10 @@
     },
     {
       "source": "/u/:username",
+      "destination": "/api/profile"
+    },
+    {
+      "source": "/u-preview/:username",
       "destination": "/api/profile-v2"
     },
     {

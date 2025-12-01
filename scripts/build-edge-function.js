@@ -52,3 +52,28 @@ profileV2EdgeFunction = profileV2EdgeFunction.replace(
 
 fs.writeFileSync(profileV2EdgeFunctionPath, profileV2EdgeFunction);
 console.log('✅ Profile V2 edge function built successfully with embedded profile-v2.html');
+
+// Build profile (v1) edge function
+const profileHtmlPath = path.join(__dirname, '..', 'profile.html');
+const profileHtml = fs.readFileSync(profileHtmlPath, 'utf8');
+
+const profileEdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile.js');
+const profileTemplatePath = path.join(__dirname, '..', 'templates', 'profile.template.js');
+
+// Always read from the template (with placeholder), never from the built file
+let profileEdgeFunction = fs.readFileSync(profileTemplatePath, 'utf8');
+
+// Escape for template literal: escape backslashes, backticks, and $
+const escapedProfileHtml = profileHtml
+  .replace(/\\/g, '\\\\')    // Escape backslashes FIRST
+  .replace(/`/g, '\\`')      // Then escape backticks
+  .replace(/\$/g, '\\$');    // Then escape ALL dollar signs
+
+// Replace the placeholder
+profileEdgeFunction = profileEdgeFunction.replace(
+  'const PROFILE_HTML_TEMPLATE = `...embedded during build...`;',
+  `const PROFILE_HTML_TEMPLATE = \`${escapedProfileHtml}\`;`
+);
+
+fs.writeFileSync(profileEdgeFunctionPath, profileEdgeFunction);
+console.log('✅ Profile edge function built successfully with embedded profile.html');
