@@ -46,6 +46,10 @@
     {
       "source": "/p/:postId",
       "destination": "/api/post"
+    },
+    {
+      "source": "/api/og/post/:postId",
+      "destination": "/api/og/post/[postId]"
     }
   ]
 }

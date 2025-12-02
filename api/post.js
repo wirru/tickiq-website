@@ -112,9 +112,11 @@ export default async function handler(request) {
         // Use real image if available
         if (data.image_token) {
           const imageUrl = `${currentDomain}/api/img/${data.image_token}`;
-          ogImageUrl = imageUrl;
+          // OG image uses the styled endpoint with overlays
+          ogImageUrl = `${currentDomain}/api/og/post/${postId}`;
+          // Landing page uses the raw image
           postImageUrl = imageUrl;
-          console.log(`[POST] Using real image for post: ${postId}`);
+          console.log(`[POST] Using OG image endpoint for post: ${postId}`);
         }
 
         // Build OG title for iMessage visibility (iMessage only shows og:title, not og:description)
