@@ -135,18 +135,13 @@ export default async function handler(request) {
           console.log(`[POST] No caption found, using default title`);
         }
 
-        // OG description (for platforms that show it: Facebook, Twitter, etc.)
-        if (data.caption) {
-          // Use Array.from to properly handle Unicode (emojis, etc.) without splitting surrogate pairs
-          const maxLength = 200;
-          const chars = Array.from(data.caption);
-          if (chars.length > maxLength) {
-            ogDescription = escapeHtml(chars.slice(0, maxLength).join('')) + '...';
-          } else {
-            ogDescription = escapeHtml(data.caption);
-          }
+        // OG description - don't repeat caption (it's in og:title)
+        // Use Reddit-style "See more from @user" format
+        if (data.author_username) {
+          ogDescription = `See more from @${escapeHtml(data.author_username)} on tickIQ`;
+        } else {
+          ogDescription = 'See this post and more on the tickIQ app';
         }
-        // else: keep default "Shared on tickIQ"
 
         // Landing page content (iOS feed cell style)
 
