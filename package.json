@@ -4,13 +4,19 @@
   "type": "module",
   "description": "tickIQ - Intelligent ticketing solution by B23, LLC",
   "scripts": {
-    "build": "node scripts/build-edge-function.cjs",
+    "dev": "next dev",
+    "build:next": "next build",
+    "build:edge": "node scripts/build-edge-function.cjs",
+    "build": "npm run build:edge && next build",
     "deploy": "npm run build && vercel",
     "deploy:prod": "npm run build && vercel --prod"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
     "@vercel/og": "^0.8.5",
+    "next": "^16.0.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "vercel": "^45.0.9"
   }
 }

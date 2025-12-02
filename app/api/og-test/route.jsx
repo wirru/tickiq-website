@@ -1,15 +1,10 @@
-/**
- * Minimal @vercel/og test endpoint
- * Uses Node.js runtime (default) - NOT edge runtime
- */
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from 'next/og';
 
-export default async function handler() {
+export async function GET() {
   return new ImageResponse(
-    {
-      type: 'div',
-      props: {
-        style: {
+    (
+      <div
+        style={{
           display: 'flex',
           fontSize: 64,
           background: 'linear-gradient(to bottom, #000, #333)',
@@ -18,10 +13,11 @@ export default async function handler() {
           height: '100%',
           alignItems: 'center',
           justifyContent: 'center',
-        },
-        children: 'Hello from tickIQ!',
-      },
-    },
+        }}
+      >
+        Hello from tickIQ!
+      </div>
+    ),
     {
       width: 600,
       height: 400,
