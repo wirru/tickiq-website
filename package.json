@@ -1,9 +1,10 @@
 {
   "name": "tickiq-website",
   "version": "1.0.0",
+  "type": "module",
   "description": "tickIQ - Intelligent ticketing solution by B23, LLC",
   "scripts": {
-    "build": "node scripts/build-edge-function.js",
+    "build": "node scripts/build-edge-function.cjs",
     "deploy": "npm run build && vercel",
     "deploy:prod": "npm run build && vercel --prod"
   },

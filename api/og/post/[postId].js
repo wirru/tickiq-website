@@ -26,9 +26,6 @@ import {
   COLORS,
 } from '../../../lib/og-utils.js';
 
-export const config = {
-  runtime: 'edge',
-};
 
 /**
  * Helper function to create element objects (like React.createElement)
