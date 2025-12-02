@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Output standalone for optimal Vercel deployment
-  output: 'standalone',
-
   // Disable React strict mode for now
   reactStrictMode: false,
 
