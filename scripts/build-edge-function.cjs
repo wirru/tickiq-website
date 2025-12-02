@@ -3,11 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 
-// Build post edge function
+// Build post route (Next.js App Router)
 const postHtmlPath = path.join(__dirname, '..', 'post.html');
 const postHtml = fs.readFileSync(postHtmlPath, 'utf8');
 
-const postEdgeFunctionPath = path.join(__dirname, '..', 'api', 'post.js');
+const postEdgeFunctionPath = path.join(__dirname, '..', 'app', 'api', 'post', 'route.js');
 const postTemplatePath = path.join(__dirname, '..', 'templates', 'post.template.js');
 
 // Always read from the template (with placeholder), never from the built file
@@ -28,11 +28,11 @@ postEdgeFunction = postEdgeFunction.replace(
 fs.writeFileSync(postEdgeFunctionPath, postEdgeFunction);
 console.log('✅ Post edge function built successfully with embedded post.html');
 
-// Build profile-v2 edge function
+// Build profile-v2 route (Next.js App Router)
 const profileV2HtmlPath = path.join(__dirname, '..', 'profile-v2.html');
 const profileV2Html = fs.readFileSync(profileV2HtmlPath, 'utf8');
 
-const profileV2EdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile-v2.js');
+const profileV2EdgeFunctionPath = path.join(__dirname, '..', 'app', 'api', 'profile-v2', 'route.js');
 const profileV2TemplatePath = path.join(__dirname, '..', 'templates', 'profile-v2.template.js');
 
 // Always read from the template (with placeholder), never from the built file
@@ -53,11 +53,11 @@ profileV2EdgeFunction = profileV2EdgeFunction.replace(
 fs.writeFileSync(profileV2EdgeFunctionPath, profileV2EdgeFunction);
 console.log('✅ Profile V2 edge function built successfully with embedded profile-v2.html');
 
-// Build profile (v1) edge function
+// Build profile (v1) route (Next.js App Router)
 const profileHtmlPath = path.join(__dirname, '..', 'profile.html');
 const profileHtml = fs.readFileSync(profileHtmlPath, 'utf8');
 
-const profileEdgeFunctionPath = path.join(__dirname, '..', 'api', 'profile.js');
+const profileEdgeFunctionPath = path.join(__dirname, '..', 'app', 'api', 'profile', 'route.js');
 const profileTemplatePath = path.join(__dirname, '..', 'templates', 'profile.template.js');
 
 // Always read from the template (with placeholder), never from the built file

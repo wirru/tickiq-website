@@ -1,8 +1,6 @@
-export const config = {
-  runtime: 'edge',
-};
+export const runtime = 'edge';
 
-export default function handler(request) {
+export async function GET(request) {
   const url = new URL(request.url);
   const pathParts = url.pathname.split('/');
 
