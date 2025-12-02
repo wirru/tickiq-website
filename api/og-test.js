@@ -1,11 +1,8 @@
 /**
  * Minimal @vercel/og test endpoint
+ * Uses Node.js runtime (default) - NOT edge runtime
  */
 import { ImageResponse } from '@vercel/og';
-
-export const config = {
-  runtime: 'edge',
-};
 
 export default async function handler() {
   return new ImageResponse(
