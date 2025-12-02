@@ -1,8 +1,61 @@
+/**
+ * Post Sharing - Vercel Edge Function
+ *
+ * Renders post sharing pages with dynamic OG images for social previews.
+ * Fetches post data from Supabase to get the actual post image.
+ *
+ * Caching: 10min edge cache, 15min stale-while-revalidate
+ */
+
 export const config = {
   runtime: 'edge',
 };
 
-export default function handler(request) {
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+  const map = {
+    '<': '&lt;',
+    '>': '&gt;',
+    '&': '&amp;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return text.replace(/[<>&"']/g, (char) => map[char]);
+}
+
+/**
+ * Format timestamp as relative time (e.g., "2h ago", "3d ago")
+ */
+function formatRelativeTime(isoString) {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  const diffWeeks = Math.floor(diffDays / 7);
+
+  if (diffMins < 1) return 'just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffWeeks < 4) return `${diffWeeks}w ago`;
+  // iOS shows "Xmo ago" for months, but we use absolute date for clarity on web
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+/**
+ * Format count with K/M suffix for large numbers
+ */
+function formatCount(count) {
+  if (count >= 1000000) return (count / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
+  if (count >= 1000) return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return String(count);
+}
+
+export default async function handler(request) {
   const url = new URL(request.url);
   const pathParts = url.pathname.split('/');
 
@@ -13,64 +66,177 @@ export default function handler(request) {
   const currentDomain = `${url.protocol}//${url.host}`;
 
   // Escape post ID for safe HTML insertion
-  const safePostId = postId.replace(/[<>&"']/g, (char) => {
-    const escapeMap = {
-      '<': '&lt;',
-      '>': '&gt;',
-      '&': '&amp;',
-      '"': '&quot;',
-      "'": '&#39;'
-    };
-    return escapeMap[char];
-  });
+  const safePostId = escapeHtml(postId);
+
+  // Default values (fallbacks)
+  let ogImageUrl = `${currentDomain}/assets/images/og-image-post-landscape.png`;
+  let ogTitle = 'Post on tickIQ';
+  let ogDescription = 'Shared on tickIQ';
+
+  // Landing page content (visible on the web page itself - iOS feed cell style)
+  let postImageUrl = `${currentDomain}/assets/images/og-image-post-landscape.png`;
+  let postCaptionHtml = '';
+  let postUsernamePillHtml = '';
+  let postWatchNameHtml = '';
+  let postTimestampHtml = '';
+  let postLikeCount = '0';
+  let postCommentCount = '0';
+
+  // Dynamic CTA content
+  let postCtaText = 'View Full Post';
+  let postEngagementText = 'Shared from the tickIQ community';
+  let rawCommentCount = 0;
+
+  // Try to fetch post data from Supabase for the real image and caption
+  try {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
+    if (supabaseUrl && supabaseAnonKey && postId !== 'post') {
+      const postApiUrl = `${supabaseUrl}/functions/v1/get-public-post-web/${postId}`;
+
+      console.log(`[POST] Fetching post data for: ${postId}`);
+
+      const response = await fetch(postApiUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'apikey': supabaseAnonKey,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Use real image if available
+        if (data.image_token) {
+          const imageUrl = `${currentDomain}/api/img/${data.image_token}`;
+          ogImageUrl = imageUrl;
+          postImageUrl = imageUrl;
+          console.log(`[POST] Using real image for post: ${postId}`);
+        }
+
+        // Build OG title for iMessage visibility (iMessage only shows og:title, not og:description)
+        if (data.caption) {
+          // Format: From the tickIQ community: caption...
+          const prefix = 'From the tickIQ community: ';
+          const maxCaptionLength = 70 - prefix.length;
+          const captionChars = Array.from(data.caption);
+          if (captionChars.length > maxCaptionLength) {
+            ogTitle = prefix + escapeHtml(captionChars.slice(0, maxCaptionLength).join('')) + '...';
+          } else {
+            ogTitle = prefix + escapeHtml(data.caption);
+          }
+          console.log(`[POST] Built title with caption: ${ogTitle}`);
+        } else {
+          // No caption - simple branded message
+          ogTitle = 'From the tickIQ community';
+          console.log(`[POST] No caption found, using default title`);
+        }
+
+        // OG description (for platforms that show it: Facebook, Twitter, etc.)
+        if (data.caption) {
+          // Use Array.from to properly handle Unicode (emojis, etc.) without splitting surrogate pairs
+          const maxLength = 200;
+          const chars = Array.from(data.caption);
+          if (chars.length > maxLength) {
+            ogDescription = escapeHtml(chars.slice(0, maxLength).join('')) + '...';
+          } else {
+            ogDescription = escapeHtml(data.caption);
+          }
+        }
+        // else: keep default "Shared on tickIQ"
+
+        // Landing page content (iOS feed cell style)
+
+        // Caption overlay - no truncation, let CSS line-clamp handle it (like iOS numberOfLines)
+        if (data.caption) {
+          postCaptionHtml = `<p class="post-caption">${escapeHtml(data.caption)}</p>`;
+        }
+
+        // Username pill
+        if (data.author_username) {
+          postUsernamePillHtml = `<div class="post-username-pill"><span class="post-username">@${escapeHtml(data.author_username)}</span></div>`;
+        }
+
+        // Watch name (with dot separator like iOS)
+        if (data.watch_display_name) {
+          postWatchNameHtml = `<span class="post-watch-name">· ${escapeHtml(data.watch_display_name)}</span>`;
+        }
+
+        // Timestamp (always with dot separator like iOS)
+        if (data.created_at) {
+          const timestamp = formatRelativeTime(data.created_at);
+          postTimestampHtml = `<span class="post-timestamp">· ${timestamp}</span>`;
+        }
+
+        // Social counts
+        postLikeCount = formatCount(data.like_count || 0);
+        postCommentCount = formatCount(data.comment_count || 0);
+        rawCommentCount = data.comment_count || 0;
+
+        // Dynamic CTA based on engagement
+        if (rawCommentCount > 0) {
+          postCtaText = rawCommentCount === 1 ? 'See 1 Comment' : `See ${rawCommentCount} Comments`;
+          postEngagementText = rawCommentCount === 1
+            ? '1 person commented on this post'
+            : `${rawCommentCount} people commented on this post`;
+        } else {
+          postCtaText = 'View Full Post';
+          postEngagementText = 'Shared from the tickIQ community';
+        }
+      } else {
+        console.log(`[POST] Post not found or not accessible: ${postId} (status: ${response.status})`);
+      }
+    }
+  } catch (error) {
+    console.error('[POST] Failed to fetch post data:', error);
+    // Fall back to defaults - don't break the page
+  }
 
   // Use the embedded HTML template
   let html = POST_HTML_TEMPLATE;
 
   // Replace meta tags with dynamic values
   html = html
-    // Update title tag
-    .replace(
-      '<title>View This Post on tickIQ</title>',
-      `<title>View This Post on tickIQ</title>`
-    )
-    // Update Open Graph title
-    .replace(
-      '<meta property="og:title" content="View This Post on tickIQ">',
-      `<meta property="og:title" content="View This Post on tickIQ">`
-    )
     // Update Open Graph URL
     .replace(
       '<meta property="og:url" content="https://tickiq.app/post">',
       `<meta property="og:url" content="${currentDomain}/p/${safePostId}">`
     )
-    // Update OG image URL to use current domain
-    .replace(
-      '<meta property="og:image" content="https://tickiq.app/assets/images/og-image-profile-landscape.png">',
-      `<meta property="og:image" content="${currentDomain}/assets/images/og-image-profile-landscape.png">`
-    )
-    // Update Twitter title
-    .replace(
-      '<meta name="twitter:title" content="View This Post on tickIQ">',
-      `<meta name="twitter:title" content="View This Post on tickIQ">`
-    )
-    // Update Twitter image URL to use current domain
-    .replace(
-      '<meta name="twitter:image" content="https://tickiq.app/assets/images/og-image-profile-landscape.png">',
-      `<meta name="twitter:image" content="${currentDomain}/assets/images/og-image-profile-landscape.png">`
-    )
+    // Update OG image URLs (both og:image and twitter:image)
+    // Use function replacement to prevent $ being interpreted as backreference
+    .replace(/\{\{OG_IMAGE_URL\}\}/g, () => ogImageUrl)
+    // Update OG title (title, og:title, twitter:title)
+    // Use function replacement for consistency
+    .replace(/\{\{OG_TITLE\}\}/g, () => ogTitle)
+    // Update OG description (both og:description and twitter:description)
+    // Use function replacement to prevent $ in captions being interpreted as backreference
+    .replace(/\{\{OG_DESCRIPTION\}\}/g, () => ogDescription)
     // Update iOS app link
     .replace(
       '<meta property="al:ios:url" content="tickiq://post/">',
       `<meta property="al:ios:url" content="tickiq://post/${safePostId}">`
-    );
+    )
+    // Landing page content (iOS feed cell style)
+    .replace(/\{\{POST_IMAGE_URL\}\}/g, () => postImageUrl)
+    .replace(/\{\{POST_CAPTION_HTML\}\}/g, () => postCaptionHtml)
+    .replace(/\{\{POST_USERNAME_PILL_HTML\}\}/g, () => postUsernamePillHtml)
+    .replace(/\{\{POST_WATCH_NAME_HTML\}\}/g, () => postWatchNameHtml)
+    .replace(/\{\{POST_TIMESTAMP_HTML\}\}/g, () => postTimestampHtml)
+    .replace(/\{\{POST_LIKE_COUNT\}\}/g, () => postLikeCount)
+    .replace(/\{\{POST_COMMENT_COUNT\}\}/g, () => postCommentCount)
+    .replace(/\{\{POST_CTA_TEXT\}\}/g, () => postCtaText)
+    .replace(/\{\{POST_ENGAGEMENT_TEXT\}\}/g, () => postEngagementText);
 
   // Return the modified HTML
   return new Response(html, {
     status: 200,
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 's-maxage=3600, stale-while-revalidate', // Cache for 1 hour at edge
+      // Cache at edge for 10 minutes, serve stale for up to 15 minutes while revalidating
+      'Cache-Control': 's-maxage=600, stale-while-revalidate=900',
     },
   });
 }
@@ -83,23 +249,23 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
-    <title>You've Been Sent a Wrist Shot</title>
-    <meta name="description" content="See it on tickIQ and join the conversation.">
+    <title>{{OG_TITLE}}</title>
+    <meta name="description" content="{{OG_DESCRIPTION}}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="You've Been Sent a Wrist Shot">
-    <meta property="og:description" content="See it on tickIQ and join the conversation.">
-    <meta property="og:image" content="https://tickiq.app/assets/images/og-image-post-landscape.png">
+    <meta property="og:title" content="{{OG_TITLE}}">
+    <meta property="og:description" content="{{OG_DESCRIPTION}}">
+    <meta property="og:image" content="{{OG_IMAGE_URL}}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://tickiq.app/post">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="You've Been Sent a Wrist Shot">
-    <meta name="twitter:description" content="See it on tickIQ and join the conversation.">
-    <meta name="twitter:image" content="https://tickiq.app/assets/images/og-image-post-landscape.png">
+    <meta name="twitter:title" content="{{OG_TITLE}}">
+    <meta name="twitter:description" content="{{OG_DESCRIPTION}}">
+    <meta name="twitter:image" content="{{OG_IMAGE_URL}}">
 
     <!-- App Links for iOS -->
     <meta property="al:ios:app_name" content="tickIQ">
@@ -148,6 +314,207 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
                         0 0 0 1px rgba(0, 0, 0, 0.05);
             animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* iOS-style feed cell preview (sized to match iOS proportions ~393px, 40px corners) */
+        .post-image-container {
+            position: relative;
+            width: 390px;
+            aspect-ratio: 3 / 4;
+            margin: 0 auto 2rem;
+            animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+                        0 0 0 1px rgba(0, 0, 0, 0.08);
+        }
+
+        .post-image-skeleton {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                #f0f0f0 0%,
+                #e0e0e0 50%,
+                #f0f0f0 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .post-image-skeleton.hidden {
+            display: none;
+        }
+
+        .post-image-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .post-image-preview.loaded {
+            opacity: 1;
+        }
+
+        /* Bottom gradient overlay (matches iOS: lighter gradient) */
+        .post-overlay-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 55%;
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.55) 0%,
+                rgba(0, 0, 0, 0.3) 35%,
+                rgba(0, 0, 0, 0) 100%
+            );
+            pointer-events: none;
+        }
+
+        /* Bottom content overlay (matches iOS: 24px left/right, 28px bottom) */
+        .post-overlay-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 24px 28px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .post-overlay-left {
+            flex: 1;
+            min-width: 0;
+            padding-right: 12px;
+            text-align: left;
+        }
+
+        /* Caption - bold white text (matches iOS: 20px bold, 5 lines, fluid scaling) */
+        .post-caption {
+            font-size: clamp(0.9375rem, 4.5vw, 1.25rem);
+            font-weight: 700;
+            line-height: 1.3;
+            color: #fff;
+            text-align: left;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Username pill + watch info + timestamp row (matches iOS: all inline, 5px gap) */
+        .post-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 6px;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        /* Username pill (matches iOS: 24px height, 13px semibold) */
+        .post-username-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 9999px;
+            height: 22px;
+            padding: 0 8px;
+            flex-shrink: 0;
+            max-width: 50%;
+        }
+
+        .post-username {
+            font-size: clamp(0.625rem, 2.8vw, 0.75rem);
+            font-weight: 500;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1;
+        }
+
+        /* Watch name (matches iOS: 10px medium, fluid scaling) */
+        .post-watch-name {
+            font-size: clamp(0.5rem, 2.2vw, 0.625rem);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 1;
+            min-width: 0;
+        }
+
+        /* Timestamp (matches iOS: 10px regular, fluid scaling) */
+        .post-timestamp {
+            font-size: clamp(0.5rem, 2.2vw, 0.625rem);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Social buttons on right */
+        .post-overlay-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-social-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            color: #fff;
+        }
+
+        .post-social-button svg {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        .post-social-count {
+            font-size: clamp(0.5rem, 2.2vw, 0.6875rem);
+            font-weight: 500;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Attribution below image */
+        .post-attribution {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .post-attribution a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
         }
 
         @keyframes fadeInScale {
@@ -249,6 +616,7 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             .post-hero {
                 min-height: calc(100vh - 80px);
                 margin-top: 80px;
+                padding: 1rem;
             }
 
             .post-title {
@@ -262,6 +630,29 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             .post-app-icon {
                 width: 100px;
                 height: 100px;
+            }
+
+            .post-image-container {
+                width: 100%;
+                max-width: 360px;
+                border-radius: 32px;
+            }
+
+            .post-overlay-content {
+                padding: 12px 20px 24px 20px;
+            }
+
+            .post-caption {
+                -webkit-line-clamp: 4;
+            }
+
+            .post-social-button svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .post-attribution {
+                font-size: 0.8rem;
             }
 
         }
@@ -392,17 +783,45 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         <!-- Post Hero Section -->
         <div class="post-hero">
             <div class="post-content">
-                <img src="/assets/icons/app-icon.png" alt="tickIQ" class="post-app-icon">
+                <div class="post-image-container">
+                    <div class="post-image-skeleton" id="image-skeleton"></div>
+                    <img src="{{POST_IMAGE_URL}}" alt="Watch photo shared on tickIQ" class="post-image-preview" id="post-image" onload="this.classList.add('loaded'); document.getElementById('image-skeleton').classList.add('hidden');">
 
-                <h1 class="post-title" id="post-title">You've Been Sent a Wrist Shot</h1>
+                    <!-- iOS-style overlay -->
+                    <div class="post-overlay-gradient"></div>
+                    <div class="post-overlay-content">
+                        <div class="post-overlay-left">
+                            {{POST_CAPTION_HTML}}
+                            <div class="post-meta-row">
+                                {{POST_USERNAME_PILL_HTML}}
+                                {{POST_WATCH_NAME_HTML}}
+                                {{POST_TIMESTAMP_HTML}}
+                            </div>
+                        </div>
+                        <div class="post-overlay-right">
+                            <div class="post-social-button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+                                </svg>
+                                <span class="post-social-count">{{POST_LIKE_COUNT}}</span>
+                            </div>
+                            <div class="post-social-button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/>
+                                </svg>
+                                <span class="post-social-count">{{POST_COMMENT_COUNT}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <p class="post-message">
-                    Open in the tickIQ app to see it and join the conversation.
+                <p class="post-attribution">
+                    {{POST_ENGAGEMENT_TEXT}}
                 </p>
 
                 <div class="post-cta-container">
                     <a href="#" id="open-app" class="post-cta-button primary">
-                        View Post in App
+                        {{POST_CTA_TEXT}}
                     </a>
                     <a href="https://apps.apple.com/us/app/tickiq-measure-watch-accuracy/id6749871310" class="post-cta-button secondary">
                         Download tickIQ
@@ -428,7 +847,6 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             <div class="qr-code-container">
                 <img id="qr-code-img" src="" alt="QR Code">
             </div>
-            <div class="qr-modal-subtitle" id="post-url-display"></div>
         </div>
     </div>
 
@@ -484,52 +902,6 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         // Determine which URL scheme to use
         const urlScheme = isDev ? 'tickiq-dev' : 'tickiq';
 
-        // Update page with post ID
-        const titleElement = document.getElementById('post-title');
-        titleElement.textContent = 'You\\'ve Been Sent a Wrist Shot';
-
-        // Update all meta tags for better sharing
-        document.title = 'You\\'ve Been Sent a Wrist Shot';
-
-        // Update meta description
-        const metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc) {
-            metaDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
-        }
-
-        // Update Open Graph meta tags
-        const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) {
-            ogTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
-        }
-
-        const ogDesc = document.querySelector('meta[property="og:description"]');
-        if (ogDesc) {
-            ogDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
-        }
-
-        const ogUrl = document.querySelector('meta[property="og:url"]');
-        if (ogUrl) {
-            ogUrl.setAttribute('content', \`https://tickiq.app/p/\${postId}\`);
-        }
-
-        // Update Twitter meta tags
-        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-        if (twitterTitle) {
-            twitterTitle.setAttribute('content', 'You\\'ve Been Sent a Wrist Shot');
-        }
-
-        const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-        if (twitterDesc) {
-            twitterDesc.setAttribute('content', 'See it on tickIQ and join the conversation.');
-        }
-
-        // Update iOS app link
-        const iosUrl = document.querySelector('meta[property="al:ios:url"]');
-        if (iosUrl) {
-            iosUrl.setAttribute('content', \`tickiq://post/\${postId}\`);
-        }
-
         // If dev mode, show indicator
         if (isDev) {
             const devBadge = document.createElement('div');
@@ -554,8 +926,7 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         const downloadButton = document.querySelector('.post-cta-button.secondary');
 
         if (isDesktop) {
-            // Desktop: Show QR code on click
-            openAppLink.textContent = 'Open on iPhone';
+            // Desktop: Show QR code on click, keep dynamic CTA text as-is
             openAppLink.href = '#';
             openAppLink.classList.add('desktop');
 
@@ -567,10 +938,9 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             // Generate QR code
             const qrCodeUrl = \`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=\${encodeURIComponent(postUrl)}\`;
             document.getElementById('qr-code-img').src = qrCodeUrl;
-            document.getElementById('post-url-display').textContent = postUrl.replace('https://', '');
 
             // Update modal title
-            document.getElementById('qr-modal-title').textContent = 'View This Post';
+            document.getElementById('qr-modal-title').textContent = 'See this post on iPhone';
 
             // Handle click to show modal
             openAppLink.addEventListener('click', (e) => {
