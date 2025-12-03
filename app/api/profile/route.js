@@ -1,8 +1,6 @@
-export const config = {
-  runtime: 'edge',
-};
+export const runtime = 'edge';
 
-export default function handler(request) {
+export async function GET(request) {
   const url = new URL(request.url);
   const pathParts = url.pathname.split('/');
 
@@ -104,8 +102,17 @@ const PROFILE_HTML_TEMPLATE = `<!DOCTYPE html>
     <meta property="al:ios:app_name" content="tickIQ">
     <meta property="al:ios:url" content="tickiq://profile/">
 
+    <!-- Favicons for all platforms -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="/assets/icons/app-icon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/assets/icons/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="/assets/icons/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/favicon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/favicon-512x512.png">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

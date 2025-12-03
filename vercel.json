@@ -1,7 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "cleanUrls": true,
-  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
@@ -34,14 +31,6 @@
     {
       "source": "/apple-app-site-association",
       "destination": "/.well-known/apple-app-site-association"
-    },
-    {
-      "source": "/u/:username",
-      "destination": "/api/profile"
-    },
-    {
-      "source": "/p/:postId",
-      "destination": "/api/post"
     }
   ]
 }

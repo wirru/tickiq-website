@@ -31,8 +31,8 @@ const server = http.createServer((req, res) => {
 
   // Handle direct /profile access
   if (pathname === '/profile') {
-    // Serve profile.html for direct access (will show 404 via JavaScript)
-    fs.readFile(path.join(__dirname, 'profile.html'), (err, data) => {
+    // Serve profile-v2.html for direct access (will show 404 via JavaScript)
+    fs.readFile(path.join(__dirname, 'profile-v2.html'), (err, data) => {
       if (err) {
         res.writeHead(404);
         res.end('404 Not Found');
@@ -50,8 +50,8 @@ const server = http.createServer((req, res) => {
     const username = profileMatch[1];
     console.log(`Profile request for user: ${username}`);
 
-    // Serve profile.html for these routes
-    fs.readFile(path.join(__dirname, 'profile.html'), (err, data) => {
+    // Serve profile-v2.html for these routes
+    fs.readFile(path.join(__dirname, 'profile-v2.html'), (err, data) => {
       if (err) {
         res.writeHead(404);
         res.end('404 Not Found');

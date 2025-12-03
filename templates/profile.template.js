@@ -1,19 +1,17 @@
-export const config = {
-  runtime: 'edge',
-};
+export const runtime = 'edge';
 
-export default function handler(request) {
+export async function GET(request) {
   const url = new URL(request.url);
   const pathParts = url.pathname.split('/');
 
-  // Extract post ID from path (expecting /p/postId)
-  const postId = pathParts[2] || 'post';
+  // Extract username from path (expecting /u/username)
+  const username = pathParts[2] || 'user';
 
   // Get the current domain for absolute URLs
   const currentDomain = `${url.protocol}//${url.host}`;
 
-  // Escape post ID for safe HTML insertion
-  const safePostId = postId.replace(/[<>&"']/g, (char) => {
+  // Escape username for safe HTML insertion
+  const safeUsername = username.replace(/[<>&"']/g, (char) => {
     const escapeMap = {
       '<': '&lt;',
       '>': '&gt;',
@@ -25,24 +23,24 @@ export default function handler(request) {
   });
 
   // Use the embedded HTML template
-  let html = POST_HTML_TEMPLATE;
+  let html = PROFILE_HTML_TEMPLATE;
 
-  // Replace meta tags with dynamic values
+  // Replace meta tags with dynamic values - ONLY updating titles with username
   html = html
     // Update title tag
     .replace(
-      '<title>View This Post on tickIQ</title>',
-      `<title>View This Post on tickIQ</title>`
+      '<title>View This Watch Collection on tickIQ</title>',
+      `<title>@${safeUsername}'s Watch Collection - tickIQ</title>`
     )
     // Update Open Graph title
     .replace(
-      '<meta property="og:title" content="View This Post on tickIQ">',
-      `<meta property="og:title" content="View This Post on tickIQ">`
+      '<meta property="og:title" content="View This Watch Collection on tickIQ">',
+      `<meta property="og:title" content="@${safeUsername}'s Watch Collection on tickIQ">`
     )
     // Update Open Graph URL
     .replace(
-      '<meta property="og:url" content="https://tickiq.app/post">',
-      `<meta property="og:url" content="${currentDomain}/p/${safePostId}">`
+      '<meta property="og:url" content="https://tickiq.app/profile">',
+      `<meta property="og:url" content="${currentDomain}/u/${safeUsername}">`
     )
     // Update OG image URL to use current domain
     .replace(
@@ -51,8 +49,8 @@ export default function handler(request) {
     )
     // Update Twitter title
     .replace(
-      '<meta name="twitter:title" content="View This Post on tickIQ">',
-      `<meta name="twitter:title" content="View This Post on tickIQ">`
+      '<meta name="twitter:title" content="View This Watch Collection on tickIQ">',
+      `<meta name="twitter:title" content="@${safeUsername}'s Watch Collection on tickIQ">`
     )
     // Update Twitter image URL to use current domain
     .replace(
@@ -61,8 +59,8 @@ export default function handler(request) {
     )
     // Update iOS app link
     .replace(
-      '<meta property="al:ios:url" content="tickiq://post/">',
-      `<meta property="al:ios:url" content="tickiq://post/${safePostId}">`
+      '<meta property="al:ios:url" content="tickiq://profile/">',
+      `<meta property="al:ios:url" content="tickiq://profile/${safeUsername}">`
     );
 
   // Return the modified HTML
@@ -75,6 +73,5 @@ export default function handler(request) {
   });
 }
 
-
-// This will be replaced during build with the actual post.html content
-const POST_HTML_TEMPLATE = `<!-- POST_HTML_CONTENT -->`;
+// This will be replaced during build with the actual profile.html content
+const PROFILE_HTML_TEMPLATE = `...embedded during build...`;
