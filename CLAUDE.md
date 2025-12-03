@@ -10,110 +10,138 @@ Official website for tickIQ - a professional iOS app for mechanical watch timing
 - **Parent Company**: B23, LLC (https://www.b23.ai)
 
 ## Tech Stack
+- **Framework**: Next.js 16 (App Router)
+- **Runtime**: Vercel Edge Runtime
 - **Hosting**: Vercel
-- **Framework**: Static HTML/CSS
+- **OG Images**: `@vercel/og` (dynamic generation)
 - **Font**: Inter (Google Fonts)
 - **Design**: Minimalist black and white, consistent with B23 brand
 
 ## Project Structure
 ```
 tickiq-website/
-├── index.html                    # Main landing page
-├── styles.css                    # Global styling
-├── profile-v2.html              # Public profile template (SSR)
-├── post.html                    # Post sharing template
-├── api/
-│   ├── profile-v2.js            # Profile V2 Edge Function (SSR + data fetching)
-│   ├── post.js                  # Post sharing Edge Function
-│   └── img/
-│       └── [token].js           # Image proxy (decrypts & serves images)
+├── app/                              # Next.js App Router
+│   ├── layout.jsx                    # Root layout
+│   ├── api/
+│   │   ├── img/[token]/route.js      # Image proxy (decrypts & serves images)
+│   │   ├── og/post/[postId]/route.jsx # Dynamic OG image generation
+│   │   ├── post/route.js             # Post sharing Edge Function
+│   │   ├── profile/route.js          # Profile v1 Edge Function
+│   │   └── profile-v2/route.js       # Profile v2 Edge Function (SSR)
+│   ├── p/[postId]/route.js           # /p/:postId route handler
+│   ├── u/[username]/route.js         # /u/:username route handler
+│   └── u-preview/[username]/route.js # /u-preview/:username route handler
+├── public/                           # Static assets
+│   ├── index.html                    # Landing page
+│   ├── about.html, business.html, etc.
+│   ├── robots.txt                    # Search engine directives
+│   ├── sitemap.xml                   # Site map for SEO
+│   ├── css/styles.css                # Global styling
+│   ├── js/components.js              # Shared JS components
+│   └── assets/                       # Images, icons, videos, documents
 ├── lib/
-│   └── crypto.js                # AES-256-GCM decryption for image tokens
+│   └── crypto.js                     # AES-256-GCM decryption for image tokens
+├── templates/                        # Source templates (pre-build)
+│   ├── post.template.js
+│   ├── profile.template.js
+│   └── profile-v2.template.js
 ├── scripts/
-│   └── build-edge-function.js   # Embeds HTML into Edge Functions
-├── vercel.json                  # Routing & security headers
-├── package.json                 # Dependencies and scripts
-└── CLAUDE.md                    # Project documentation
+│   └── build-edge-function.cjs       # Embeds HTML into Edge Functions
+├── post.html                         # Post sharing HTML template
+├── profile.html                      # Profile v1 HTML template
+├── profile-v2.html                   # Profile v2 HTML template (SSR)
+├── next.config.js                    # Next.js configuration
+├── vercel.json                       # Security headers & static rewrites
+├── package.json                      # Dependencies and scripts
+└── CLAUDE.md                         # This file
 ```
 
-## Key Design Elements
-- **App Logo**: Circle with checkmark icon (200x200px SVG)
-- **B23 Brand**: Small B23 logo in header linking to parent company
-- **Typography**: Inter font with multiple weights
-- **Color Scheme**: Black (#000000) on white (#ffffff) with gray accents
-- **Animations**: Fade-in and scale-in effects on load
-- **Responsive**: Mobile-optimized with breakpoints at 768px and 480px
+## Why Next.js + Edge Runtime?
 
-## Deployment Process
+### Edge Runtime Benefits
+All dynamic routes use `export const runtime = 'edge'` for:
+- **Global distribution**: Runs in 30+ edge locations near users
+- **Instant cold starts**: ~0ms startup (vs ~100-500ms for Node.js)
+- **Web Crypto API**: Native access for AES-256-GCM token decryption
+- **Lower latency**: Critical for image proxying and OG image generation
 
-### Build Process
-The project includes an Edge Function that requires building before deployment:
-1. **Build Script**: `scripts/build-edge-function.js` embeds the `profile.html` content into the Edge Function
-2. **Automatic Build**: Both `npm run deploy` and `npm run deploy:prod` automatically run the build first
-3. **Git Deployment**: When pushing to Git, Vercel automatically runs the build process
+### Why Not Pure Static?
+- **Dynamic OG images**: `@vercel/og` generates social preview images at runtime
+- **SSR profiles**: Profile v2 fetches real data from Supabase
+- **Image proxy**: Decrypts tokens and proxies private storage images
 
-### Deployment Commands
+---
+
+## Development Workflow
+
+### Local Development
 ```bash
-# Install dependencies
+# First time setup
 npm install
 
-# Deploy to preview (includes automatic build)
-npm run deploy
+# Build Edge Functions (only needed after editing HTML templates)
+npm run build:edge
 
-# Deploy to production (includes automatic build)
-npm run deploy:prod
+# Start local dev server
+vercel dev
 
-# Login to Vercel (if needed)
-vercel login
+# Visit: http://localhost:3000
 ```
 
-### Important Notes
-- **No manual build needed**: Never run `npm run build` manually - it's automatic
-- **Preview Authentication**: Disable Vercel Authentication on preview deployments to test social sharing
-- **Build Output**: The Edge Function gets the HTML embedded during build, no filesystem access needed
+### Deployment (Git-based - Recommended)
+```bash
+# Push to any branch → Vercel creates preview deployment
+git push origin feature-branch
 
-## Domain Configuration
-Both domains are managed through Vercel:
-1. Add domains in Vercel dashboard (Project Settings > Domains)
-2. Configure DNS records at your domain registrar to point to Vercel
-3. SSL certificates automatically provisioned by Vercel for all domains
+# Merge to main → Vercel deploys to production
+git checkout main && git merge feature-branch && git push
+```
 
-## Contact Information
-- **Product Email**: tickiq@b23.ai
-- **Company Email**: hi@b23.ai
+Vercel automatically runs `npm run build` on every deployment, which:
+1. Embeds HTML templates into Edge Functions (`build:edge`)
+2. Builds Next.js app (`next build`)
 
-## Content Details
-- **Product Name**: tickIQ
-- **Tagline**: "Professional watch timing. AI-powered insights."
-- **Status**: Now Available on iOS
-- **Description**: Professional mechanical watch timing app with chronometer precision
-- **Key Features**:
-  - Professional timegrapher with ±0.5ms beat error precision
-  - AI-powered watch identification using GPT-4 Vision
-  - Real-time measurement visualization
-  - Cloud-synchronized watch collection
-  - Machine learning signal detection
-- **Technical Specs**:
-  - BPH Range: 12,000 - 72,000
-  - Rate Accuracy: ±6 s/d
-  - Beat Error: ±0.5 ms
-  - Amplitude: 200-360°
+### CLI Deployment (Alternative)
+```bash
+npm run deploy       # Preview deployment
+npm run deploy:prod  # Production deployment
+```
 
-## Public Profiles V2 Architecture
+---
 
-### Overview
-Public profile pages (`/u/username`) display a user's watch collection on the web for anonymous visitors. This is a complete Server-Side Rendered (SSR) experience that fetches real data from Supabase and displays watches, measurements, and statistics.
+## Route Architecture
 
-**Current Status**: ✅ Deployed to DEV environment
-**Branch**: `public-profiles-v2`
-**Key Feature**: Encrypted image tokens to hide watch UUIDs (database primary keys)
+### URL → Handler Mapping
 
-### Full Architecture
+| URL Pattern | Handler | Purpose |
+|-------------|---------|---------|
+| `/` | `public/index.html` | Landing page |
+| `/about`, `/business`, etc. | `public/*.html` | Static pages |
+| `/u/:username` | `app/u/[username]/route.js` → `app/api/profile/route.js` | Profile v1 (client-side) |
+| `/u-preview/:username` | `app/u-preview/[username]/route.js` → `app/api/profile-v2/route.js` | Profile v2 (SSR) |
+| `/p/:postId` | `app/p/[postId]/route.js` → `app/api/post/route.js` | Post sharing page |
+| `/api/img/:token` | `app/api/img/[token]/route.js` | Image proxy |
+| `/api/og/post/:postId` | `app/api/og/post/[postId]/route.jsx` | Dynamic OG image |
+
+### How Routing Works
+1. **Static pages**: Served from `public/` via `next.config.js` rewrites
+2. **Dynamic routes**: Next.js App Router file-based routing (`app/` directory)
+3. **No `vercel.json` rewrites needed**: App Router handles all dynamic routes
+
+---
+
+## Public Profiles
+
+### Two Versions
+- **Profile v1** (`/u/:username`): Client-side rendering, static OG image
+- **Profile v2** (`/u-preview/:username`): Server-side rendering, real data from Supabase
+
+### Profile V2 Architecture (SSR)
 
 ```
-User visits: https://tickiq.app/u/username
+User visits: https://tickiq.app/u-preview/username
     ↓
-Vercel Edge Function (/api/profile-v2)
+Vercel Edge Function (app/api/profile-v2/route.js)
     ↓
 Supabase Edge Function (get-public-profile-web)
     ↓
@@ -127,334 +155,244 @@ Browser displays watch collection
     ↓
 Images load via: /api/img/[encrypted-token]
     ↓
-Image Proxy decrypts token → fetches from Supabase Storage → returns image
+Image Proxy decrypts → fetches from Supabase Storage → returns image
 ```
 
-### Components
-
-#### 1. Vercel Edge Function (`/api/profile-v2.js`)
-**Purpose**: Server-Side Rendering with data fetching
-
-**Flow**:
-1. Extract username from URL path
-2. Call Supabase Edge Function with anon key
-3. Receive profile data with encrypted image tokens
-4. Render HTML with embedded data
-5. Return with cache headers (10min edge cache, 15min stale-while-revalidate)
-
-**Key Features**:
-- ✅ Server-side data fetching
-- ✅ SEO-friendly (data in HTML)
-- ✅ Error handling (404 for private/non-existent profiles)
-- ✅ HTML escaping for security
-- ✅ `noindex,nofollow` meta tags (social sharing focus, not SEO)
-
-#### 2. Supabase Edge Function (`get-public-profile-web`)
-**Location**: `/Users/willwu/Development/B23, LLC/tickIQ/supabase/functions/get-public-profile-web/`
-
-**Purpose**: Fetch public profile data and generate encrypted image tokens
-
-**Flow**:
-1. Verify profile has `include_in_public_feed = true`
-2. Fetch watches and measurements (RLS enforced)
-3. Generate signed URLs for thumbnails using service role key
-4. Encrypt signed URLs using AES-256-GCM
-5. Return profile data with encrypted tokens
-
-**Security Features**:
-- ✅ RLS policies enforce `include_in_public_feed` flag
-- ✅ Service role key used ONLY after verifying profile is public
-- ✅ Signed URLs encrypted to hide watch UUIDs
-- ✅ Returns 404 for private profiles
-- ✅ Logging prefixed with `[WEB]` for monitoring
-
-**Response Format**:
-```json
-{
-  "profile": {
-    "username": "will",
-    "created_at": "2024-07-01T00:00:00Z"
-  },
-  "stats": {
-    "watch_count": 5,
-    "measurement_count": 23,
-    "average_rate": 2.5
-  },
-  "watches": [
-    {
-      "id": "uuid",
-      "make": "Rolex",
-      "model": "Submariner",
-      "reference_number": "116610LN",
-      "thumbnail_url": "ENCRYPTED_TOKEN_HERE",  // Not actual URL!
-      "latest_measurement": {
-        "rate": 2.3,
-        "created_at": "2024-11-01T00:00:00Z"
-      },
-      "measurement_count": 8
-    }
-  ]
-}
+### Supabase Edge Function Location
+```
+/Users/willwu/Development/B23, LLC/tickIQ/supabase/functions/get-public-profile-web/
 ```
 
-#### 3. Image Proxy (`/api/img/[token].js`)
-**Purpose**: Decrypt encrypted image tokens and proxy actual images from Supabase Storage
+---
 
-**Why This Exists**:
+## Post Sharing
+
+### Architecture
+
+```
+User visits: https://tickiq.app/p/postId
+    ↓
+Vercel Edge Function (app/api/post/route.js)
+    ↓
+Supabase Edge Function (get-public-post-web)
+    ↓
+Returns: post data + encrypted image token
+    ↓
+Vercel renders HTML with iOS-style feed cell preview
+    ↓
+OG image uses: /api/og/post/[postId] (dynamic generation)
+```
+
+### Dynamic OG Images
+The `/api/og/post/:postId` endpoint generates 600x800 portrait images with:
+- Post photo as background
+- iOS-style gradient overlay
+- Caption text
+- Username pill
+- Like/comment counts
+- Watch name and timestamp
+
+Uses `@vercel/og` (Satori + Resvg) for server-side image generation.
+
+---
+
+## Image Proxy System
+
+### Why It Exists
 - Watch UUIDs are database primary keys
-- Exposing them enables enumeration attacks and database reconnaissance
-- Solution: Encrypt the entire signed URL into a token
+- Exposing them enables enumeration attacks
+- Solution: Encrypt signed URLs into opaque tokens
 
-**Flow**:
-1. Receive encrypted token from URL: `/api/img/abc123def456...`
-2. Decrypt token using `IMAGE_TOKEN_SECRET` (AES-256-GCM)
-3. Extract signed Supabase Storage URL
-4. Fetch image from Supabase Storage
-5. Return image bytes with aggressive cache headers
+### Flow
+1. Supabase generates signed URL for private storage
+2. Encrypts URL + expiration into token (AES-256-GCM)
+3. Client requests `/api/img/[token]`
+4. Edge Function decrypts token, fetches image, returns bytes
 
-**Security Benefits**:
-- ✅ Watch UUIDs completely hidden from public view
-- ✅ Supabase storage URLs not exposed
-- ✅ Tokens expire in 45 minutes
-- ✅ AES-256-GCM provides tamper-proof authentication
-- ✅ Storage bucket remains private (RLS unchanged)
+### Files
+- **Encryption** (Supabase): `crypto.ts` in tickIQ repo
+- **Decryption** (Vercel): `lib/crypto.js`
 
-**Performance**:
-- Cache-Control: `public, max-age=2700, s-maxage=2700, immutable`
-- Tokens are unique per generation, so aggressive caching is safe
-- Expected cache hit rate: >95%
+---
 
-#### 4. Encryption Utilities
+## Build System
 
-**Supabase Side** (`crypto.ts`):
-- `encryptImageToken()` - Encrypts signed URLs into tokens
-- Uses Web Crypto API (available in Deno)
-- AES-256-GCM with random IV
-- Base64 URL-safe encoding
+### Template Embedding
+HTML templates (`post.html`, `profile.html`, `profile-v2.html`) are embedded into Edge Functions at build time:
 
-**Vercel Side** (`lib/crypto.js`):
-- `decryptImageToken()` - Decrypts tokens back to signed URLs
-- Uses Web Crypto API (available in Edge Runtime)
-- Validates expiration timestamp
-- Returns signed URL for proxying
-
-### Environment Variables
-
-**Vercel** (tickiq-website):
-- `SUPABASE_URL` - Points to Supabase project (DEV for Preview, PROD for production)
-- `SUPABASE_ANON_KEY` - Anon key for calling Supabase Edge Function
-- `IMAGE_TOKEN_SECRET` - 32-byte encryption key (shared with Supabase)
-
-**Supabase** (Edge Functions):
-- `SUPABASE_URL` - Auto-provided
-- `SUPABASE_ANON_KEY` - Auto-provided
-- `SUPABASE_SERVICE_ROLE_KEY` - Auto-provided (used for signed URLs)
-- `IMAGE_TOKEN_SECRET` - 32-byte encryption key (manually added secret)
-
-### Build Process
-
-**Script**: `scripts/build-edge-function.js`
-
-**What it does**:
-1. Reads `profile-v2.html` template
-2. Embeds HTML into `api/profile-v2.js` as template literal
-3. Escapes special characters (backticks, ${}, backslashes)
-4. Same process for `post.js`
-
-**When it runs**:
-- Automatically on `npm run deploy`
-- Automatically on `npm run deploy:prod`
-- Automatically when Vercel builds from Git
-
-### Routing Configuration
-
-**File**: `vercel.json`
-
-```json
-{
-  "rewrites": [
-    {
-      "source": "/u/:username",
-      "destination": "/api/profile-v2"
-    },
-    {
-      "source": "/p/:postId",
-      "destination": "/api/post"
-    }
-  ]
-}
+```
+templates/post.template.js  +  post.html  →  app/api/post/route.js
 ```
 
-**Image Proxy Routing**:
-- `/api/img/[token]` → Handled by `/api/img/[token].js` (Vercel's file-based routing)
-- No rewrite needed, works automatically
+**Script**: `scripts/build-edge-function.cjs`
 
-### Caching Strategy
+**Why CommonJS (`.cjs`)?**
+- `package.json` has `"type": "module"` for ES modules
+- Build script uses `require()` for simplicity
+- `.cjs` extension forces CommonJS parsing
 
-**HTML Page** (Vercel Edge):
-- `s-maxage=600` (10 minutes edge cache)
-- `stale-while-revalidate=900` (15 minutes grace period)
-- Total cache window: 25 minutes
-- Reduces Supabase invocations by ~98%
+### When to Rebuild
+Run `npm run build:edge` after editing:
+- `post.html`
+- `profile.html`
+- `profile-v2.html`
 
-**Images** (Image Proxy):
-- `max-age=2700, s-maxage=2700, immutable` (45 minutes)
-- Tokens are unique, so aggressive caching is safe
-- Browser cache + edge cache for optimal performance
+For deployment, this happens automatically via `npm run build`.
 
-**Why These Durations**:
-- Tokens expire in 45 minutes (must be longer than HTML cache)
-- Safety margin: 45min (tokens) > 25min (max HTML cache) = 20min buffer
-- Balances freshness with performance
+---
 
-### Security Layers
+## Environment Variables
 
-1. **RLS Policies** (PostgreSQL) - Database-level enforcement
-   - Only profiles with `include_in_public_feed = true` are accessible
-   - Watches and measurements follow profile visibility
+### Vercel (tickiq-website)
+| Variable | Purpose |
+|----------|---------|
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Anon key for Edge Function calls |
+| `IMAGE_TOKEN_SECRET` | 32-byte AES encryption key (shared with Supabase) |
 
-2. **Privacy Flag Check** (Supabase Function) - Defense in depth
-   - Explicitly checks `include_in_public_feed` before returning data
-   - Returns 404 for private profiles
+**Note**: Use different values for Preview vs Production environments in Vercel dashboard.
 
-3. **Service Role Key** (Supabase Function) - Controlled elevation
-   - Used ONLY after verifying profile is public
-   - Generates signed URLs that bypass RLS (safe because already verified)
-   - Never exposed to client or Vercel
+### Supabase (Edge Functions)
+| Variable | Purpose |
+|----------|---------|
+| `SUPABASE_URL` | Auto-provided |
+| `SUPABASE_ANON_KEY` | Auto-provided |
+| `SUPABASE_SERVICE_ROLE_KEY` | Auto-provided (for signed URLs) |
+| `IMAGE_TOKEN_SECRET` | Manually added secret |
 
-4. **Encrypted Tokens** (Image Proxy) - UUID protection
-   - Watch UUIDs completely hidden from public view
-   - AES-256-GCM prevents tampering and reverse engineering
-   - Tokens expire in 45 minutes
+---
 
-5. **HTML Escaping** (Vercel Edge) - XSS prevention
-   - All user-generated content escaped
-   - Prevents injection attacks
+## Security
 
-### Testing
+### Layers
+1. **RLS Policies** (PostgreSQL): Only `include_in_public_feed = true` profiles accessible
+2. **Privacy Check** (Supabase): Explicit verification before returning data
+3. **Encrypted Tokens**: Watch UUIDs hidden via AES-256-GCM
+4. **HTML Escaping**: All user content escaped to prevent XSS
+5. **Security Headers** (`vercel.json`):
+   - `X-Content-Type-Options: nosniff`
+   - `X-Frame-Options: DENY`
+   - `X-XSS-Protection: 1; mode=block`
 
-#### Local Testing (Supabase)
+### Token Expiration
+- Tokens expire in 45 minutes
+- HTML pages cached for max 25 minutes
+- Safety margin ensures tokens never expire while page is cached
+
+---
+
+## Caching Strategy
+
+### HTML Pages
+```
+Cache-Control: s-maxage=300, stale-while-revalidate=600
+```
+- 5 min edge cache, 10 min stale-while-revalidate
+- Reduces Supabase invocations by ~95%
+
+### Images (via Proxy)
+```
+Cache-Control: public, max-age={timeUntilExpiry}, s-maxage={timeUntilExpiry}, immutable
+```
+- Cached until token expiration
+- Unique tokens per generation = safe aggressive caching
+
+### OG Images
+```
+Cache-Control: s-maxage=600, stale-while-revalidate=900
+```
+- 10 min edge cache, 15 min stale-while-revalidate
+
+---
+
+## Testing
+
+### Local
 ```bash
+# Start Supabase Edge Functions
 cd /Users/willwu/Development/B23, LLC/tickIQ
-supabase functions serve get-public-profile-web
-curl "http://localhost:54321/functions/v1/get-public-profile-web/will" \
-  -H "Authorization: Bearer ANON_KEY"
-```
+supabase functions serve
 
-#### Local Testing (Vercel)
-```bash
+# Start Vercel dev server (separate terminal)
 cd /Users/willwu/Development/B23, LLC/tickiq-website
-npm run build
+npm run build:edge
 vercel dev
-# Visit: http://localhost:3000/u/will
 ```
 
-#### Preview Deployment Testing
-1. Run `npm run deploy`
-2. Visit preview URL: `https://[preview-url]/u/will`
-3. Check browser console for encrypted tokens
-4. Verify images load with `/api/img/[token]` URLs
-5. Confirm no UUIDs in page source or Network tab
-
-#### Verification Commands
+### Verify Token Encryption
 ```javascript
 // In browser console on profile page
-
-// Check tokens are encrypted (not UUIDs)
-window.__PROFILE_DATA__.watches[0].thumbnail_url.match(/[0-9a-f]{8}-[0-9a-f]{4}/)
-// Should return: null (no UUIDs found)
-
-// Verify token format
-const token = window.__PROFILE_DATA__.watches[0].thumbnail_url
-console.log('Token length:', token.length)  // ~655 chars
-console.log('Valid base64url:', /^[A-Za-z0-9_-]+$/.test(token))  // true
+const token = document.querySelector('img').src.split('/api/img/')[1];
+console.log('Token length:', token.length);  // ~655 chars
+console.log('No UUIDs:', !token.match(/[0-9a-f]{8}-[0-9a-f]{4}/));  // true
 ```
 
-### Deployment
+---
 
-#### Deploy Supabase Edge Function
+## Troubleshooting
+
+### Images Not Loading (404)
+- Check `IMAGE_TOKEN_SECRET` set in both Supabase and Vercel
+- Verify Supabase Edge Function deployed
+- Check Vercel logs: `vercel logs`
+
+### Profile Shows Private
+- Verify `include_in_public_feed = true` in database
+- Check Supabase function logs for `[WEB]` prefix
+
+### Build Fails
+- Ensure HTML templates exist: `post.html`, `profile.html`, `profile-v2.html`
+- Check `templates/*.template.js` files have placeholder strings
+
+### OG Images Not Generating
+- Verify `SUPABASE_URL` and `SUPABASE_ANON_KEY` set
+- Check post exists and is public
+- View `/api/og/post/[postId]` directly in browser
+
+---
+
+## Deploying Supabase Functions
+
 ```bash
 cd /Users/willwu/Development/B23, LLC/tickIQ
-./deploy-dev.sh functions get-public-profile-web  # For DEV
-# OR
-./deploy-prod.sh functions get-public-profile-web  # For PROD
+
+# Deploy to DEV
+./deploy-dev.sh functions get-public-profile-web
+./deploy-dev.sh functions get-public-post-web
+
+# Deploy to PROD
+./deploy-prod.sh functions get-public-profile-web
+./deploy-prod.sh functions get-public-post-web
 ```
 
-#### Deploy Vercel (Automatic)
-```bash
-cd /Users/willwu/Development/B23, LLC/tickiq-website
-git add .
-git commit -m "Update public profiles"
-git push origin public-profiles-v2
-# Vercel automatically builds and deploys
-```
+---
 
-### Troubleshooting
+## Key Design Elements
+- **Typography**: Inter font with multiple weights
+- **Color Scheme**: Black (#000000) on white (#ffffff) with gray accents
+- **Animations**: Fade-in and scale-in effects on load
+- **Responsive**: Mobile-optimized with breakpoints at 768px and 480px
 
-**Images not loading (404)**:
-- Check `IMAGE_TOKEN_SECRET` is set in both Supabase and Vercel
-- Verify token format in browser console (should be base64url)
-- Check Vercel logs for decryption errors
-- Ensure Supabase Edge Function deployed successfully
+## Contact Information
+- **Product Email**: tickiq@b23.ai
+- **Company Email**: hi@b23.ai
 
-**UUIDs still visible**:
-- Verify using latest deployed version of Supabase function
-- Check encryption is working: token length should be ~655 chars
-- Confirm image URLs use `/api/img/[token]` not direct Supabase URLs
-
-**Profile shows as private when it's public**:
-- Verify `include_in_public_feed = true` in database
-- Check Supabase Edge Function logs for privacy check
-- Ensure RLS policies allow anon access to profiles table
-
-### Performance Metrics
-
-**Expected**:
-- Page load time (LCP): < 2 seconds
-- Edge cache hit rate: > 90%
-- Image load time: < 500ms (first load), ~0ms (cached)
-- Token generation overhead: +100ms per profile request
-- Image proxy overhead: +50ms per image (first load)
-
-**Current (DEV)**:
-- ✅ Images loading successfully (200 OK)
-- ✅ Cache working (memory cache, 0ms subsequent loads)
-- ✅ No UUID leakage verified
-- ✅ Mobile responsive
-
-## Security Headers
-Configured in vercel.json:
-- X-Content-Type-Options: nosniff
-- X-Frame-Options: DENY
-- X-XSS-Protection: 1; mode=block
+---
 
 ## Future Enhancements
 
-### Public Profiles V2
-- [ ] Deploy to production (merge `public-profiles-v2` → `main`)
-- [ ] User opt-in for SEO indexing (remove `noindex` for opted-in users)
-- [ ] Rate limiting (IP-based, 60 req/min per IP)
-- [ ] Analytics (track profile views, popular watches)
-- [ ] Watch detail modal (click to see full measurements)
+### Profiles
+- [ ] Merge profile v1 and v2 (use SSR for all profiles)
+- [ ] User opt-in for SEO indexing
+- [ ] Watch detail modal
 - [ ] Measurement graphs/charts
-- [ ] User bio/description field
-- [ ] Avatar/profile photo
+- [ ] User bio/avatar
 
-### Image Proxy Enhancements
-- [ ] Cloudflare Worker proxy (better than Vercel for images long-term)
-- [ ] Image optimization (WebP, AVIF conversion)
-- [ ] Multi-resolution support (small/medium/large)
-- [ ] Watermarking for public images
-- [ ] Advanced rate limiting per IP
+### Image Proxy
+- [ ] Image optimization (WebP/AVIF)
+- [ ] Multi-resolution support
+- [ ] Rate limiting per IP
 
-### Website General
-- [ ] Add product features section to landing page
-- [ ] Include demo request form
-- [ ] Add pricing information
-- [ ] Implement email capture for launch notifications
-
-## Development Notes
-- Maintains consistency with B23 parent brand
-- Designed for minimal load time and maximum performance
-- No build process required - pure static files
-- Ready for immediate deployment to Vercel
+### General
+- [ ] Product features section on landing page
+- [ ] Email capture for notifications
