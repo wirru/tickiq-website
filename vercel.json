@@ -42,10 +42,6 @@
     {
       "source": "/u-preview/:username",
       "destination": "/api/profile-v2"
-    },
-    {
-      "source": "/p/:postId",
-      "destination": "/api/post"
     }
   ]
 }

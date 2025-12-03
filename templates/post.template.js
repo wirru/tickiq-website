@@ -85,6 +85,9 @@ export async function GET(request) {
   let postEngagementText = 'Shared from the tickIQ community';
   let rawCommentCount = 0;
 
+  // Track if post was found
+  let postFound = false;
+
   // Try to fetch post data from Supabase for the real image and caption
   try {
     const supabaseUrl = process.env.SUPABASE_URL;
@@ -105,6 +108,7 @@ export async function GET(request) {
       });
 
       if (response.ok) {
+        postFound = true;
         const data = await response.json();
 
         // Use real image if available
@@ -188,6 +192,55 @@ export async function GET(request) {
   } catch (error) {
     console.error('[POST] Failed to fetch post data:', error);
     // Fall back to defaults - don't break the page
+  }
+
+  // Return 404 if post was not found
+  if (!postFound) {
+    console.log(`[POST] Returning 404 for post: ${postId}`);
+    return new Response(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Post Not Found - tickIQ</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code { font-size: 6rem; font-weight: 200; margin-bottom: 1rem; color: #000; }
+        .error-message { font-size: 1.25rem; color: #666; margin-bottom: 2rem; }
+        .error-link { color: #000; text-decoration: none; font-weight: 500; }
+        .error-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <p class="error-message">This post doesn't exist or is no longer available.</p>
+        <a href="/" class="error-link">Return to homepage</a>
+    </div>
+</body>
+</html>
+    `, {
+      status: 404,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache',
+      },
+    });
   }
 
   // Use the embedded HTML template

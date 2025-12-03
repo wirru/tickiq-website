@@ -3,7 +3,8 @@ import { ImageResponse } from 'next/og';
 /**
  * Post OG Image Generator
  * Generates dynamic Open Graph images for post sharing.
- * Creates a 3:4 portrait image with the post photo and iOS-style overlays.
+ * Creates a 600x800 portrait image (3:4 ratio to match post photos) with iOS-style overlays.
+ * Reduced resolution for faster loading while maintaining quality for social previews.
  */
 
 // Utility functions
@@ -304,8 +305,8 @@ export async function GET(request, { params }) {
         </div>
       ),
       {
-        width: 900,
-        height: 1200,
+        width: 600,
+        height: 800,
         headers: {
           'Cache-Control': 's-maxage=600, stale-while-revalidate=900',
         },
