@@ -34,14 +34,6 @@
     {
       "source": "/apple-app-site-association",
       "destination": "/.well-known/apple-app-site-association"
-    },
-    {
-      "source": "/u/:username",
-      "destination": "/api/profile"
-    },
-    {
-      "source": "/u-preview/:username",
-      "destination": "/api/profile-v2"
     }
   ]
 }

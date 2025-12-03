@@ -32,15 +32,10 @@ const nextConfig = {
         source: '/terms',
         destination: '/terms.html',
       },
-      // Dynamic routes for profiles (posts handled by /app/p/[postId]/route.js)
-      {
-        source: '/u/:username',
-        destination: '/api/profile',
-      },
-      {
-        source: '/u-preview/:username',
-        destination: '/api/profile-v2',
-      },
+      // Dynamic routes handled by App Router:
+      // /p/[postId] -> app/p/[postId]/route.js
+      // /u/[username] -> app/u/[username]/route.js
+      // /u-preview/[username] -> app/u-preview/[username]/route.js
     ];
   },
 };
