@@ -7,6 +7,20 @@ import { ImageResponse } from 'next/og';
  * Reduced resolution for faster loading while maintaining quality for social previews.
  */
 
+// Load Inter font with multiple weights
+async function loadFonts() {
+  const [interBold, interMedium, interRegular] = await Promise.all([
+    fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hjp-Ek-_EeA.woff').then(res => res.arrayBuffer()),
+    fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hjp-Ek-_EeA.woff').then(res => res.arrayBuffer()),
+    fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff').then(res => res.arrayBuffer()),
+  ]);
+  return [
+    { name: 'Inter', data: interBold, weight: 700, style: 'normal' },
+    { name: 'Inter', data: interMedium, weight: 500, style: 'normal' },
+    { name: 'Inter', data: interRegular, weight: 400, style: 'normal' },
+  ];
+}
+
 // Utility functions
 function truncateText(text, maxLength) {
   if (!text) return '';
@@ -91,10 +105,10 @@ async function fetchPostData(postId) {
   }
 }
 
-// SVG icon paths
+// SVG icon paths (Heroicons outline style to match post.html)
 const ICONS = {
-  heart: 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z',
-  comment: 'M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z',
+  heart: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z',
+  comment: 'M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z',
 };
 
 export async function GET(request, { params }) {
@@ -111,8 +125,11 @@ export async function GET(request, { params }) {
   const currentDomain = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch post data from Supabase
-    const postData = await fetchPostData(postId);
+    // Load fonts and fetch post data in parallel
+    const [fonts, postData] = await Promise.all([
+      loadFonts(),
+      fetchPostData(postId),
+    ]);
 
     if (!postData || !postData.image_token) {
       console.log(`[OG/POST] Post not found or missing image: ${postId}`);
@@ -170,29 +187,50 @@ export async function GET(request, { params }) {
                 marginRight: 24,
               }}
             >
-              {/* Caption */}
+              {/* Caption with fake text-shadow (Satori doesn't support textShadow) */}
               {postData.caption && (
-                <p
-                  style={{
-                    fontSize: 36,
-                    fontWeight: 700,
-                    color: '#ffffff',
-                    margin: 0,
-                    marginBottom: 12,
-                    lineHeight: 1.25,
-                  }}
-                >
-                  {truncateText(postData.caption, 120)}
-                </p>
+                <div style={{ display: 'flex', position: 'relative', marginBottom: 12 }}>
+                  {/* Shadow layer */}
+                  <p
+                    style={{
+                      position: 'absolute',
+                      top: 2,
+                      left: 0,
+                      fontSize: 36,
+                      fontFamily: 'Inter',
+                      fontWeight: 700,
+                      color: 'rgba(0, 0, 0, 0.5)',
+                      margin: 0,
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    {truncateText(postData.caption, 120)}
+                  </p>
+                  {/* Main text */}
+                  <p
+                    style={{
+                      position: 'relative',
+                      fontSize: 36,
+                      fontFamily: 'Inter',
+                      fontWeight: 700,
+                      color: '#ffffff',
+                      margin: 0,
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    {truncateText(postData.caption, 120)}
+                  </p>
+                </div>
               )}
 
-              {/* Metadata row */}
+              {/* Metadata row - no wrap, truncate if needed */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  flexWrap: 'wrap',
+                  flexWrap: 'nowrap',
                   gap: 8,
+                  overflow: 'hidden',
                 }}
               >
                 {/* Username pill */}
@@ -209,6 +247,7 @@ export async function GET(request, { params }) {
                     <span
                       style={{
                         fontSize: 18,
+                        fontFamily: 'Inter',
                         fontWeight: 500,
                         color: '#ffffff',
                       }}
@@ -218,16 +257,21 @@ export async function GET(request, { params }) {
                   </div>
                 )}
 
-                {/* Watch name */}
+                {/* Watch name - truncate if too long */}
                 {postData.watch_display_name && (
                   <span
                     style={{
                       fontSize: 18,
+                      fontFamily: 'Inter',
                       fontWeight: 500,
                       color: 'rgba(255, 255, 255, 0.6)',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      flexShrink: 1,
+                      minWidth: 0,
                     }}
                   >
-                    · {postData.watch_display_name}
+                    · {truncateText(postData.watch_display_name, 35)}
                   </span>
                 )}
 
@@ -236,8 +280,11 @@ export async function GET(request, { params }) {
                   <span
                     style={{
                       fontSize: 18,
+                      fontFamily: 'Inter',
                       fontWeight: 400,
                       color: 'rgba(255, 255, 255, 0.6)',
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                     }}
                   >
                     · {formatRelativeTime(postData.created_at)}
@@ -246,9 +293,12 @@ export async function GET(request, { params }) {
               </div>
             </div>
 
-            {/* Right side: Like/comment counts */}
+            {/* Right side: Like/comment counts - positioned above metadata row */}
             <div
               style={{
+                position: 'absolute',
+                right: 32,
+                bottom: 75,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -263,12 +313,13 @@ export async function GET(request, { params }) {
                   alignItems: 'center',
                 }}
               >
-                <svg width={32} height={32} viewBox="0 0 24 24" fill="#ffffff">
+                <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={1.5}>
                   <path d={ICONS.heart} />
                 </svg>
                 <span
                   style={{
                     fontSize: 18,
+                    fontFamily: 'Inter',
                     fontWeight: 500,
                     color: '#ffffff',
                     marginTop: 4,
@@ -286,12 +337,13 @@ export async function GET(request, { params }) {
                   alignItems: 'center',
                 }}
               >
-                <svg width={32} height={32} viewBox="0 0 24 24" fill="#ffffff">
+                <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={1.5}>
                   <path d={ICONS.comment} />
                 </svg>
                 <span
                   style={{
                     fontSize: 18,
+                    fontFamily: 'Inter',
                     fontWeight: 500,
                     color: '#ffffff',
                     marginTop: 4,
@@ -307,6 +359,7 @@ export async function GET(request, { params }) {
       {
         width: 600,
         height: 800,
+        fonts,
         headers: {
           'Cache-Control': 's-maxage=600, stale-while-revalidate=900',
         },

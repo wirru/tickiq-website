@@ -537,9 +537,6 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             left: 0;
             right: 0;
             padding: 16px 24px 28px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
         }
 
         .post-overlay-left {
@@ -619,8 +616,11 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
             flex-shrink: 0;
         }
 
-        /* Social buttons on right */
+        /* Social buttons on right - positioned above metadata row */
         .post-overlay-right {
+            position: absolute;
+            right: 24px;
+            bottom: 52px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -789,6 +789,11 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
 
             .post-caption {
                 -webkit-line-clamp: 4;
+            }
+
+            .post-overlay-right {
+                right: 20px;
+                bottom: 52px;
             }
 
             .post-social-button svg {
