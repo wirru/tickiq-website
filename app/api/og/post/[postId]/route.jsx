@@ -162,15 +162,25 @@ export async function GET(request, { params }) {
             }}
           />
 
-          {/* Gradient overlay with content */}
+          {/* Gradient overlay layer */}
           <div
             style={{
               position: 'absolute',
               bottom: 0,
               left: 0,
               right: 0,
-              height: '45%',
-              background: 'linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.55))',
+              height: '55%',
+              background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0.55) 100%)',
+            }}
+          />
+
+          {/* Content overlay */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -189,13 +199,14 @@ export async function GET(request, { params }) {
             >
               {/* Caption with fake text-shadow (Satori doesn't support textShadow) */}
               {postData.caption && (
-                <div style={{ display: 'flex', position: 'relative', marginBottom: 12 }}>
-                  {/* Shadow layer */}
+                <div style={{ display: 'flex', position: 'relative', marginBottom: 12, width: '100%' }}>
+                  {/* Shadow layer - must match main text width exactly */}
                   <p
                     style={{
                       position: 'absolute',
                       top: 2,
                       left: 0,
+                      right: 0,
                       fontSize: 36,
                       fontFamily: 'Inter',
                       fontWeight: 700,
@@ -216,6 +227,7 @@ export async function GET(request, { params }) {
                       color: '#ffffff',
                       margin: 0,
                       lineHeight: 1.25,
+                      width: '100%',
                     }}
                   >
                     {truncateText(postData.caption, 120)}
