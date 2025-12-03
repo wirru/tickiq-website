@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { interBold, interMedium, interRegular } from './fonts';
 
 /**
  * Post OG Image Generator
@@ -7,19 +8,22 @@ import { ImageResponse } from 'next/og';
  * Reduced resolution for faster loading while maintaining quality for social previews.
  */
 
-// Load Inter font with multiple weights
-async function loadFonts() {
-  const [interBold, interMedium, interRegular] = await Promise.all([
-    fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hjp-Ek-_EeA.woff').then(res => res.arrayBuffer()),
-    fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hjp-Ek-_EeA.woff').then(res => res.arrayBuffer()),
-    fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff').then(res => res.arrayBuffer()),
-  ]);
-  return [
-    { name: 'Inter', data: interBold, weight: 700, style: 'normal' },
-    { name: 'Inter', data: interMedium, weight: 500, style: 'normal' },
-    { name: 'Inter', data: interRegular, weight: 400, style: 'normal' },
-  ];
+// Convert base64 fonts to ArrayBuffer (done once at module load)
+function base64ToArrayBuffer(base64) {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
 }
+
+// Pre-computed font data (no network calls!)
+const fonts = [
+  { name: 'Inter', data: base64ToArrayBuffer(interBold), weight: 700, style: 'normal' },
+  { name: 'Inter', data: base64ToArrayBuffer(interMedium), weight: 500, style: 'normal' },
+  { name: 'Inter', data: base64ToArrayBuffer(interRegular), weight: 400, style: 'normal' },
+];
 
 // Utility functions
 function truncateText(text, maxLength) {
@@ -125,11 +129,8 @@ export async function GET(request, { params }) {
   const currentDomain = `${url.protocol}//${url.host}`;
 
   try {
-    // Load fonts and fetch post data in parallel
-    const [fonts, postData] = await Promise.all([
-      loadFonts(),
-      fetchPostData(postId),
-    ]);
+    // Fetch post data (fonts are pre-loaded at module level)
+    const postData = await fetchPostData(postId);
 
     if (!postData || !postData.image_token) {
       console.log(`[OG/POST] Post not found or missing image: ${postId}`);
