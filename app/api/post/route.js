@@ -620,7 +620,7 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         .post-overlay-right {
             position: absolute;
             right: 24px;
-            bottom: 52px;
+            bottom: 58px;
             display: flex;
             flex-direction: column;
             align-items: center;

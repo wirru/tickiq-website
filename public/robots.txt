@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /u/
+Disallow: /u-preview/
 Disallow: /p/
 Disallow: /api/
 
