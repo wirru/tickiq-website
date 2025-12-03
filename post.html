@@ -685,6 +685,17 @@
         const openAppLink = document.getElementById('open-app');
         const downloadButton = document.querySelector('.post-cta-button.secondary');
 
+        // Update download button with campaign-tracked URL
+        if (downloadButton) {
+            const campaignToken = document.body.dataset.campaignToken || 'web-post';
+            const params = new URLSearchParams({
+                pt: '128058562',
+                ct: campaignToken,
+                mt: '8'
+            });
+            downloadButton.href = `https://apps.apple.com/app/apple-store/id6749871310?${params.toString()}`;
+        }
+
         if (isDesktop) {
             // Desktop: Show QR code on click, keep dynamic CTA text as-is
             openAppLink.href = '#';
