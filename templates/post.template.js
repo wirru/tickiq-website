@@ -205,33 +205,163 @@ export async function GET(request) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
     <title>Post Not Found - tickIQ</title>
-    <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/favicon-180x180.png">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Main site styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .error-container {
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom, #1A1612 0%, #000000 100%);
+            color: #FFFFFF;
             min-height: 100vh;
+        }
+
+        /* Header styling for dark background */
+        #header:not(.collapsed) .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        #header:not(.collapsed) .header-logo {
+            filter: brightness(0) invert(1) !important;
+        }
+
+        #header:not(.collapsed) .get-app-button {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border: 1px solid #FFFFFF !important;
+        }
+
+        #header:not(.collapsed) .get-app-button .apple-icon {
+            color: #000000 !important;
+        }
+
+        #header:not(.collapsed) .hamburger,
+        #header:not(.collapsed) .menu-icon,
+        #header:not(.collapsed) .mobile-menu-toggle,
+        #header:not(.collapsed) .hamburger-icon {
+            filter: brightness(0) invert(1) !important;
+        }
+
+        #header:not(.collapsed) .hamburger span,
+        #header:not(.collapsed) .menu-icon span,
+        #header:not(.collapsed) .mobile-menu-toggle span,
+        #header:not(.collapsed) .hamburger-icon span {
+            background: #FFFFFF !important;
+        }
+
+        .error-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            padding: 12rem 2rem 10rem 2rem;
             text-align: center;
-            padding: 2rem;
         }
-        .error-code { font-size: 6rem; font-weight: 200; margin-bottom: 1rem; color: #000; }
-        .error-message { font-size: 1.25rem; color: #666; margin-bottom: 2rem; }
-        .error-link { color: #000; text-decoration: none; font-weight: 500; }
-        .error-link:hover { text-decoration: underline; }
+
+        .error-content {
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Icon - matches iOS style */
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            opacity: 0.3;
+            display: block;
+        }
+
+        /* Inner content wrapper */
+        .error-text {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Title - matches iOS .title2 .semibold */
+        .error-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        /* Message - matches iOS .body */
+        .error-message {
+            font-size: 1.0625rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+            padding: 0 40px;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 10rem 1.5rem 8rem 1.5rem;
+                min-height: 100vh;
+            }
+
+            .error-message {
+                padding: 0 20px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Header will be injected by components.js -->
+    <header></header>
+
     <div class="error-container">
-        <div class="error-code">404</div>
-        <p class="error-message">This post doesn't exist or is no longer available.</p>
-        <a href="/" class="error-link">Return to homepage</a>
+        <div class="error-content">
+            <!-- Photo slash icon (SF Symbols style - photo.on.rectangle.angled) -->
+            <svg class="error-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                <!-- Circle background -->
+                <circle cx="32" cy="32" r="28" fill="white"/>
+                <!-- Photo/image icon -->
+                <rect x="20" y="24" width="24" height="18" rx="2" stroke="#1A1612" stroke-width="2" fill="none"/>
+                <!-- Mountain peaks (photo symbol) -->
+                <path d="M20 38L26 32L30 36L38 28L44 34V40C44 41.1 43.1 42 42 42H22C20.9 42 20 41.1 20 40V38Z" fill="#1A1612"/>
+                <!-- Sun/circle in photo -->
+                <circle cx="38" cy="29" r="2.5" fill="#1A1612"/>
+                <!-- Slash line -->
+                <line x1="18" y1="46" x2="46" y2="18" stroke="#1A1612" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+
+            <div class="error-text">
+                <h1 class="error-title">Post Not Found</h1>
+                <p class="error-message">This post doesn't exist or is no longer available.</p>
+            </div>
+        </div>
     </div>
+
+    <!-- Footer will be injected by components.js -->
+    <footer></footer>
+
+    <!-- Load shared components -->
+    <script src="/js/components.js"></script>
 </body>
 </html>
     `, {
