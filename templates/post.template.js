@@ -223,42 +223,9 @@ export async function GET(request) {
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(to bottom, #1A1612 0%, #000000 100%);
-            color: #FFFFFF;
+            background: #FFFFFF;
+            color: #000000;
             min-height: 100vh;
-        }
-
-        /* Header styling for dark background */
-        #header:not(.collapsed) .nav-link {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
-
-        #header:not(.collapsed) .header-logo {
-            filter: brightness(0) invert(1) !important;
-        }
-
-        #header:not(.collapsed) .get-app-button {
-            background: #FFFFFF !important;
-            color: #000000 !important;
-            border: 1px solid #FFFFFF !important;
-        }
-
-        #header:not(.collapsed) .get-app-button .apple-icon {
-            color: #000000 !important;
-        }
-
-        #header:not(.collapsed) .hamburger,
-        #header:not(.collapsed) .menu-icon,
-        #header:not(.collapsed) .mobile-menu-toggle,
-        #header:not(.collapsed) .hamburger-icon {
-            filter: brightness(0) invert(1) !important;
-        }
-
-        #header:not(.collapsed) .hamburger span,
-        #header:not(.collapsed) .menu-icon span,
-        #header:not(.collapsed) .mobile-menu-toggle span,
-        #header:not(.collapsed) .hamburger-icon span {
-            background: #FFFFFF !important;
         }
 
         .error-container {
@@ -285,12 +252,12 @@ export async function GET(request) {
             }
         }
 
-        /* Icon - matches iOS style */
+        /* Icon */
         .error-icon {
             width: 64px;
             height: 64px;
             margin: 0 auto 24px;
-            opacity: 0.3;
+            opacity: 0.25;
             display: block;
         }
 
@@ -301,18 +268,18 @@ export async function GET(request) {
             gap: 12px;
         }
 
-        /* Title - matches iOS .title2 .semibold */
+        /* Title */
         .error-title {
             font-size: 1.375rem;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
+            color: #000000;
             margin: 0;
         }
 
-        /* Message - matches iOS .body */
+        /* Message */
         .error-message {
             font-size: 1.0625rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: #666666;
             line-height: 1.5;
             padding: 0 40px;
             margin: 0;
@@ -336,18 +303,18 @@ export async function GET(request) {
 
     <div class="error-container">
         <div class="error-content">
-            <!-- Photo slash icon (SF Symbols style - photo.on.rectangle.angled) -->
+            <!-- Photo slash icon -->
             <svg class="error-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                 <!-- Circle background -->
-                <circle cx="32" cy="32" r="28" fill="white"/>
+                <circle cx="32" cy="32" r="28" fill="#000000"/>
                 <!-- Photo/image icon -->
-                <rect x="20" y="24" width="24" height="18" rx="2" stroke="#1A1612" stroke-width="2" fill="none"/>
+                <rect x="20" y="24" width="24" height="18" rx="2" stroke="#FFFFFF" stroke-width="2" fill="none"/>
                 <!-- Mountain peaks (photo symbol) -->
-                <path d="M20 38L26 32L30 36L38 28L44 34V40C44 41.1 43.1 42 42 42H22C20.9 42 20 41.1 20 40V38Z" fill="#1A1612"/>
+                <path d="M20 38L26 32L30 36L38 28L44 34V40C44 41.1 43.1 42 42 42H22C20.9 42 20 41.1 20 40V38Z" fill="#FFFFFF"/>
                 <!-- Sun/circle in photo -->
-                <circle cx="38" cy="29" r="2.5" fill="#1A1612"/>
+                <circle cx="38" cy="29" r="2.5" fill="#FFFFFF"/>
                 <!-- Slash line -->
-                <line x1="18" y1="46" x2="46" y2="18" stroke="#1A1612" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="18" y1="46" x2="46" y2="18" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
 
             <div class="error-text">
