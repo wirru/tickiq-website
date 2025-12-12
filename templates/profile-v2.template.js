@@ -132,8 +132,8 @@ function renderErrorPage(username, domain, errorType) {
   let title, message, statusCode;
 
   if (errorType === '404') {
-    title = 'Private Profile';
-    message = 'This profile is not publicly accessible';
+    title = 'Collection Not Found';
+    message = "This collection doesn't exist or isn't available.";
     statusCode = 404;
   } else if (errorType === 'invalid') {
     title = 'Invalid Profile';
@@ -235,8 +235,8 @@ function renderErrorPage(username, domain, errorType) {
             }
         }
 
-        /* Lock Icon - matches iOS .font(.system(size: 64)) */
-        .lock-icon {
+        /* Question Mark Icon - matches iOS .font(.system(size: 64)) */
+        .question-icon {
             width: 64px;
             height: 64px;
             margin: 0 auto 24px;
@@ -286,18 +286,13 @@ function renderErrorPage(username, domain, errorType) {
 
     <div class="private-profile-container">
         <div class="private-profile-content">
-            <!-- Lock Icon (SF Symbols style - lock.circle.fill) -->
-            <svg class="lock-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+            <!-- Question Mark Icon (SF Symbols style - questionmark.circle.fill) -->
+            <svg class="question-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                 <!-- Circle background -->
                 <circle cx="32" cy="32" r="28" fill="white"/>
-                <!-- Lock symbol - bigger and optically centered -->
-                <!-- Shackle (top rounded part) -->
-                <path d="M25 29V25C25 21.134 28.134 18 32 18C35.866 18 39 21.134 39 25V29" stroke="#1A1612" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                <!-- Lock body (rounded rectangle) -->
-                <rect x="23" y="29" width="18" height="16" rx="3" fill="#1A1612"/>
-                <!-- Keyhole -->
-                <circle cx="32" cy="35.5" r="1.5" fill="white"/>
-                <rect x="31" y="35.5" width="2" height="4.5" rx="1" fill="white"/>
+                <!-- Question mark -->
+                <path d="M32 44.5C33.1 44.5 34 43.6 34 42.5C34 41.4 33.1 40.5 32 40.5C30.9 40.5 30 41.4 30 42.5C30 43.6 30.9 44.5 32 44.5Z" fill="#1A1612"/>
+                <path d="M32 18C27.05 18 23 22.05 23 27H27C27 24.25 29.25 22 32 22C34.75 22 37 24.25 37 27C37 29.75 34.75 32 32 32C30.9 32 30 32.9 30 34V38H34V35.5C37.95 34.45 41 30.95 41 27C41 22.05 36.95 18 32 18Z" fill="#1A1612"/>
             </svg>
 
             <div class="private-profile-text">
