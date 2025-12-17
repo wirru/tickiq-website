@@ -1127,8 +1127,15 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
                 }
             });
         } else {
-            // Mobile: Deep link to app
-            openAppLink.href = \`\${urlScheme}://post/\${postId}\`;
+            // Mobile: If they're here, Universal Links didn't open the app = not installed
+            // Send them to App Store with campaign tracking
+            const campaignToken = document.body.dataset.campaignToken || 'web-post';
+            const params = new URLSearchParams({
+                pt: '128058562',
+                ct: campaignToken,
+                mt: '8'
+            });
+            openAppLink.href = \`https://apps.apple.com/app/apple-store/id6749871310?\${params.toString()}\`;
         }
 
         // Smooth auto-redirect on iOS with better UX
