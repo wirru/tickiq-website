@@ -933,7 +933,7 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         <!-- Post Hero Section -->
         <div class="post-hero">
             <div class="post-content">
-                <div class="post-image-container">
+                <div class="post-image-container" id="post-image-container" style="cursor: pointer;">
                     <div class="post-image-skeleton" id="image-skeleton"></div>
                     <img src="{{POST_IMAGE_URL}}" alt="Watch photo shared on tickIQ" class="post-image-preview" id="post-image" onload="this.classList.add('loaded'); document.getElementById('image-skeleton').classList.add('hidden');">
 
@@ -1136,6 +1136,14 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
                 mt: '8'
             });
             openAppLink.href = \`https://apps.apple.com/app/apple-store/id6749871310?\${params.toString()}\`;
+        }
+
+        // Make post image clickable - triggers same action as CTA button
+        const postImageContainer = document.getElementById('post-image-container');
+        if (postImageContainer) {
+            postImageContainer.addEventListener('click', () => {
+                openAppLink.click();
+            });
         }
 
         // Smooth auto-redirect on iOS with better UX
