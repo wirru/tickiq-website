@@ -114,11 +114,13 @@ export async function GET(request) {
         // Use real image if available
         if (data.image_token) {
           const imageUrl = `${currentDomain}/api/img/${data.image_token}`;
-          // OG image uses the styled endpoint with overlays
-          ogImageUrl = `${currentDomain}/api/og/post/${postId}`;
-          // Landing page uses the raw image
+          // OPTION 1: Dynamic OG image with overlays (too slow, even with transformed source)
+          // ogImageUrl = `${currentDomain}/api/og/post/${postId}`;
+          // OPTION 2: Use transformed image directly (fast, works well)
+          ogImageUrl = imageUrl;
+          // Landing page uses the same transformed image
           postImageUrl = imageUrl;
-          console.log(`[POST] Using OG image endpoint for post: ${postId}`);
+          console.log(`[POST] Using transformed image for OG and display: ${postId}`);
         }
 
         // Build OG title for iMessage visibility (iMessage only shows og:title, not og:description)
@@ -933,7 +935,7 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
         <!-- Post Hero Section -->
         <div class="post-hero">
             <div class="post-content">
-                <div class="post-image-container">
+                <div class="post-image-container" id="post-image-container" style="cursor: pointer;">
                     <div class="post-image-skeleton" id="image-skeleton"></div>
                     <img src="{{POST_IMAGE_URL}}" alt="Watch photo shared on tickIQ" class="post-image-preview" id="post-image" onload="this.classList.add('loaded'); document.getElementById('image-skeleton').classList.add('hidden');">
 
@@ -1127,8 +1129,23 @@ const POST_HTML_TEMPLATE = `<!DOCTYPE html>
                 }
             });
         } else {
-            // Mobile: Deep link to app
-            openAppLink.href = \`\${urlScheme}://post/\${postId}\`;
+            // Mobile: If they're here, Universal Links didn't open the app = not installed
+            // Send them to App Store with campaign tracking
+            const campaignToken = document.body.dataset.campaignToken || 'web-post';
+            const params = new URLSearchParams({
+                pt: '128058562',
+                ct: campaignToken,
+                mt: '8'
+            });
+            openAppLink.href = \`https://apps.apple.com/app/apple-store/id6749871310?\${params.toString()}\`;
+        }
+
+        // Make post image clickable - triggers same action as CTA button
+        const postImageContainer = document.getElementById('post-image-container');
+        if (postImageContainer) {
+            postImageContainer.addEventListener('click', () => {
+                openAppLink.click();
+            });
         }
 
         // Smooth auto-redirect on iOS with better UX
