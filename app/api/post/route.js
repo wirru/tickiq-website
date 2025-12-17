@@ -114,11 +114,13 @@ export async function GET(request) {
         // Use real image if available
         if (data.image_token) {
           const imageUrl = `${currentDomain}/api/img/${data.image_token}`;
-          // OG image uses the styled endpoint with overlays
-          ogImageUrl = `${currentDomain}/api/og/post/${postId}`;
-          // Landing page uses the raw image
+          // OPTION 1: Dynamic OG image with overlays (slower, fancier)
+          // ogImageUrl = `${currentDomain}/api/og/post/${postId}`;
+          // OPTION 2: Use transformed image directly (faster loading)
+          ogImageUrl = imageUrl;
+          // Landing page uses the same image
           postImageUrl = imageUrl;
-          console.log(`[POST] Using OG image endpoint for post: ${postId}`);
+          console.log(`[POST] Using transformed image for OG and display: ${postId}`);
         }
 
         // Build OG title for iMessage visibility (iMessage only shows og:title, not og:description)
