@@ -2405,19 +2405,35 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     // Set stats
                     document.getElementById('watch-count').textContent = data.stats.watch_count;
                     document.getElementById('measurement-count').textContent = data.stats.measurement_count;
-                    document.getElementById('days-logged').textContent = data.stats.total_posting_days || 0;
+
+                    // Only show "Days Tracked" for PRO users with rotation insights
+                    const rotationInsightsAvailable = data.stats.rotation_insights_available;
+                    if (rotationInsightsAvailable) {
+                        document.getElementById('days-logged').textContent = data.stats.total_posting_days || 0;
+                    } else {
+                        // Hide the Days Tracked stat for FREE users
+                        const daysLoggedStat = document.getElementById('days-logged').closest('.stat');
+                        if (daysLoggedStat) {
+                            daysLoggedStat.style.display = 'none';
+                        }
+                        // Adjust grid to 2 columns
+                        const statsGrid = document.querySelector('.profile-stats');
+                        if (statsGrid) {
+                            statsGrid.style.gridTemplateColumns = '1fr 1fr';
+                        }
+                    }
 
                     // Render watches with cumulative rotation offset
                     if (data.watches && data.watches.length > 0) {
-                        // Render birds eye view grid
-                        renderBirdsEyeView(data.watches);
+                        // Render birds eye view grid (pass rotation flag)
+                        renderBirdsEyeView(data.watches, rotationInsightsAvailable);
 
                         // Render scrollytelling sections
                         const watchCollection = document.getElementById('watch-collection');
                         let cumulativeRotation = 0;
 
                         const sections = data.watches.map((watch, index) => {
-                            const section = renderWatchSection(watch, index + 1, cumulativeRotation);
+                            const section = renderWatchSection(watch, index + 1, cumulativeRotation, rotationInsightsAvailable);
                             cumulativeRotation += watch.percentage_of_rotation;
                             return section;
                         });
@@ -2440,7 +2456,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 }
             }
 
-            function renderBirdsEyeView(watches) {
+            function renderBirdsEyeView(watches, rotationInsightsAvailable) {
                 const watchGrid = document.getElementById('watch-grid');
 
                 // Helper to create filled pie chart (matching scrollytelling style)
@@ -2496,6 +2512,16 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     // Rotation percentage
                     const percentage = watch.percentage_of_rotation || 0;
 
+                    // Only show rotation metrics for PRO users
+                    const rotationHtml = rotationInsightsAvailable ? \`
+                            <div class="watch-grid-divider"></div>
+                            <div class="watch-grid-metric">
+                                \${createGridPieChart(percentage)}
+                                <span class="grid-percentage">\${Math.round(percentage)}%</span>
+                            </div>
+                            <div class="watch-grid-context">of rotation</div>
+                    \` : '';
+
                     return \`
                         <a href="#watch-\${watch.id}" class="watch-grid-item" data-watch-id="\${watch.id}">
                             <div class="watch-grid-rank">#\${rank}</div>
@@ -2503,12 +2529,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 \${imageHtml}
                             </div>
                             <div class="watch-grid-name">\${escapeHtml(watchName)}</div>
-                            <div class="watch-grid-divider"></div>
-                            <div class="watch-grid-metric">
-                                \${createGridPieChart(percentage)}
-                                <span class="grid-percentage">\${Math.round(percentage)}%</span>
-                            </div>
-                            <div class="watch-grid-context">of rotation</div>
+                            \${rotationHtml}
                         </a>
                     \`;
                 }).join('');
@@ -2528,7 +2549,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                 });
             }
 
-            function renderWatchSection(watch, rank, rotationOffset) {
+            function renderWatchSection(watch, rank, rotationOffset, rotationInsightsAvailable) {
                 const watchName = [watch.make, watch.model].filter(Boolean).join(' ') || 'Watch';
                 const referenceText = watch.reference_number ? escapeHtml(watch.reference_number) : '';
 
@@ -2614,7 +2635,8 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                     \`;
                 };
 
-                // Stats grid - Order: Accuracy, % of Rotation, # of Measurements, Days Worn, Last Worn, First Worn
+                // Stats grid - Order: Accuracy, % of Rotation, # of Measurements, Days Worn
+                // Rotation stats (% of Rotation, Days Worn) only shown for PRO users
                 const statsHtml = \`
                     <div class="watch-stats-grid">
                         \${measurementData ? \`
@@ -2623,7 +2645,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 <div class="watch-stat-value \${measurementData.rateClass}">\${measurementData.rate}</div>
                             </div>
                         \` : ''}
-                        \${watch.days_worn > 0 ? \`
+                        \${rotationInsightsAvailable && watch.days_worn > 0 ? \`
                             <div class="watch-stat rotation-stat-with-chart">
                                 \${createPieChart(watch.percentage_of_rotation, rotationOffset)}
                                 <div class="rotation-stat-content">
@@ -2638,7 +2660,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 <div class="watch-stat-value">\${measurementData.count}</div>
                             </div>
                         \` : ''}
-                        \${watch.days_worn > 0 ? \`
+                        \${rotationInsightsAvailable && watch.days_worn > 0 ? \`
                             <div class="watch-stat">
                                 <div class="watch-stat-label">Days Worn</div>
                                 <div class="watch-stat-value">\${watch.days_worn}</div>
