@@ -2503,7 +2503,7 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                                 <circle cx="13" cy="13" r="12" fill="white" opacity="0.15"/>
                                 <path d="M13 6C11.3431 6 10 7.34315 10 9V11H9C8.44772 11 8 11.4477 8 12V18C8 18.5523 8.44772 19 9 19H17C17.5523 19 18 18.5523 18 18V12C18 11.4477 17.5523 11 17 11H16V9C16 7.34315 14.6569 6 13 6ZM11.5 9C11.5 8.17157 12.1716 7.5 13 7.5C13.8284 7.5 14.5 8.17157 14.5 9V11H11.5V9Z" fill="white" opacity="0.4"/>
                             </svg>
-                            <div class="placeholder-text">LOCKED</div>
+                            <div class="placeholder-text">NOT AVAILABLE</div>
                         </div>\`;
 
                     // Add has-image class only when there's an actual image
@@ -2562,18 +2562,19 @@ const PROFILE_V2_HTML_TEMPLATE = `<!DOCTYPE html>
                             <circle cx="13" cy="13" r="12" fill="white" opacity="0.15"/>
                             <path d="M13 6C11.3431 6 10 7.34315 10 9V11H9C8.44772 11 8 11.4477 8 12V18C8 18.5523 8.44772 19 9 19H17C17.5523 19 18 18.5523 18 18V12C18 11.4477 17.5523 11 17 11H16V9C16 7.34315 14.6569 6 13 6ZM11.5 9C11.5 8.17157 12.1716 7.5 13 7.5C13.8284 7.5 14.5 8.17157 14.5 9V11H11.5V9Z" fill="white" opacity="0.4"/>
                         </svg>
-                        <div class="placeholder-text">LOCKED</div>
+                        <div class="placeholder-text">NOT AVAILABLE</div>
                     </div>\`;
 
                 // Add has-image class only when there's an actual image
                 const imageContainerClass = imageUrl ? 'watch-image-container has-image' : 'watch-image-container';
 
                 // Prepare measurement data for stats grid
+                // Use 30-day average rate to match iOS WatchCardCell display
                 let measurementData = null;
-                if (watch.latest_measurement) {
-                    const rate = watch.latest_measurement.rate;
+                if (watch.average_rate_30d !== null && watch.average_rate_30d !== undefined) {
+                    const rate = watch.average_rate_30d;
                     const sign = rate >= 0 ? '+' : '';
-                    const rateClass = watch.latest_measurement.rate_color_class || '';
+                    const rateClass = watch.average_rate_30d_color_class || '';
                     measurementData = {
                         rate: \`\${sign}\${rate.toFixed(1)} sec/day\`,
                         rateClass: rateClass,
